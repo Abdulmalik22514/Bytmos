@@ -20,8 +20,8 @@ const Slide2 = () => {
   return (
     <View>
       <Text style={styles.header}>BytmosPartner helps you to:</Text>
-      {SlideItems.map(item => (
-        <View style={styles.items}>
+      {SlideItems.map((item, index) => (
+        <View style={styles.items} key={index}>
           <View style={styles.dot} />
           <Text style={styles.itemList}>{item.title}</Text>
         </View>
