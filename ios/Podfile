@@ -19,6 +19,7 @@ target 'bytmos_partner' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
+
   target 'bytmos_partnerTests' do
     inherit! :complete
     # Pods for testing
