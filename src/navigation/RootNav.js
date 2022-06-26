@@ -7,6 +7,7 @@ import {StatusBar} from 'react-native';
 import {COLORS} from '../constants/theme';
 import NotchResponsive from '../components/NotchResponsive';
 import TermsAndPrivacy from '../screens/TermsPrivacy';
+import SignUp from '../screens/SignUp';
 
 const Stack = createNativeStackNavigator();
 
@@ -23,6 +24,7 @@ function RootNavigator() {
 
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="TermsPrivacy" component={TermsAndPrivacy} />
+        <Stack.Screen name="SignUp" component={SignUp} />
       </Stack.Navigator>
     </NavigationContainer>
   );
