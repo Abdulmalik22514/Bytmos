@@ -13,6 +13,7 @@ export const COLORS = {
   yellow: '#FAB613',
   blue: '#00709E',
   separator: '#D3D3D3',
+  input: '#828181',
 };
 export const SIZES = {
   // font sizes
