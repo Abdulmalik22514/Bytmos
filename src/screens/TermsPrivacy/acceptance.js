@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: COLORS.grey,
     borderRadius: 15,
-    height: SIZES.font1 * 2,
+    height: SIZES.font1 * 1.9,
   },
   accepted: {
     backgroundColor: COLORS.blue,

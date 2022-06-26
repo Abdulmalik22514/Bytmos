@@ -41,7 +41,7 @@ export const TermsPrivacyStyles = StyleSheet.create({
     flex: 2,
   },
   bottomBox: {
-    flex: 1,
+    flex: 1.1,
     paddingHorizontal: SIZES.font10,
     paddingVertical: SIZES.font5,
   },
