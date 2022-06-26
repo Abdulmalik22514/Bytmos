@@ -6,6 +6,7 @@ import Acceptance, {AcceptanceItems} from './acceptance';
 import CustomButton from '../../components/CustomButton';
 import Terms from './terms';
 import {TermsPrivacyStyles as styles} from './styles';
+import {SIZES} from '../../constants/theme';
 
 const TermsAndPrivacy = ({navigation}) => {
   const [active, setActive] = useState('Terms');
@@ -53,7 +54,11 @@ const TermsAndPrivacy = ({navigation}) => {
             />
           );
         })}
-        <CustomButton title={'Continue'} />
+        <CustomButton
+          title={'Continue'}
+          onPress={() => navigation.navigate('SignUp')}
+          style={{marginTop: SIZES.font10 * 1.5}}
+        />
       </View>
     </View>
   );
