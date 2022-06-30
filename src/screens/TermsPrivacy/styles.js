@@ -6,7 +6,36 @@ export const TermsPrivacyStyles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.white,
   },
-
+  acceptanceBox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
+    marginBottom: SIZES.font6,
+    paddingHorizontal: SIZES.font10,
+    borderWidth: 1,
+    borderColor: COLORS.grey,
+    borderRadius: 15,
+    paddingVertical: SIZES.font10,
+  },
+  acceptedView: {
+    width: SIZES.font4,
+    height: SIZES.font4,
+    borderRadius: 100,
+    borderColor: COLORS.blue,
+    borderWidth: 3,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: SIZES.font6,
+  },
+  title: {
+    ...FONTS.body3,
+  },
+  accepted: {
+    backgroundColor: COLORS.blue,
+    width: SIZES.font10,
+    height: SIZES.font10,
+    borderRadius: 100,
+  },
   termsCondition: {
     ...FONTS.h8,
   },
@@ -41,7 +70,7 @@ export const TermsPrivacyStyles = StyleSheet.create({
     flex: 2,
   },
   bottomBox: {
-    flex: 1.1,
+    flex: 0.7,
     paddingHorizontal: SIZES.font10,
     paddingVertical: SIZES.font5,
   },
