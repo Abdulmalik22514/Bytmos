@@ -2,7 +2,6 @@ import {FlatList, Pressable, Text, View} from 'react-native';
 import React, {useState} from 'react';
 import {BackArrow} from '../../assets/svgs/svg';
 import ChooseTerms, {TermsHeaders} from './chooseTerms';
-import Acceptance, {AcceptanceItems} from './acceptance';
 import CustomButton from '../../components/CustomButton';
 import Terms from './terms';
 import {TermsPrivacyStyles as styles} from './styles';
@@ -10,7 +9,7 @@ import {SIZES} from '../../constants/theme';
 
 const TermsAndPrivacy = ({navigation}) => {
   const [active, setActive] = useState('Terms');
-  const [accept, setAccepted] = useState(false);
+  const [accepted, setAccepted] = useState(false);
 
   return (
     <View style={styles.container}>
@@ -37,24 +36,29 @@ const TermsAndPrivacy = ({navigation}) => {
         </View>
         <Text style={styles.termsCondition}>Bytmos Terms & Conditions</Text>
         <FlatList
-          data={[...Array(8).keys()]}
+          data={[...Array(8)]}
           renderItem={Terms}
           showsVerticalScrollIndicator={false}
         />
       </View>
       <View style={styles.separator} />
       <View style={styles.bottomBox}>
-        {AcceptanceItems.map((item, index) => {
-          return (
-            <Acceptance
-              key={index}
-              title={item.title}
-              onPress={() => setAccepted(item.title)}
-              isAccepted={item.title === accept}
-            />
-          );
-        })}
+        <Pressable
+          style={styles.acceptanceBox}
+          onPress={() => setAccepted(!accepted)}>
+          <View style={styles.acceptedView}>
+            {accepted ? <View style={styles.accepted} /> : null}
+          </View>
+          <Text style={styles.title}>
+            I accept the{' '}
+            <Text style={{fontWeight: 'bold'}}>Terms of service</Text> and{' '}
+            {'\n'}
+            <Text style={{fontWeight: 'bold'}}>Privacy policy</Text>
+          </Text>
+        </Pressable>
+
         <CustomButton
+          disabled={!accepted}
           title={'Continue'}
           onPress={() => navigation.navigate('SignUp')}
           style={{marginTop: SIZES.font10 * 1.5}}
