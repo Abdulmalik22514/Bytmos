@@ -8,13 +8,14 @@ import {COLORS} from '../constants/theme';
 import NotchResponsive from '../components/NotchResponsive';
 import TermsAndPrivacy from '../screens/TermsPrivacy';
 import SignUp from '../screens/SignUp';
+import VerifyOtp from '../screens/VerifyOtp';
 
 const Stack = createNativeStackNavigator();
 
 function RootNavigator() {
   return (
     <NavigationContainer>
-      <StatusBar translucent={false} backgroundColor={COLORS.black} />
+      <StatusBar translucent={true} backgroundColor={'transparent'} />
       <NotchResponsive />
       <Stack.Navigator
         screenOptions={{
@@ -25,6 +26,7 @@ function RootNavigator() {
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="TermsPrivacy" component={TermsAndPrivacy} />
         <Stack.Screen name="SignUp" component={SignUp} />
+        <Stack.Screen name="VerifyOtp" component={VerifyOtp} />
       </Stack.Navigator>
     </NavigationContainer>
   );

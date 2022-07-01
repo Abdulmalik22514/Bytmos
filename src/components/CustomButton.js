@@ -14,7 +14,6 @@ const CustomButton = ({title, onPress, textStyle, disabled, style}) => {
         },
         style,
       ]}
-      activeOpacity={0.8}
       onPress={onPress}>
       <Text style={[styles.title, {...textStyle}]}>{title}</Text>
     </Pressable>
