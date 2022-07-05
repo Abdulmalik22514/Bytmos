@@ -45,6 +45,7 @@ export const TermsPrivacyStyles = StyleSheet.create({
     paddingHorizontal: SIZES.font6,
     marginVertical: SIZES.font10,
   },
+
   headerTitle: {
     ...FONTS.h6,
   },
