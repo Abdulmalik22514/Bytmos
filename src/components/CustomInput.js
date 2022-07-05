@@ -2,35 +2,19 @@ import {StyleSheet, Text, TextInput, View} from 'react-native';
 import React from 'react';
 import {COLORS, FONTS, SIZES} from '../constants/theme';
 
-const CustomInput = props => {
-  const {
-    field: {name, onBlur, onChange, value},
-    // form: {errors, touched, setFieldTouched},
-    ...inputProps
-  } = props;
-
-  // const hasError = errors[name] && touched[name];
-
+const CustomInput = ({value, onChangeText, error, ...rest}) => {
   return (
     <>
       <View style={styles.authForm}>
         <TextInput
           placeholderTextColor={COLORS.grey}
-          style={[
-            styles.textInput,
-            // props.multiline && {height: props.numberOfLines * 40},
-            // hasError && styles.errorInput,
-          ]}
+          style={[styles.textInput]}
           value={value}
-          onChangeText={text => onChange(name)(text)}
-          // onBlur={() => {
-          //   setFieldTouched(name);
-          //   onBlur(name);
-          // }}
-          {...inputProps}
+          onChangeText={onChangeText}
+          {...rest}
         />
       </View>
-      {/* {hasError && <Text style={styles.errorText}>{errors[name]}</Text>} */}
+      {error && <Text style={styles.errorText}>{error}</Text>}
     </>
   );
 };
@@ -51,6 +35,6 @@ const styles = StyleSheet.create({
   },
   errorText: {
     fontSize: 10,
-    color: 'red',
+    color: COLORS.red,
   },
 });

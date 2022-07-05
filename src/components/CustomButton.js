@@ -1,8 +1,15 @@
-import {Pressable, StyleSheet, Text, TouchableOpacity} from 'react-native';
+import {Pressable, StyleSheet, Text, ActivityIndicator} from 'react-native';
 import React from 'react';
 import {COLORS, FONTS, SIZES} from '../constants/theme';
 
-const CustomButton = ({title, onPress, textStyle, disabled, style}) => {
+const CustomButton = ({
+  title,
+  onPress,
+  textStyle,
+  disabled,
+  style,
+  isLoading,
+}) => {
   return (
     <Pressable
       disabled={disabled}
@@ -15,7 +22,11 @@ const CustomButton = ({title, onPress, textStyle, disabled, style}) => {
         style,
       ]}
       onPress={onPress}>
-      <Text style={[styles.title, {...textStyle}]}>{title}</Text>
+      {isLoading ? (
+        <ActivityIndicator size={'large'} color={COLORS.white} />
+      ) : (
+        <Text style={[styles.title, {...textStyle}]}>{title}</Text>
+      )}
     </Pressable>
   );
 };
