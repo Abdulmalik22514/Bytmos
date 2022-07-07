@@ -2,14 +2,7 @@ import {StyleSheet, Text, TouchableOpacity} from 'react-native';
 import React from 'react';
 import {COLORS, FONTS, SIZES} from '../../constants/theme';
 
-export const TermsHeaders = [
-  {
-    title: 'Terms',
-  },
-  {
-    title: 'Privacy',
-  },
-];
+export const TermsHeaders = ['Terms', 'Privacy'];
 
 const ChooseTerms = ({title, isActive, onPress}) => {
   return (
