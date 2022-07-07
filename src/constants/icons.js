@@ -10,6 +10,7 @@ const Tribe = require('../assets/images/tribe.png');
 const Envelope = require('../assets/images/envelope.png');
 const Wallet = require('../assets/images/wallet.png');
 const Profile = require('../assets/images/profile.png');
+const ProfilePix = require('../assets/images/profilePix.png');
 
 export default {
   SplashIcon,
@@ -24,4 +25,5 @@ export default {
   Envelope,
   Wallet,
   Profile,
+  ProfilePix,
 };
