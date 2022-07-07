@@ -160,7 +160,10 @@ const Login = () => {
                   <CustomButton
                     title="Continue"
                     style={styles.startButton}
-                    onPress={() => navigate('BottomTab')}
+                    onPress={() => {
+                      setSuccessful(!successful);
+                      navigate('BottomTab');
+                    }}
                   />
                 </View>
               ) : (
@@ -168,7 +171,7 @@ const Login = () => {
                   <Text style={styles.forgotText}>Reset Password </Text>
                   <Text style={{...FONTS.body4}}>
                     Set the new password for your account so you can login and
-                    acess all the features.
+                    access all the features.
                   </Text>
                   <View style={{marginVertical: SIZES.font1}}>
                     <InputBox label="New Password" isPassword />
