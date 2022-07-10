@@ -37,7 +37,7 @@ const SignUp = ({}) => {
       auth_token: 'response.data.auth_token',
       email: value.email,
     });
-    return;
+
     const device_name = await getDeviceName();
     const userCredentials = {
       pa_last_name: `${value.fullName?.split(' ')[1]}`,
@@ -52,8 +52,6 @@ const SignUp = ({}) => {
     try {
       const response = await apis.signup(userCredentials);
 
-      console.log({response});
-
       Alert.alert('Success!', response.message.toString(), [
         {
           text: 'Alright Thanks',
@@ -66,7 +64,6 @@ const SignUp = ({}) => {
       ]);
     } catch (e) {
       const error = getErrorValue(Object.keys(userCredentials), e);
-      console.log(e, 'error');
       Alert.alert('Error!', error);
     }
   };
