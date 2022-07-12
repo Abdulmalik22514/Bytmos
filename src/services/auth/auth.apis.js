@@ -1,14 +1,22 @@
+import {Alert} from "react-native"
 import {GET, PUT, POST, DELETE} from "../../configs/api"
+import {handleError} from "../../utils/handleErrors"
 import {AuthEndpoints} from "../api/Auth/auth.endpoints"
 
 /** Sign in api */
 export const LoginAccount = async params => {
 	try {
-		const {data} = await POST(AuthEndpoints.SIGNIN, params)
-			.then(res => res)
-			.catch(res => console.error(res))
+		return await POST(AuthEndpoints.SIGNIN, params)
+			.then(res => {
+				if (!res?.status) {
+					handleError(res)
+				} else {
+					Alert.alert("Success!", !Array.isArray(res?.message) ? res?.message : "")
 
-		return data
+					return res
+				}
+			})
+			.catch(res => console.error(res))
 	} catch (error) {
 		console.warn(`ASRE_ERROR:\n ${error}`)
 	}
@@ -17,11 +25,16 @@ export const LoginAccount = async params => {
 /** Sign up api */
 export const RegisterAccount = async params => {
 	try {
-		const {data} = await POST(AuthEndpoints.SIGNUP, params)
-			.then(res => res)
+		return await POST(AuthEndpoints.SIGNUP, params)
+			.then(res => {
+				if (!res?.status) {
+					handleError(res)
+				} else {
+					Alert.alert("Success!", !Array.isArray(res?.message) ? res?.message : "")
+					return res
+				}
+			})
 			.catch(res => console.error(res))
-
-		return data
 	} catch (error) {
 		console.warn(`ASRE_ERROR:\n ${error}`)
 	}
@@ -32,11 +45,16 @@ export const RegisterAccount = async params => {
  */
 export const ResendOTP = async () => {
 	try {
-		const {data} = await POST(AuthEndpoints.RESEND_OTP)
-			.then(res => res)
+		return await POST(AuthEndpoints.RESEND_OTP)
+			.then(res => {
+				if (!res?.status) {
+					handleError(res)
+				} else {
+					Alert.alert("Success!", !Array.isArray(res?.message) ? res?.message : "")
+					return res
+				}
+			})
 			.catch(res => console.error(res))
-
-		return data
 	} catch (error) {
 		console.warn(`ASRE_ERROR:\n ${error}`)
 	}
@@ -47,11 +65,16 @@ export const ResendOTP = async () => {
  */
 export const VerifyOTP = async params => {
 	try {
-		const {data} = await POST(AuthEndpoints.VERIFY_OTP, params)
-			.then(res => res)
+		return await POST(AuthEndpoints.VERIFY_OTP, params)
+			.then(res => {
+				if (!res?.status) {
+					handleError(res)
+				} else {
+					Alert.alert("Success!", !Array.isArray(res?.message) ? res?.message : "")
+					return res
+				}
+			})
 			.catch(res => console.error(res))
-
-		return data
 	} catch (error) {
 		console.warn(`ASRE_ERROR:\n ${error}`)
 	}
@@ -62,11 +85,16 @@ export const VerifyOTP = async params => {
  */
 export const CreateAccount = async params => {
 	try {
-		const {data} = await POST(AuthEndpoints.CREATE_ACC, params)
-			.then(res => res)
+		return await POST(AuthEndpoints.CREATE_ACC, params)
+			.then(res => {
+				if (!res?.status) {
+					handleError(res)
+				} else {
+					Alert.alert("Success!", !Array.isArray(res?.message) ? res?.message : "")
+					return res
+				}
+			})
 			.catch(res => console.error(res))
-
-		return data
 	} catch (error) {
 		console.warn(`ASRE_ERROR:\n ${error}`)
 	}
@@ -77,11 +105,16 @@ export const CreateAccount = async params => {
  */
 export const UpdatePersoanlAccount = async params => {
 	try {
-		const {data} = await POST(AuthEndpoints.UPDATE_ACC, params)
-			.then(res => res)
+		return await POST(AuthEndpoints.UPDATE_ACC, params)
+			.then(res => {
+				if (!res?.status) {
+					handleError(res)
+				} else {
+					Alert.alert("Success!", !Array.isArray(res?.message) ? res?.message : "")
+					return res
+				}
+			})
 			.catch(res => console.error(res))
-
-		return data
 	} catch (error) {
 		console.warn(`ASRE_ERROR:\n ${error}`)
 	}
@@ -93,11 +126,16 @@ export const UpdatePersoanlAccount = async params => {
  */
 export const UpdateCompanyAccount = async params => {
 	try {
-		const {data} = await POST(AuthEndpoints.UPDATE_COM, params)
-			.then(res => res)
+		return await POST(AuthEndpoints.UPDATE_COM, params)
+			.then(res => {
+				if (!res?.status) {
+					handleError(res)
+				} else {
+					Alert.alert("Success!", !Array.isArray(res?.message) ? res?.message : "")
+					return res
+				}
+			})
 			.catch(res => console.error(res))
-
-		return data
 	} catch (error) {
 		console.warn(`ASRE_ERROR:\n ${error}`)
 	}
@@ -108,11 +146,16 @@ export const UpdateCompanyAccount = async params => {
  */
 export const FetchPersonalAccount = async () => {
 	try {
-		const {data} = await GET(AuthEndpoints.FETCH_ACC)
-			.then(res => res)
+		return await GET(AuthEndpoints.FETCH_ACC)
+			.then(res => {
+				if (!res?.status) {
+					handleError(res)
+				} else {
+					Alert.alert("Success!", !Array.isArray(res?.message) ? res?.message : "")
+					return res
+				}
+			})
 			.catch(res => console.error(res))
-
-		return data
 	} catch (error) {
 		console.warn(`ASRE_ERROR:\n ${error}`)
 	}
@@ -123,11 +166,16 @@ export const FetchPersonalAccount = async () => {
  */
 export const FetchCompanyAccount = async () => {
 	try {
-		const {data} = await GET(AuthEndpoints.FETCH_COM)
-			.then(res => res)
+		return await GET(AuthEndpoints.FETCH_COM)
+			.then(res => {
+				if (!res?.status) {
+					handleError(res)
+				} else {
+					Alert.alert("Success!", !Array.isArray(res?.message) ? res?.message : "")
+					return res
+				}
+			})
 			.catch(res => console.error(res))
-
-		return data
 	} catch (error) {
 		console.warn(`ASRE_ERROR:\n ${error}`)
 	}
@@ -139,11 +187,16 @@ export const FetchCompanyAccount = async () => {
  */
 export const ForgottenPassword = async params => {
 	try {
-		const {data} = await POST(AuthEndpoints.FORGOT_PWD, params)
-			.then(res => res)
+		return await POST(AuthEndpoints.FORGOT_PWD, params)
+			.then(res => {
+				if (!res?.status) {
+					handleError(res)
+				} else {
+					Alert.alert("Success!", !Array.isArray(res?.message) ? res?.message : "")
+					return res
+				}
+			})
 			.catch(res => console.error(res))
-
-		return data
 	} catch (error) {
 		console.warn(`ASRE_ERROR:\n ${error}`)
 	}
@@ -155,11 +208,16 @@ export const ForgottenPassword = async params => {
  */
 export const VerifyPasswordReset = async params => {
 	try {
-		const {data} = await POST(AuthEndpoints.FORGOT_PWD, params)
-			.then(res => res)
+		return await POST(AuthEndpoints.FORGOT_PWD, params)
+			.then(res => {
+				if (!res?.status) {
+					handleError(res)
+				} else {
+					Alert.alert("Success!", !Array.isArray(res?.message) ? res?.message : "")
+					return res
+				}
+			})
 			.catch(res => console.error(res))
-
-		return data
 	} catch (error) {
 		console.warn(`ASRE_ERROR:\n ${error}`)
 	}
@@ -171,11 +229,16 @@ export const VerifyPasswordReset = async params => {
  */
 export const ResetPassword = async params => {
 	try {
-		const {data} = await POST(AuthEndpoints.RESEND_OTP, params)
-			.then(res => res)
+		return await POST(AuthEndpoints.RESEND_OTP, params)
+			.then(res => {
+				if (!res?.status) {
+					handleError(res)
+				} else {
+					Alert.alert("Success!", !Array.isArray(res?.message) ? res?.message : "")
+					return res
+				}
+			})
 			.catch(res => console.error(res))
-
-		return data
 	} catch (error) {
 		console.warn(`ASRE_ERROR:\n ${error}`)
 	}

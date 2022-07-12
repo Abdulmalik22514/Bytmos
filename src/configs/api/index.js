@@ -40,14 +40,14 @@ HttpClient.interceptors.request.use(configs => {
 })
 
 /* response interceptors */
-// HttpClient.interceptors.response.use(
-// 	response => {
-// 		return Promise.resolve(response.data)
-// 	},
-// 	error => {
-// 		return Promise.reject(error.response.data)
-// 	},
-// )
+HttpClient.interceptors.response.use(
+	response => {
+		return Promise.resolve(response.data)
+	},
+	error => {
+		return Promise.reject(error.response.data)
+	},
+)
 
 /* export  */
 
