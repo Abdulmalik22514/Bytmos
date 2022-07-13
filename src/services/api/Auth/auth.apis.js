@@ -1,7 +1,7 @@
 import {Alert} from "react-native"
-import {GET, PUT, POST, DELETE} from "../../configs/api"
-import {handleError} from "../../utils/handleErrors"
-import {AuthEndpoints} from "../api/Auth/auth.endpoints"
+import {GET, PUT, POST, DELETE} from "../../../configs/api"
+import {handleError} from "../../../utils/handleErrors"
+import {AuthEndpoints} from "./auth.endpoints"
 
 /** Sign in api */
 export const LoginAccount = async params => {

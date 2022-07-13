@@ -1,4 +1,4 @@
-import {getToken, isActive, termsAccepted, userHasOnboarded} from "../../../services/auth/authServices"
+import {getToken, isActive, termsAccepted, userHasOnboarded} from "../../../services/authServices"
 
 export const AuthStores = {
 	auth: {

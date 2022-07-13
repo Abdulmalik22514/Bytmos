@@ -1,5 +1,5 @@
 import axios from "axios"
-import {getToken} from "../../services/auth/authServices"
+import {getToken} from "../../services/authServices"
 import {config} from "./../config"
 import {ResConfigs} from "./../resConfig"
 

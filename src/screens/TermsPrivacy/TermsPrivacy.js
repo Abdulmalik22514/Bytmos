@@ -7,7 +7,7 @@ import Terms from "./terms"
 import {TermsPrivacyStyles as styles} from "./styles"
 import {SIZES} from "../../constants/theme"
 import Container from "../../components/Container"
-import {acceptTerms} from "../../services/auth/authServices"
+import {acceptTerms} from "../../services/authServices"
 
 const TermsAndPrivacy = ({navigation}) => {
 	const [active, setActive] = useState("Terms")

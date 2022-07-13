@@ -7,7 +7,7 @@ import Slide1 from "./slide1"
 import Slide2 from "./slide2"
 import Slide3 from "./slide3"
 import {OnboardingStyles as styles} from "./styles"
-import {onboardUser} from "../../services/auth/authServices"
+import {onboardUser} from "../../services/authServices"
 
 const slides = [1, 2, 3]
 

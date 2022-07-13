@@ -1,4 +1,4 @@
-import {saveUser, setIsActive, setToken} from "../../../services/auth/authServices"
+import {saveUser, setIsActive, setToken} from "../../../services/authServices"
 
 export const AuthMiddleware = {
 	auth: {

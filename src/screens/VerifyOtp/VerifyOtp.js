@@ -10,8 +10,8 @@ import * as yup from "yup"
 import {VerifyOtpStyle as styles} from "./styles"
 import {LOGIN_SCREEN} from "../../constants/screens"
 import {useMutation} from "react-query"
-import {useAuthApis} from "../../services/auth/auth.index"
-import {resetToken} from "../../services/auth/authServices"
+import {useAuthApis} from "../../services/api/auth/auth.index"
+import {resetToken} from "../../services/authServices"
 import {sleep} from "./../../utils/utils"
 
 const otpValiditor = yup.object().shape({
