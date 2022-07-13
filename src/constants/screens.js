@@ -1,0 +1,6 @@
+export const ONBOARD_SCREEN = "Onboarding"
+export const TERMS_AND_POLICY_SCREEN = "TermsPrivacy"
+export const LOGIN_SCREEN = "Login"
+export const SIGNUP_SCREEN = "signup"
+export const VERIFY_OTP_SCREEN = "verifyOtp"
+export const BOTTOMTAB_SCREEN = "BottomTab"
