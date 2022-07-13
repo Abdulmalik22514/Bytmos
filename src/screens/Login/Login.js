@@ -1,5 +1,5 @@
 import {Image, Pressable, Text, View} from 'react-native';
-import React, {useRef, useMemo, useCallback, useState} from 'react';
+import React, {useRef, useCallback, useState} from 'react';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {FONTS, SIZES} from '../../constants/theme';
 import icons from '../../constants/icons';
@@ -20,10 +20,7 @@ const Login = () => {
 
   const bottomSheetRef = useRef(null);
 
-  // variables
-  const snapPoints = useMemo(() => ['1%', '60%', '75%'], []);
-  // const snapPoints = useMemo(() => ['25%', '50%', '75%'], []);
-  // const snapPoints = {[]}
+  const snapPoints = ['1%', '60%', '75%'];
 
   const renderBackdrop = useCallback(
     props => (
@@ -97,6 +94,7 @@ const Login = () => {
           backgroundStyle={styles.bottomSheet}
           ref={bottomSheetRef}
           index={-1}
+          handleIndicatorStyle={{backgroundColor: 'red', width: 150}}
           enablePanDownToClose
           snapPoints={snapPoints}>
           {bottomSheetView === 1 && (
