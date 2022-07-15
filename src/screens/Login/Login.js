@@ -1,5 +1,5 @@
 import {Image, Pressable, Text, View} from 'react-native';
-import React, {useRef, useCallback, useState} from 'react';
+import React, {useRef, useMemo, useCallback, useState} from 'react';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {FONTS, SIZES} from '../../constants/theme';
 import icons from '../../constants/icons';
@@ -11,17 +11,29 @@ import InputBox from '../../components/InputBox';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
 import {useNavigation} from '@react-navigation/native';
 import {LoginStyles as styles} from './styles';
+import {SIGNUP_SCREEN} from '../../constants/screens';
+import {useAuthApis} from '../../services/api/auth/auth.index';
+import {useMutation} from 'react-query';
+import {FLUSDYNAMIC_STORE, useFlusDispatcher, useFlusStores} from 'react-flus';
+import {USER_LOGIN} from '../../flus/constants/auth.const';
+import {getDeviceName} from 'react-native-device-info';
+import {
+  accountLoginValidationSchema,
+  forgetPwdValidationSchema,
+  resetPwdValidationSchema,
+} from '../../utils/validation';
 
 const Login = () => {
   const {navigate} = useNavigation();
-  const [bottomSheetView, setBottomSheetView] = useState(1);
-  const [otp, setOtp] = useState('');
-  const [successful, setSuccessful] = useState(false);
+
+  /* Flus state vars & dispatcher */
+  const {resetPwdSession} = useFlusStores();
+  const dispatcher = useFlusDispatcher();
 
   const bottomSheetRef = useRef(null);
 
+  // variables
   const snapPoints = ['1%', '60%', '75%'];
-
   const renderBackdrop = useCallback(
     props => (
       <BottomSheetBackdrop
@@ -34,30 +46,139 @@ const Login = () => {
     [],
   );
 
+  /* import apis services */
+  const {ForgottenPassword, ResetPassword, VerifyPasswordReset, LoginAccount} =
+    useAuthApis();
+
+  const loginAccountApi = useMutation(LoginAccount, {
+    onSuccess: (res, formParams) => {
+      if (res?.status) {
+        dispatcher({
+          type: USER_LOGIN,
+          payload: {
+            user: res?.data?.user_info,
+            access_token: res?.data?.auth_token,
+          },
+        });
+      }
+    },
+  });
+
+  /* Recover user account password. */
+  const forgottenPasswordApi = useMutation(ForgottenPassword, {
+    onSuccess: (res, formParams) => {
+      if (res?.status) {
+        /* Dynamically store user email for verifying password reset */
+        dispatcher({
+          type: FLUSDYNAMIC_STORE,
+          payload: {
+            store: 'resetPwdSession',
+            data: {user: formParams?.partner_email, bottomSheetView: 2},
+          },
+        });
+      }
+    },
+  });
+
+  /* Verify password reset token */
+  const verifyPasswordResetApi = useMutation(VerifyPasswordReset, {
+    onSuccess: res => {
+      if (res?.status) {
+        dispatcher({
+          type: FLUSDYNAMIC_STORE,
+          payload: {
+            store: 'resetPwdSession',
+            data: {bottomSheetView: 3, ...res?.data},
+          },
+        });
+      }
+    },
+  });
+
+  /* Reset account password  */
+  const resetPasswordApi = useMutation(ResetPassword, {
+    onSuccess: res => {
+      if (res?.status) {
+        dispatcher({
+          type: FLUSDYNAMIC_STORE,
+          payload: {store: 'resetPwdSession', data: {bottomSheetView: 4}},
+        });
+        // bottomSheetRef.current?.snapToIndex(0)
+      }
+    },
+  });
+
+  /* handle account login */
+  const handleAccountLogin = async formData => {
+    const device_name = await getDeviceName();
+
+    const formParams = {device_name, ...formData};
+
+    loginAccountApi.mutate(formParams);
+  };
+  /* Handle account recover  */
+  const handleAccountRecovery = formData =>
+    forgottenPasswordApi.mutateAsync(formData);
+  /* handle password reset verification  */
+  const handlePwdResetVerification = formData => {
+    const params = {partner_email: resetPwdSession?.user, ...formData};
+
+    verifyPasswordResetApi.mutateAsync(params);
+  };
+
+  /* reset password reset opertion  */
+  const destoryPasswordResetSession = () => {
+    dispatcher({
+      type: FLUSDYNAMIC_STORE,
+      payload: {store: 'resetPwdSession', data: {bottomSheetView: 0}},
+    });
+    bottomSheetRef.current?.snapToIndex(0);
+  };
+
+  /* handle password resetting */
+  const handlePasswordResetting = formData => {
+    const formParams = {...resetPwdSession, ...formData};
+
+    resetPasswordApi.mutate(formParams);
+  };
+
+  const isLoading =
+    forgottenPasswordApi.isLoading ||
+    verifyPasswordResetApi.isLoading ||
+    resetPasswordApi.isLoading ||
+    loginAccountApi.isLoading;
+
   return (
     <>
       <KeyboardAwareScrollView contentContainerStyle={styles.container}>
+        {/* Login Form */}
         <View style={styles.wrapper}>
           <Image
             source={icons.BlueLogo}
             resizeMode={'contain'}
             style={styles.imageHeader}
           />
-          <Formik initialValues={{email: '', password: ''}}>
+          <Formik
+            validationSchema={accountLoginValidationSchema}
+            initialValues={{pa_email: '', password: ''}}
+            onSubmit={handleAccountLogin}>
             {({handleChange, handleSubmit, errors, touched, values}) => (
               <>
                 <CustomInput
-                  name="email"
+                  name="pa_email"
                   placeholder="Email"
-                  onChangeText={handleChange('email')}
-                  value={values.email}
-                  error={touched.email && errors.email ? errors.email : null}
+                  onChangeText={handleChange('pa_email')}
+                  value={values.pa_email}
+                  error={
+                    touched.pa_email && errors.pa_email ? errors.pa_email : null
+                  }
                 />
                 <CustomInput
                   name="password"
                   placeholder="Password"
                   onChangeText={handleChange('password')}
                   value={values.password}
+                  secureTextEntry
                   error={
                     touched.password && errors.password ? errors.password : null
                   }
@@ -66,12 +187,14 @@ const Login = () => {
                   <CustomButton
                     title="Login"
                     style={styles.button}
-                    onPress={() => navigate('BottomTab')}
+                    onPress={handleSubmit}
+                    isLoading={isLoading}
+                    disabled={isLoading}
                   />
                   <CustomButton
                     title="Signup"
                     style={styles.button}
-                    onPress={() => navigate('SignUp')}
+                    onPress={() => navigate(SIGNUP_SCREEN)}
                   />
                 </View>
               </>
@@ -83,12 +206,21 @@ const Login = () => {
             <Pressable
               onPress={() => {
                 bottomSheetRef.current?.snapToIndex(1);
-                setBottomSheetView(1);
+
+                dispatcher({
+                  type: FLUSDYNAMIC_STORE,
+                  payload: {
+                    store: 'resetPwdSession',
+                    data: {bottomSheetView: 1},
+                  },
+                });
               }}>
               <Text style={styles.resendText}>Reset here</Text>
             </Pressable>
           </View>
         </View>
+
+        {/* Reset password components */}
         <BottomSheet
           backdropComponent={renderBackdrop}
           backgroundStyle={styles.bottomSheet}
@@ -96,91 +228,188 @@ const Login = () => {
           index={-1}
           enablePanDownToClose
           snapPoints={snapPoints}>
-          {bottomSheetView === 1 && (
+          {/* Forgotten Password */}
+          {resetPwdSession?.bottomSheetView === 1 && (
             <>
-              <View style={styles.contentContainer}>
-                <Text style={styles.forgotText}>Forgot password</Text>
-                <Text style={{...FONTS.body4}}>
-                  Enter your email for the verification process, we will send 4
-                  digits code to your email.
-                </Text>
-                <View style={{marginVertical: SIZES.font1}}>
-                  <InputBox label="Email" />
-                </View>
-                <CustomButton
-                  title="Continue"
-                  style={{marginTop: SIZES.font10}}
-                  onPress={() => setBottomSheetView(2)}
-                />
-              </View>
+              <Formik
+                validationSchema={forgetPwdValidationSchema}
+                initialValues={{partner_email: ''}}
+                onSubmit={handleAccountRecovery}>
+                {({
+                  handleChange,
+                  handleSubmit,
+                  errors,
+                  touched,
+                  values,
+                  isSubmitting,
+                }) => (
+                  <>
+                    <View style={styles.contentContainer}>
+                      <Text style={styles.forgotText}>Forgot password</Text>
+                      <Text style={{...FONTS.body4}}>
+                        To reset your password enter your registered email
+                        below, we will send you a 4 digits code to your email
+                        for verification.
+                      </Text>
+                      <View style={{marginVertical: SIZES.font1}}>
+                        <InputBox
+                          name="partner_email"
+                          label="Registered Email"
+                          keyboardType="email-address"
+                          value={values.partner_email}
+                          onChangeText={handleChange('partner_email')}
+                          error={
+                            touched.partner_email && errors.partner_email
+                              ? errors.partner_email
+                              : null
+                          }
+                        />
+                      </View>
+                      <CustomButton
+                        title="Send"
+                        style={{marginTop: SIZES.font10}}
+                        onPress={handleSubmit}
+                        isLoading={isLoading}
+                        disabled={isLoading}
+                      />
+                    </View>
+                  </>
+                )}
+              </Formik>
             </>
           )}
-          {bottomSheetView === 2 && (
-            <>
-              <View style={styles.contentContainer}>
-                <Text style={styles.forgotText}>Enter 4 Digits Code</Text>
-                <Text style={{...FONTS.body4}}>
-                  Enter the 4 digits code you receieved on your email.
-                </Text>
-                <View style={{marginVertical: SIZES.font1}}>
-                  <OTPInputView
-                    style={styles.otpInputView}
-                    pinCount={4}
-                    code={otp}
-                    onCodeChanged={setOtp}
-                    codeInputFieldStyle={styles.underlineStyleBase}
-                    codeInputHighlightStyle={styles.underlineStyleHighLighted}
-                    autoFocusOnLoad
-                  />
-                </View>
-                <CustomButton
-                  title="Continue"
-                  style={{marginTop: SIZES.font1 + 20}}
-                  onPress={() => setBottomSheetView(3)}
-                />
-              </View>
-            </>
-          )}
-          {bottomSheetView === 3 && (
-            <>
-              {successful ? (
-                <View style={styles.verifyView}>
-                  <Image
-                    source={icons.Success}
-                    resizeMode="contain"
-                    style={styles.verifyImage}
-                  />
-                  <Text style={styles.successfulText}>
-                    Password Reset Successful!
-                  </Text>
 
-                  <CustomButton
-                    title="Continue"
-                    style={styles.startButton}
-                    onPress={() => {
-                      setSuccessful(!successful);
-                      navigate('BottomTab');
-                    }}
-                  />
-                </View>
-              ) : (
-                <View style={styles.contentContainer}>
-                  <Text style={styles.forgotText}>Reset Password </Text>
-                  <Text style={{...FONTS.body4}}>
-                    Set the new password for your account so you can login and
-                    access all the features.
-                  </Text>
-                  <View style={{marginVertical: SIZES.font1}}>
-                    <InputBox label="New Password" isPassword />
-                    <InputBox label="Confirm Password" isPassword />
-                  </View>
-                  <CustomButton
-                    title="Reset Password"
-                    style={{marginTop: SIZES.font10}}
-                    onPress={() => setSuccessful(!successful)}
-                  />
-                </View>
-              )}
+          {/* Verify Password Reset Code */}
+          {resetPwdSession?.bottomSheetView === 2 && (
+            <>
+              <Formik
+                initialValues={{otp: ''}}
+                onSubmit={handlePwdResetVerification}>
+                {({
+                  handleChange,
+                  handleSubmit,
+                  errors,
+                  touched,
+                  values,
+                  isSubmitting,
+                }) => (
+                  <>
+                    <View style={styles.contentContainer}>
+                      <Text style={styles.forgotText}>Enter 4 Digits Code</Text>
+                      <Text style={{...FONTS.body4}}>
+                        Enter the 4 digits code you receieved on your email.
+                      </Text>
+                      <View style={{marginVertical: SIZES.font1}}>
+                        <OTPInputView
+                          style={styles.otpInputView}
+                          pinCount={4}
+                          code={values?.otp}
+                          onCodeChanged={code => {
+                            handleChange('otp')(code);
+                          }}
+                          codeInputFieldStyle={styles.underlineStyleBase}
+                          codeInputHighlightStyle={
+                            styles.underlineStyleHighLighted
+                          }
+                          autoFocusOnLoad
+                        />
+                      </View>
+                      <CustomButton
+                        title="Verify"
+                        style={{marginTop: SIZES.font1 + 20}}
+                        onPress={handleSubmit}
+                        isLoading={isLoading}
+                        disabled={isLoading}
+                      />
+                    </View>
+                  </>
+                )}
+              </Formik>
+            </>
+          )}
+
+          {/* Reset New Password */}
+          {resetPwdSession?.bottomSheetView === 3 && (
+            <>
+              <Formik
+                validationSchema={resetPwdValidationSchema}
+                initialValues={{password: '', password_confirmation: ''}}
+                onSubmit={handlePasswordResetting}>
+                {({
+                  handleChange,
+                  handleSubmit,
+                  errors,
+                  touched,
+                  values,
+                  isSubmitting,
+                }) => (
+                  <>
+                    <View style={styles.contentContainer}>
+                      <Text style={styles.forgotText}>Reset Password </Text>
+                      <Text style={{...FONTS.body4}}>
+                        Set the new password for your account so you can login
+                        and acess all the features.
+                      </Text>
+                      <View style={{marginVertical: SIZES.font1}}>
+                        <InputBox
+                          label="New Password"
+                          isPassword
+                          name="password"
+                          value={values.password}
+                          onChangeText={handleChange('password')}
+                          error={
+                            touched.password && errors.password
+                              ? errors.password
+                              : null
+                          }
+                        />
+
+                        <InputBox
+                          label="Confirm Password"
+                          isPassword
+                          value={values.password_confirmation}
+                          onChangeText={handleChange('password_confirmation')}
+                          error={
+                            touched.password_confirmation &&
+                            errors.password_confirmation
+                              ? errors.password_confirmation
+                              : null
+                          }
+                        />
+                      </View>
+                      <CustomButton
+                        title="Reset Password"
+                        style={{marginTop: SIZES.font10}}
+                        onPress={handleSubmit}
+                        isLoading={isLoading}
+                        disabled={isLoading}
+                      />
+                    </View>
+                  </>
+                )}
+              </Formik>
+            </>
+          )}
+
+          {/* Reset Password Success */}
+          {resetPwdSession?.bottomSheetView === 4 && (
+            <>
+              <View style={styles.verifyView}>
+                <Image
+                  source={icons.Success}
+                  resizeMode="contain"
+                  style={styles.verifyImage}
+                />
+                <Text style={styles.successfulText}>
+                  Password Reset Successful!
+                </Text>
+
+                <CustomButton
+                  title="Login"
+                  style={styles.startButton}
+                  onPress={destoryPasswordResetSession}
+                />
+              </View>
             </>
           )}
         </BottomSheet>

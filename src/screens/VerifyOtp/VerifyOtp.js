@@ -4,11 +4,15 @@ import {useNavigation, useRoute} from '@react-navigation/native';
 import icons from '../../constants/icons';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
 import CustomButton from '../../components/CustomButton';
-import {apis} from '../../services/api';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {Formik} from 'formik';
 import * as yup from 'yup';
 import {VerifyOtpStyle as styles} from './styles';
+import {LOGIN_SCREEN} from '../../constants/screens';
+import {useMutation} from 'react-query';
+import {useAuthApis} from '../../services/api/auth/auth.index';
+import {resetToken} from '../../services/authServices';
+import {sleep} from './../../utils/utils';
 
 const otpValiditor = yup.object().shape({
   otp: yup.string().required('Otp is required'),
@@ -16,57 +20,40 @@ const otpValiditor = yup.object().shape({
 
 const VerifyOtp = () => {
   const {navigate} = useNavigation();
-  const [successful, setSuccessful] = useState(false);
-  const [resending, setResending] = useState(false);
 
   const formRef = useRef();
 
-  const {params} = useRoute();
-  const {email, auth_token} = params;
+  const {VerifyOTP, ResendOTP} = useAuthApis();
+  /* verify otp handler */
+  const verifyOTPApi = useMutation(VerifyOTP, {
+    onSuccess: res => {
+      if (res?.status) {
+        resetToken();
 
-  const handleResend = async () => {
-    formRef.current.setErrors('otp', '');
-    try {
-      setResending(true);
-      const headers = {
-        Resource_Code: '006',
-        Authorization: `Bearer ${auth_token}`,
-      };
-      const response = await apis.resendOtp(headers);
-      Alert.alert('Success', response.message ?? '');
-      console.log(response);
-    } catch (e) {
-      Alert.alert('Error', 'Unable to resend Otp , try later..');
-      console.log(e);
-    } finally {
-      setResending(false);
-    }
-  };
-
-  const verify = async (values, {setFieldError}) => {
-    setSuccessful(!successful);
-    return;
-    try {
-      const headers = {
-        Resource_Code: '007',
-        Authorization: `Bearer ${auth_token}`,
-      };
-
-      const response = await apis.verifyOtp({otp: values.otp}, headers);
-
-      if (response.code === 200) {
-        setSuccessful(true);
+        sleep().then(() => navigate(LOGIN_SCREEN));
       }
-    } catch (e) {
-      setFieldError('otp', 'verify-error');
-    }
+    },
+  });
+
+  /* resend otp */
+  const resendOTPApi = useMutation(ResendOTP);
+
+  const handleResend = () => {
+    formRef.current.setErrors('otp', '');
+
+    resendOTPApi.mutate();
   };
+
+  const handleOTPVerification = formData => verifyOTPApi.mutateAsync(formData);
+
+  const isLoading = verifyOTPApi.isLoading;
+  const resendingOtp = resendOTPApi.isLoading;
 
   return (
     <Formik
       initialValues={{otp: ''}}
       validationSchema={otpValiditor}
-      onSubmit={verify}
+      onSubmit={handleOTPVerification}
       innerRef={formRef}>
       {({
         handleChange,
@@ -78,94 +65,74 @@ const VerifyOtp = () => {
         setFieldError,
       }) => (
         <>
-          {successful ? (
-            <View style={styles.lottieBox}>
-              <Image
-                source={icons.Success}
-                resizeMode="contain"
-                style={styles.lottieView}
-              />
-              <Text style={styles.successfulText}>
-                Verification Successful!
-              </Text>
+          <KeyboardAwareScrollView
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={styles.container}>
+            <Image
+              source={icons.Verify_Otp}
+              resizeMode="contain"
+              style={styles.image}
+            />
+            <Text style={styles.otpVerify}>Verification</Text>
+            <Text style={styles.verifyText}>
+              Please enter the verification code that was sent to your
+              registered email
+            </Text>
+            <OTPInputView
+              style={styles.otpInputView}
+              pinCount={4}
+              code={values?.otp}
+              onCodeChanged={code => {
+                handleChange('otp')(code);
+              }}
+              autoFocusOnLoad
+              codeInputFieldStyle={[
+                styles.underlineStyleBase,
+                touched.otp && errors.otp && styles.inputErroe,
+              ]}
+              codeInputHighlightStyle={styles.underlineStyleHighLighted}
+            />
 
-              <CustomButton
-                title="Start"
-                style={styles.startButton}
-                onPress={() => navigate('Login')}
-              />
-            </View>
-          ) : (
-            <KeyboardAwareScrollView
-              showsVerticalScrollIndicator={false}
-              contentContainerStyle={styles.container}>
-              <Image
-                source={icons.Verify_Otp}
-                resizeMode="contain"
-                style={styles.image}
-              />
-              <Text style={styles.otpVerify}>OTP Verification</Text>
-              <Text style={styles.verifyText}>
-                Please enter the verification code that was {'\n'}sent to
-                <Text style={{fontWeight: '700'}}> {email}</Text>
-              </Text>
-              <OTPInputView
-                style={styles.otpInputView}
-                pinCount={4}
-                code={values.otp}
-                onCodeChanged={code => {
-                  // if (errors.otp === 'verify-error') {
-                  //   setFieldError('otp', '');
-                  // }
-                  handleChange('otp')(code);
-                }}
-                autoFocusOnLoad
-                codeInputFieldStyle={[
-                  styles.underlineStyleBase,
-                  touched.otp && errors.otp && styles.inputErroe,
-                ]}
-                codeInputHighlightStyle={styles.underlineStyleHighLighted}
-              />
-
-              {errors.otp === 'verify-error' && (
-                <View style={{alignItems: 'center'}}>
-                  <Text style={styles.invalidCode}>
-                    Verification code invalid
-                  </Text>
-                  <Pressable onPress={handleResend}>
-                    {resending ? (
-                      <Text style={styles.resendingText}>Resending...</Text>
-                    ) : (
-                      <Text style={styles.resendText}>Resend</Text>
-                    )}
-                  </Pressable>
-                </View>
-              )}
-
-              {errors.otp === 'verify-error' ? null : (
-                <View style={styles.resendOtpView}>
-                  {resending ? (
+            {errors.otp === 'verify-error' && (
+              <View style={{alignItems: 'center'}}>
+                <Text style={styles.invalidCode}>
+                  Verification code invalid
+                </Text>
+                <Pressable onPress={handleResend}>
+                  {resendingOtp && (
                     <Text style={styles.resendingText}>Resending...</Text>
-                  ) : (
-                    <>
-                      <Text style={styles.noOtpReceive}>
-                        Didn’t receive OTP?
-                      </Text>
-                      <Pressable onPress={handleResend}>
-                        <Text style={styles.resendText}>Resend OTP</Text>
-                      </Pressable>
-                    </>
                   )}
-                </View>
-              )}
-              <CustomButton
-                title="Proceed"
-                style={styles.proceedButton}
-                onPress={handleSubmit}
-                isLoading={isSubmitting}
-              />
-            </KeyboardAwareScrollView>
-          )}
+                  {!resendingOtp && (
+                    <Text style={styles.resendText}>Resend</Text>
+                  )}
+                </Pressable>
+              </View>
+            )}
+
+            {errors.otp !== 'verify-error' && (
+              <View style={styles.resendOtpView}>
+                {resendingOtp && (
+                  <Text style={styles.resendingText}>Resending...</Text>
+                )}
+
+                {!resendingOtp && (
+                  <>
+                    <Text style={styles.noOtpReceive}>Didn’t receive OTP?</Text>
+                    <Pressable onPress={handleResend}>
+                      <Text style={styles.resendText}> Resend</Text>
+                    </Pressable>
+                  </>
+                )}
+              </View>
+            )}
+            <CustomButton
+              title="Proceed"
+              style={styles.proceedButton}
+              disabled={isLoading || resendingOtp}
+              onPress={handleSubmit}
+              isLoading={isSubmitting || isLoading}
+            />
+          </KeyboardAwareScrollView>
         </>
       )}
     </Formik>
