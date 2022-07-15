@@ -3,12 +3,14 @@ import React from 'react';
 import {BellIcon, MenuIcon, SearchIcon} from '../assets/svgs/svg';
 import icons from '../constants/icons';
 import {SIZES} from '../constants/theme';
+import {useNavigation} from '@react-navigation/native';
 
-const Header = () => {
+const Header = ({onPress}) => {
+  const navigation = useNavigation();
   return (
     <View style={styles.container}>
       <View style={styles.leftView}>
-        <Pressable>
+        <Pressable onPress={onPress}>
           <MenuIcon />
         </Pressable>
         <Image
