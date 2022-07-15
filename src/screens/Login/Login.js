@@ -94,7 +94,6 @@ const Login = () => {
           backgroundStyle={styles.bottomSheet}
           ref={bottomSheetRef}
           index={-1}
-          handleIndicatorStyle={{backgroundColor: 'red', width: 150}}
           enablePanDownToClose
           snapPoints={snapPoints}>
           {bottomSheetView === 1 && (

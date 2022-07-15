@@ -9,6 +9,7 @@ import Onboarding from '../screens/Onboarding/Onboarding';
 import TermsAndPrivacy from '../screens/TermsPrivacy/TermsPrivacy';
 import SignUp from '../screens/SignUp/SignUp';
 import BottomTabs from './TabNav';
+import DrawerNav from './DrawerNav';
 
 const Stack = createNativeStackNavigator();
 
@@ -26,6 +27,7 @@ function RootNavigator() {
         <Stack.Screen name="TermsPrivacy" component={TermsAndPrivacy} />
         <Stack.Screen name="SignUp" component={SignUp} />
         <Stack.Screen name="VerifyOtp" component={VerifyOtp} />
+        <Stack.Screen name="DrawerNav" component={DrawerNav} />
         <Stack.Screen name="BottomTab" component={BottomTabs} />
       </Stack.Navigator>
     </NavigationContainer>
