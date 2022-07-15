@@ -10,11 +10,13 @@ export const COLORS = {
   white: '#FFFFFF',
   grey: '#C7C7C7',
   black: '#000000',
-  yellow: '#FAB613',
   blue: '#00709E',
   separator: '#D3D3D3',
   input: '#828181',
   otp: '#A4A2A2',
+  card: '#444343',
+  shadow: 'rgba(77, 76, 76, 0.15)',
+  line: '#959292',
 };
 export const SIZES = {
   // font sizes
