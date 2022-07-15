@@ -4,11 +4,11 @@ import {Platform} from 'react-native';
 import TabComponent from '../components/TabComponent';
 import icons from '../constants/icons';
 import {COLORS, SIZES} from '../constants/theme';
-import Home from '../screens/Home/Home';
 import Tribe from '../screens/Tribe/Tribe';
 import Inbox from '../screens/Inbox/Inbox';
 import MyWallet from '../screens/MyWallet/MyWallet';
 import Profile from '../screens/Profile/Profile';
+import DrawerNav from './DrawerNav';
 
 const Tab = createBottomTabNavigator();
 
@@ -30,7 +30,7 @@ const BottomTabs = () => {
       }}>
       <Tab.Screen
         name="Home"
-        component={Home}
+        component={DrawerNav}
         options={{
           tabBarIcon: ({focused}) => (
             <TabComponent label={'Home'} focused={focused} icon={icons.Home} />
