@@ -24,13 +24,16 @@ export default function DrawerNav() {
   return (
     <Drawer.Navigator
       drawerContent={props => <CustomDrawer {...props} />}
-      //   initialRouteName={undefined}
       screenOptions={{
         headerShown: false,
         drawerLabelStyle: {
           ...FONTS.body3,
           color: COLORS.black,
           marginLeft: -10,
+        },
+        drawerType: 'front',
+        drawerStyle: {
+          width: '75%',
         },
       }}>
       <Drawer.Screen

@@ -11,6 +11,7 @@ import SignUp from '../screens/SignUp/SignUp';
 import BottomTabs from './TabNav';
 import {useFlusStores} from 'react-flus';
 import {
+  BOTTOMTAB_SCREEN,
   LOGIN_SCREEN,
   ONBOARD_SCREEN,
   SIGNUP_SCREEN,
@@ -22,8 +23,6 @@ const Stack = createNativeStackNavigator();
 
 function RootNavigator() {
   const {auth} = useFlusStores();
-
-  console.log({auth});
 
   // console.log(auth)
   return (
@@ -58,7 +57,7 @@ function RootNavigator() {
         ) : (
           <>
             {/* Auth protected screens should be stacked here  */}
-            <Stack.Screen name={VERIFY_OTP_SCREEN} component={BottomTabs} />
+            <Stack.Screen name={LOGIN_SCREEN} component={BottomTabs} />
           </>
         )}
       </Stack.Navigator>

@@ -52,14 +52,14 @@ const BottomTabs = () => {
       />
 
       <Tab.Screen
-        name={'Inbox'}
+        name={'Message'}
         component={Inbox}
         options={{
           tabBarIcon: ({focused}) => (
             <TabComponent
-              label={'Inbox'}
+              label={'Message'}
               focused={focused}
-              icon={icons.Envelope}
+              icon={icons.Message}
             />
           ),
         }}
