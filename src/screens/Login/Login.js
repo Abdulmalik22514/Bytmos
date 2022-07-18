@@ -231,6 +231,7 @@ const Login = () => {
           backdropComponent={renderBackdrop}
           backgroundStyle={styles.bottomSheet}
           ref={bottomSheetRef}
+          handleIndicatorStyle={styles.sheetHandleStyle}
           index={-1}
           enablePanDownToClose
           snapPoints={snapPoints}>

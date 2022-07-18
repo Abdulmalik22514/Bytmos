@@ -79,4 +79,11 @@ export const LoginStyles = StyleSheet.create({
   bottomSheet: {
     backgroundColor: COLORS.background,
   },
+  sheetHandleStyle: {
+    backgroundColor: COLORS.grey,
+    width: SIZES.font1 * 2.5,
+    height: SIZES.font10 - 5,
+    marginTop: SIZES.font10,
+    borderRadius: 5,
+  },
 });
