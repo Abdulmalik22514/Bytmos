@@ -1,38 +1,39 @@
-import * as React from "react";
-import {NavigationContainer} from "@react-navigation/native";
-import {createNativeStackNavigator} from "@react-navigation/native-stack";
-import {StatusBar} from "react-native";
-import NotchResponsive from "../components/NotchResponsive";
-import VerifyOtp from "../screens/VerifyOtp/VerifyOtp";
-import Login from "../screens/Login/Login";
-import Onboarding from "../screens/Onboarding/Onboarding";
-import TermsAndPrivacy from "../screens/TermsPrivacy/TermsPrivacy";
-import SignUp from "../screens/SignUp/SignUp";
-import BottomTabs from "./TabNav";
-import {useFlusStores} from "react-flus";
+import * as React from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {StatusBar} from 'react-native';
+import NotchResponsive from '../components/NotchResponsive';
+import VerifyOtp from '../screens/VerifyOtp/VerifyOtp';
+import Login from '../screens/Login/Login';
+import Onboarding from '../screens/Onboarding/Onboarding';
+import TermsAndPrivacy from '../screens/TermsPrivacy/TermsPrivacy';
+import SignUp from '../screens/SignUp/SignUp';
+import BottomTabs from './TabNav';
+import {useFlusStores} from 'react-flus';
 import {
   LOGIN_SCREEN,
   ONBOARD_SCREEN,
   SIGNUP_SCREEN,
   TERMS_AND_POLICY_SCREEN,
   VERIFY_OTP_SCREEN,
-} from "../constants/screens";
+} from '../constants/screens';
 
 const Stack = createNativeStackNavigator();
 
 function RootNavigator() {
   const {auth} = useFlusStores();
 
+  console.log({auth});
+
   // console.log(auth)
   return (
     <NavigationContainer>
-      <StatusBar translucent={true} backgroundColor={"transparent"} />
+      <StatusBar translucent={true} backgroundColor={'transparent'} />
       <NotchResponsive />
       <Stack.Navigator
         screenOptions={{
           headerShown: false,
-        }}
-      >
+        }}>
         {!auth?.isActive ? (
           <>
             {/* None-Auth protected screens should be stacked here */}

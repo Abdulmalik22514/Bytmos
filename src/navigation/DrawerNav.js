@@ -14,9 +14,9 @@ import {
   PencilIcon,
   SettingsIcon,
 } from '../assets/svgs/svg';
-import BottomTabs from './TabNav';
 import CustomDrawer from '../components/CustomDrawer';
-import {COLORS, FONTS, SIZES} from '../constants/theme';
+import {COLORS, FONTS} from '../constants/theme';
+import {HomeNavigator} from './HomeNavigator';
 
 const Drawer = createDrawerNavigator();
 
@@ -35,7 +35,7 @@ export default function DrawerNav() {
       }}>
       <Drawer.Screen
         name="HomeScreen"
-        component={Home}
+        component={HomeNavigator}
         options={{
           drawerIcon: () => <HomeIcon />,
           drawerLabel: 'Home',

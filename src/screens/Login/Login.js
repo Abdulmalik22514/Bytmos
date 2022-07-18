@@ -12,7 +12,7 @@ import OTPInputView from '@twotalltotems/react-native-otp-input';
 import {useNavigation} from '@react-navigation/native';
 import {LoginStyles as styles} from './styles';
 import {SIGNUP_SCREEN} from '../../constants/screens';
-import {useAuthApis} from '../../services/api/auth/auth.index';
+import {useAuthApis} from '../../services/api/Auth/auth.index';
 import {useMutation} from 'react-query';
 import {FLUSDYNAMIC_STORE, useFlusDispatcher, useFlusStores} from 'react-flus';
 import {USER_LOGIN} from '../../flus/constants/auth.const';
@@ -112,6 +112,8 @@ const Login = () => {
   const handleAccountLogin = async formData => {
     const device_name = await getDeviceName();
 
+    console.log({formData});
+
     const formParams = {device_name, ...formData};
 
     loginAccountApi.mutate(formParams);
@@ -159,8 +161,12 @@ const Login = () => {
             style={styles.imageHeader}
           />
           <Formik
+            enableReinitialize
             validationSchema={accountLoginValidationSchema}
-            initialValues={{pa_email: '', password: ''}}
+            initialValues={{
+              pa_email: 'ibrahimmalik095@gmail.com',
+              password: '#Abdulmalik1',
+            }}
             onSubmit={handleAccountLogin}>
             {({handleChange, handleSubmit, errors, touched, values}) => (
               <>

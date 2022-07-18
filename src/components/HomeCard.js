@@ -21,6 +21,7 @@ export const CardItems = [
   {
     icon: <AccountIcon />,
     label: 'Account',
+
     // onPress: () => navigation.navigate('AccountScreen'),
   },
   {
@@ -46,13 +47,14 @@ export const CardItems = [
   {
     icon: <WorksIcon />,
     label: 'My Recent Works',
+    screenName: 'RecentWorks',
     // onPress: () => navigation.navigate('AccountScreen'),
   },
 ];
 
-const HomeCard = ({icon, label}) => {
+const HomeCard = ({icon, label, onPress}) => {
   return (
-    <Pressable style={styles.container}>
+    <Pressable style={styles.container} onPress={onPress}>
       {icon}
       <Text style={styles.label}>{label}</Text>
     </Pressable>

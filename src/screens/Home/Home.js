@@ -13,6 +13,7 @@ import {
   ServicesIcon,
   WorksIcon,
 } from '../../assets/svgs/svg';
+import {ONBOARD_SCREEN} from '../../constants/screens';
 
 // const CardItems = [
 //   {
@@ -63,7 +64,14 @@ const Home = ({navigation}) => {
         <Text style={styles.accountName}>Flora’s Fashion Styles Ltd</Text>
         <View style={styles.itemContainer}>
           {CardItems.map((item, index) => {
-            return <HomeCard key={index} icon={item.icon} label={item.label} />;
+            return (
+              <HomeCard
+                key={index}
+                icon={item.icon}
+                label={item.label}
+                onPress={() => navigation.navigate(item.screenName || '')}
+              />
+            );
           })}
         </View>
       </KeyboardAwareScrollView>

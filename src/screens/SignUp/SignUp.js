@@ -12,7 +12,7 @@ import Container from '../../components/Container';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {SignupStyle as styles} from './styles';
 import {useMutation} from 'react-query';
-import {useAuthApis} from '../../services/api/auth/auth.index';
+import {useAuthApis} from '../../services/api/Auth/auth.index';
 import {useFlusDispatcher} from 'react-flus';
 import {SET_API_TOKEN} from '../../flus/constants/auth.const';
 import {VERIFY_OTP_SCREEN} from '../../constants/screens';
@@ -35,7 +35,7 @@ const getErrorValue = (errorKeys, err) => {
   return errorMessage ?? 'Something went wrong';
 };
 
-const SignUp = ({}) => {
+const SignUp = () => {
   const {navigate} = useNavigation();
   const dispatcher = useFlusDispatcher();
 

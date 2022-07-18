@@ -1,10 +1,12 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
+import {useNavigation} from '@react-navigation/native';
 
 const RecentWorks = () => {
+  const {goBack} = useNavigation();
   return (
     <View>
-      <Text>RecentWorks</Text>
+      <Text onPress={goBack}>RecentWorks</Text>
     </View>
   );
 };
