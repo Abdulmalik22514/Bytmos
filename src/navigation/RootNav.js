@@ -25,6 +25,7 @@ function RootNavigator() {
   const {auth} = useFlusStores();
 
   // console.log(auth)
+
   return (
     <NavigationContainer>
       <StatusBar translucent={true} backgroundColor={'transparent'} />
@@ -57,7 +58,7 @@ function RootNavigator() {
         ) : (
           <>
             {/* Auth protected screens should be stacked here  */}
-            <Stack.Screen name={LOGIN_SCREEN} component={BottomTabs} />
+            <Stack.Screen name={BOTTOMTAB_SCREEN} component={BottomTabs} />
           </>
         )}
       </Stack.Navigator>

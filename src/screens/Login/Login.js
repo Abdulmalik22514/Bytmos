@@ -112,8 +112,6 @@ const Login = () => {
   const handleAccountLogin = async formData => {
     const device_name = await getDeviceName();
 
-    console.log({formData});
-
     const formParams = {device_name, ...formData};
 
     loginAccountApi.mutate(formParams);
@@ -134,6 +132,7 @@ const Login = () => {
       type: FLUSDYNAMIC_STORE,
       payload: {store: 'resetPwdSession', data: {bottomSheetView: 0}},
     });
+
     bottomSheetRef.current?.snapToIndex(0);
   };
 
@@ -231,7 +230,6 @@ const Login = () => {
           backdropComponent={renderBackdrop}
           backgroundStyle={styles.bottomSheet}
           ref={bottomSheetRef}
-          handleIndicatorStyle={styles.sheetHandleStyle}
           index={-1}
           enablePanDownToClose
           snapPoints={snapPoints}>

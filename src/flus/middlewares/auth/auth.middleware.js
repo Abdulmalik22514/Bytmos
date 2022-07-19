@@ -40,6 +40,10 @@ export const AuthMiddleware = {
     logout(state) {
       destorySession();
 
+      state.auth.isActive = false;
+      state.auth.api_token = null;
+      state.auth.user = null;
+
       return {
         ...state,
       };
