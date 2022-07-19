@@ -5,48 +5,6 @@ import {COLORS, FONTS, SIZES} from '../../constants/theme';
 import Header from '../../components/Header';
 import icons from '../../constants/icons';
 import HomeCard, {CardItems} from '../../components/HomeCard';
-import {
-  AccountIcon,
-  ManageIcon,
-  OrdersIcon,
-  PackagesIcon,
-  ServicesIcon,
-  WorksIcon,
-} from '../../assets/svgs/svg';
-import {ONBOARD_SCREEN} from '../../constants/screens';
-
-// const CardItems = [
-//   {
-//     icon: <AccountIcon />,
-//     label: 'Account',
-//     onPress: () => navigation.navigate('AccountScreen'),
-//   },
-//   {
-//     icon: <PackagesIcon />,
-//     label: 'Packages',
-//     onPress: () => navigation.navigate('AccountScreen'),
-//   },
-//   {
-//     icon: <ServicesIcon />,
-//     label: 'My Services',
-//     onPress: () => navigation.navigate('AccountScreen'),
-//   },
-//   {
-//     icon: <OrdersIcon />,
-//     label: 'Service Orders',
-//     onPress: () => navigation.navigate('AccountScreen'),
-//   },
-//   {
-//     icon: <ManageIcon />,
-//     label: 'Manage Orders',
-//     onPress: () => navigation.navigate('AccountScreen'),
-//   },
-//   {
-//     icon: <WorksIcon />,
-//     label: 'My Recent Works',
-//     onPress: () => navigation.navigate('AccountScreen'),
-//   },
-// ];
 
 const Home = ({navigation}) => {
   return (

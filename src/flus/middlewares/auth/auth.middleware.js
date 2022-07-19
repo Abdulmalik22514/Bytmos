@@ -1,4 +1,9 @@
-import {saveUser, setIsActive, setToken} from '../../../services/authServices';
+import {
+  destorySession,
+  saveUser,
+  setIsActive,
+  setToken,
+} from '../../../services/authServices';
 
 export const AuthMiddleware = {
   auth: {
@@ -33,9 +38,7 @@ export const AuthMiddleware = {
     },
 
     logout(state) {
-      state.auth.isActive = false;
-      state.auth.api_token = null;
-      state.auth.user = null;
+      destorySession();
 
       return {
         ...state,

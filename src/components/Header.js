@@ -11,7 +11,7 @@ const Header = ({onPress}) => {
     <View style={styles.container}>
       <View style={styles.leftView}>
         <Pressable onPress={onPress}>
-          <MenuIcon />
+          <MenuIcon width={24} height={20} />
         </Pressable>
         <Image
           source={icons.SplashIcon}
@@ -21,10 +21,10 @@ const Header = ({onPress}) => {
       </View>
       <View style={styles.leftView}>
         <Pressable>
-          <SearchIcon style={styles.searchIcon} />
+          <SearchIcon style={styles.searchIcon} width={20} height={25} />
         </Pressable>
         <Pressable>
-          <BellIcon />
+          <BellIcon width={24} height={28} />
         </Pressable>
       </View>
     </View>
@@ -39,18 +39,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: SIZES.font10,
-    marginVertical: SIZES.font10,
+    marginVertical: SIZES.font10 - 5,
   },
   image: {
     width: SIZES.font1 * 6.5,
-    height: SIZES.font1 * 2,
-    marginLeft: SIZES.font10,
+    height: SIZES.font1 * 1.5,
+    marginLeft: SIZES.font10 - 5,
   },
   leftView: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   searchIcon: {
-    marginRight: SIZES.font8,
+    marginRight: SIZES.font9,
   },
 });

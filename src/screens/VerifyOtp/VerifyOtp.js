@@ -21,10 +21,6 @@ const otpValiditor = yup.object().shape({
 const VerifyOtp = () => {
   const {navigate} = useNavigation();
 
-  const jjjjjjj = useRoute();
-
-  console.log({jjjjjjj});
-
   const formRef = useRef();
 
   const {VerifyOTP, ResendOTP} = useAuthApis();

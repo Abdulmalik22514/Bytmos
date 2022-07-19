@@ -4,13 +4,9 @@ import CustomButton from '../../components/CustomButton';
 import {COLORS, FONTS, SIZES} from '../../constants/theme';
 import {useFlusDispatcher} from 'react-flus';
 import {LOGOUT} from '../../flus/constants/auth.const';
-import {useRoute} from '@react-navigation/native';
 
 const Logout = () => {
   const dispatcher = useFlusDispatcher();
-  const jjjjjjj = useRoute();
-
-  console.log({jjjjjjj});
 
   return (
     <View style={styles.container}>
