@@ -1,69 +1,124 @@
-import {Image, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {COLORS, FONTS, SIZES} from '../../constants/theme';
+import {Image, ScrollView, Text, View} from 'react-native';
+import React, {useState} from 'react';
+import {FONTS, SIZES} from '../../constants/theme';
 import Header from '../../components/Header';
 import icons from '../../constants/icons';
 import HomeCard, {CardItems} from '../../components/HomeCard';
+import Modal from 'react-native-modal';
+import CustomButton from '../../components/CustomButton';
+import {ACCOUNT_SCREEN} from '../../constants/screens';
+import Rating from '../../components/Performance';
+import {HomeStyles as styles} from './styles';
 
 const Home = ({navigation}) => {
+  const [isModalVisible, setModalVisible] = useState(false);
+
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+  };
+
+  const handleAction = title => {
+    if (title === 'Account') {
+      return toggleModal();
+    }
+    if (title === 'Packages') {
+      return toggleModal();
+    }
+    if (title === 'My Services') {
+      return toggleModal();
+    }
+    if (title === 'Service Orders') {
+      return toggleModal();
+    }
+    if (title === 'Manage Orders') {
+      return toggleModal();
+    }
+    if (title === 'My Recent Works') {
+      return toggleModal();
+    }
+  };
+
   return (
-    <View style={styles.container}>
-      <View>
-        <Header onPress={() => navigation.openDrawer()} />
-        <View style={styles.separator} />
-      </View>
-      <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
-        <Image
-          source={icons.ProfilePix}
-          resizeMode="contain"
-          style={styles.profilepic}
-        />
-        <Text style={styles.accountName}>Flora’s Fashion Styles Ltd</Text>
-        <View style={styles.itemContainer}>
-          {CardItems.map((item, index) => {
-            return (
-              <HomeCard
-                key={index}
-                icon={item.icon}
-                label={item.label}
-                onPress={() => navigation.navigate(item.screenName || '')}
-              />
-            );
-          })}
+    <>
+      <View style={styles.container}>
+        <View>
+          <Header onPress={() => navigation.openDrawer()} />
         </View>
-      </KeyboardAwareScrollView>
-    </View>
+        <ScrollView
+          style={{paddingHorizontal: SIZES.font10}}
+          showsVerticalScrollIndicator={false}>
+          <Image
+            source={icons.ProfilePix}
+            resizeMode="contain"
+            style={styles.profilepic}
+          />
+          <Text style={styles.accountName}>Flora’s Fashion Styles Ltd</Text>
+          <View style={styles.itemContainer}>
+            {CardItems.map((item, index) => {
+              return (
+                <HomeCard
+                  key={index}
+                  icon={item.icon}
+                  label={item.label}
+                  onPress={() => handleAction(item.label)}
+                />
+              );
+            })}
+          </View>
+          <View style={{paddingHorizontal: SIZES.font8}}>
+            <Text style={{...FONTS.h10, marginBottom: SIZES.font1}}>
+              Performance
+            </Text>
+            <Rating label="Client Ranking" />
+            <Rating label="Service Points" />
+            <Rating label="Tribality" />
+            <Rating label="Tribal Presence" />
+          </View>
+        </ScrollView>
+      </View>
+      <Modal
+        onBackdropPress={toggleModal}
+        isVisible={isModalVisible}
+        backdropOpacity={0.7}>
+        <View>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalText}>Create a</Text>
+            <CustomButton
+              title="Personal Account"
+              style={styles.modalButton}
+              onPress={() => {
+                toggleModal();
+                //to delay navigation after modal is closed
+                setTimeout(
+                  () =>
+                    navigation.navigate(ACCOUNT_SCREEN, {
+                      accountType: 'Personal',
+                    }),
+                  150,
+                );
+              }}
+            />
+            <Text style={{...FONTS.body4, fontSize: 22}}>OR</Text>
+            <CustomButton
+              title="Business Account"
+              style={styles.modalButton}
+              onPress={() => {
+                toggleModal();
+                //to delay navigation after modal is closed
+                setTimeout(
+                  () =>
+                    navigation.navigate(ACCOUNT_SCREEN, {
+                      accountType: 'Business',
+                    }),
+                  150,
+                );
+              }}
+            />
+          </View>
+        </View>
+      </Modal>
+    </>
   );
 };
 
 export default Home;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: COLORS.white,
-  },
-  separator: {
-    width: '100%',
-    borderWidth: 0.6,
-    borderColor: COLORS.separator,
-  },
-  profilepic: {
-    width: SIZES.font1 * 4.5,
-    height: SIZES.font1 * 4.5,
-    alignSelf: 'center',
-    marginVertical: SIZES.font10,
-  },
-  itemContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-    paddingHorizontal: SIZES.font10,
-    marginTop: SIZES.font1 * 2,
-  },
-  accountName: {
-    ...FONTS.h6,
-    alignSelf: 'center',
-  },
-});
