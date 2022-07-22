@@ -6,7 +6,7 @@ import icons from '../../constants/icons';
 import HomeCard, {CardItems} from '../../components/HomeCard';
 import Modal from 'react-native-modal';
 import CustomButton from '../../components/CustomButton';
-import {ACCOUNT_SCREEN} from '../../constants/screens';
+import {ACCOUNT_SCREEN, PACKAGE_SCREEN} from '../../constants/screens';
 import Rating from '../../components/Performance';
 import {HomeStyles as styles} from './styles';
 
@@ -22,7 +22,7 @@ const Home = ({navigation}) => {
       return toggleModal();
     }
     if (title === 'Packages') {
-      return toggleModal();
+      return navigation.navigate(PACKAGE_SCREEN);
     }
     if (title === 'My Services') {
       return toggleModal();
