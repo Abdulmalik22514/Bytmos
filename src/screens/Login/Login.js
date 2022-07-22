@@ -22,6 +22,8 @@ import {
   forgetPwdValidationSchema,
   resetPwdValidationSchema,
 } from '../../utils/validation';
+import BottomSheet1 from '../../utils/BottomSheet/BottomSheet1';
+import NotchResponsive from '../../components/NotchResponsive';
 
 const Login = () => {
   const {navigate} = useNavigation();
@@ -51,7 +53,7 @@ const Login = () => {
     useAuthApis();
 
   const loginAccountApi = useMutation(LoginAccount, {
-    onSuccess: (res, formParams) => {
+    onSuccess: res => {
       if (res?.status) {
         dispatcher({
           type: USER_LOGIN,
@@ -127,7 +129,7 @@ const Login = () => {
   };
 
   /* reset password reset opertion  */
-  const destoryPasswordResetSession = () => {
+  const destroyPasswordResetSession = () => {
     dispatcher({
       type: FLUSDYNAMIC_STORE,
       payload: {store: 'resetPwdSession', data: {bottomSheetView: 0}},
@@ -152,6 +154,7 @@ const Login = () => {
   return (
     <>
       <KeyboardAwareScrollView contentContainerStyle={styles.container}>
+        <NotchResponsive />
         {/* Login Form */}
         <View style={styles.wrapper}>
           <Image
@@ -240,44 +243,20 @@ const Login = () => {
                 validationSchema={forgetPwdValidationSchema}
                 initialValues={{partner_email: ''}}
                 onSubmit={handleAccountRecovery}>
-                {({
-                  handleChange,
-                  handleSubmit,
-                  errors,
-                  touched,
-                  values,
-                  isSubmitting,
-                }) => (
+                {({handleChange, handleSubmit, errors, touched, values}) => (
                   <>
-                    <View style={styles.contentContainer}>
-                      <Text style={styles.forgotText}>Forgot password</Text>
-                      <Text style={{...FONTS.body4}}>
-                        To reset your password enter your registered email
-                        below, we will send you a 4 digits code to your email
-                        for verification.
-                      </Text>
-                      <View style={{marginVertical: SIZES.font1}}>
-                        <InputBox
-                          name="partner_email"
-                          label="Registered Email"
-                          keyboardType="email-address"
-                          value={values.partner_email}
-                          onChangeText={handleChange('partner_email')}
-                          error={
-                            touched.partner_email && errors.partner_email
-                              ? errors.partner_email
-                              : null
-                          }
-                        />
-                      </View>
-                      <CustomButton
-                        title="Send"
-                        style={{marginTop: SIZES.font10}}
-                        onPress={handleSubmit}
-                        isLoading={isLoading}
-                        disabled={isLoading}
-                      />
-                    </View>
+                    <BottomSheet1
+                      value={values.partner_email}
+                      onChangeSheet1={handleChange('partner_email')}
+                      error={
+                        touched.partner_email && errors.partner_email
+                          ? errors.partner_email
+                          : null
+                      }
+                      onSubmitSheet1={handleSubmit}
+                      isLoading={isLoading}
+                      disabled={isLoading}
+                    />
                   </>
                 )}
               </Formik>
@@ -290,14 +269,7 @@ const Login = () => {
               <Formik
                 initialValues={{otp: ''}}
                 onSubmit={handlePwdResetVerification}>
-                {({
-                  handleChange,
-                  handleSubmit,
-                  errors,
-                  touched,
-                  values,
-                  isSubmitting,
-                }) => (
+                {({handleChange, handleSubmit, values}) => (
                   <>
                     <View style={styles.contentContainer}>
                       <Text style={styles.forgotText}>Enter 4 Digits Code</Text>
@@ -340,14 +312,7 @@ const Login = () => {
                 validationSchema={resetPwdValidationSchema}
                 initialValues={{password: '', password_confirmation: ''}}
                 onSubmit={handlePasswordResetting}>
-                {({
-                  handleChange,
-                  handleSubmit,
-                  errors,
-                  touched,
-                  values,
-                  isSubmitting,
-                }) => (
+                {({handleChange, handleSubmit, errors, touched, values}) => (
                   <>
                     <View style={styles.contentContainer}>
                       <Text style={styles.forgotText}>Reset Password </Text>
@@ -412,7 +377,7 @@ const Login = () => {
                 <CustomButton
                   title="Login"
                   style={styles.startButton}
-                  onPress={destoryPasswordResetSession}
+                  onPress={destroyPasswordResetSession}
                 />
               </View>
             </>
