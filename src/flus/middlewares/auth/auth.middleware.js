@@ -1,5 +1,5 @@
 import {
-  destorySession,
+  destroySession,
   saveUser,
   setIsActive,
   setToken,
@@ -38,7 +38,7 @@ export const AuthMiddleware = {
     },
 
     logout(state) {
-      destorySession();
+      destroySession();
 
       state.auth.isActive = false;
       state.auth.api_token = null;
