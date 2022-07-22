@@ -17,6 +17,8 @@ export const COLORS = {
   card: '#444343',
   shadow: 'rgba(77, 76, 76, 0.15)',
   line: '#959292',
+  pictureBackground: '#E5E2E2',
+  rating: '#F0EEEE',
 };
 export const SIZES = {
   // font sizes
@@ -120,7 +122,7 @@ export const FONTS = {
   body4: {
     fontFamily: 'Roboto-Regular',
     fontSize: SIZES.font7,
-    lineHeight: 22,
+    // lineHeight: 22,
     color: COLORS.black,
   },
 };

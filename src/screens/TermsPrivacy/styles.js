@@ -75,4 +75,19 @@ export const TermsPrivacyStyles = StyleSheet.create({
     paddingHorizontal: SIZES.font10,
     paddingVertical: SIZES.font5,
   },
+  items: {
+    flexDirection: 'row',
+    marginVertical: SIZES.font10 * 1.4,
+  },
+  dot: {
+    width: SIZES.font10 * 0.6,
+    height: SIZES.font10 * 0.6,
+    borderRadius: 100,
+    backgroundColor: COLORS.black,
+    marginTop: SIZES.font10 * 0.6,
+    marginRight: SIZES.font10 * 0.6,
+  },
+  itemList: {
+    ...FONTS.body4,
+  },
 });
