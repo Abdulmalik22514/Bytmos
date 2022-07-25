@@ -78,7 +78,7 @@ const resetTermsState = state => {
   MMKV.setBool(TERMS, state);
 };
 
-const destorySession = () => {
+const destroySession = () => {
   if (userHasOnboarded() && termsAccepted()) {
     MMKV.clearStore();
     MMKV.clearMemoryCache();
@@ -112,7 +112,7 @@ export {
   setToken,
   getToken,
   resetToken,
-  destorySession,
+  destroySession,
   userHasOnboarded,
   onboardUser,
   acceptTerms,

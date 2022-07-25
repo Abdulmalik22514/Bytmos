@@ -1,13 +1,37 @@
-import {Image, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import {Alert, Image, StyleSheet, Text, View} from 'react-native';
+import React, {useState} from 'react';
 import {COLORS, FONTS, SIZES} from '../constants/theme';
 import icons from '../constants/icons';
-import {
-  DrawerContentScrollView,
-  DrawerItemList,
-} from '@react-navigation/drawer';
+import {DrawerContentScrollView, DrawerItem} from '@react-navigation/drawer';
+import {LOGOUT as LOGOUTSCREEN} from '../constants/screens';
+import {useFlusDispatcher} from 'react-flus';
+import {LOGOUT} from '../flus/constants/auth.const';
+import {DrawerItems} from '../utils/drawerContent';
 
 const CustomDrawer = props => {
+  const {navigation} = props;
+  const [currentScreen, setCurrentScreen] = useState('DrawerHome');
+  const dispatcher = useFlusDispatcher();
+
+  const onPressItem = screenName => {
+    if (screenName == LOGOUTSCREEN) {
+      Alert.alert('Logout!', 'Are you sure you want to logout?', [
+        {text: 'Cancel'},
+        {
+          text: 'OK',
+          onPress: () => {
+            dispatcher({
+              type: LOGOUT,
+            });
+          },
+        },
+      ]);
+      return;
+    }
+    setCurrentScreen(screenName);
+    navigation.navigate(screenName);
+  };
+
   return (
     <View style={styles.container}>
       <DrawerContentScrollView {...props}>
@@ -19,15 +43,33 @@ const CustomDrawer = props => {
               resizeMode="contain"
             />
             <View>
-              <Text style={{...FONTS.h10}}>John Doe</Text>
-              <Text style={{...FONTS.body4}}>BP ID: FAFDSG35SF</Text>
+              <Text style={FONTS.h10}>John Doe</Text>
+              <Text style={FONTS.body4}>BP ID: FAFDSG35SF</Text>
             </View>
           </View>
           <View style={styles.separator} />
         </View>
 
         <View style={styles.drawerList}>
-          <DrawerItemList {...props} />
+          {DrawerItems.map((item, index) => {
+            return (
+              <DrawerItem
+                key={index}
+                label={item.label}
+                icon={item.icon}
+                labelStyle={{
+                  ...FONTS.body3,
+                  color: COLORS.black,
+                  marginLeft: -12,
+                }}
+                inactiveTintColor="red"
+                focused={currentScreen === item.screenName}
+                activeBackgroundColor={COLORS.blue}
+                onPress={() => onPressItem(item.screenName)}
+                style={styles.drawerItem}
+              />
+            );
+          })}
         </View>
       </DrawerContentScrollView>
     </View>
@@ -58,7 +100,12 @@ const styles = StyleSheet.create({
     borderColor: COLORS.line,
   },
   drawerList: {
-    flex: 1,
-    paddingTop: SIZES.font3,
+    paddingTop: SIZES.font10,
+  },
+  drawerItem: {
+    height: SIZES.font1 * 1.65,
+    justifyContent: 'center',
+    borderRadius: 5,
+    marginHorizontal: SIZES.font8,
   },
 });

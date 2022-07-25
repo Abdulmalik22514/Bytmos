@@ -16,39 +16,45 @@ import {
 } from '../assets/svgs/svg';
 import {COLORS, FONTS, SIZES} from '../constants/theme';
 import {useNavigation} from '@react-navigation/native';
+import {
+  ACCOUNT_SCREEN,
+  MANAGE_ORDERS_SCREEN,
+  PACKAGE_SCREEN,
+  RECENT_WORKS_SCREEN,
+  SERVICE_ORDERS_SCREEN,
+  SERVICE_SCREEN,
+} from '../constants/screens';
 
 export const CardItems = [
   {
     icon: <AccountIcon />,
     label: 'Account',
-
-    // onPress: () => navigation.navigate('AccountScreen'),
+    screenName: ACCOUNT_SCREEN,
   },
   {
     icon: <PackagesIcon />,
     label: 'Packages',
-    // onPress: () => navigation.navigate('AccountScreen'),
+    screenName: PACKAGE_SCREEN,
   },
   {
     icon: <ServicesIcon />,
     label: 'My Services',
-    // onPress: () => navigation.navigate('AccountScreen'),
+    screenName: SERVICE_SCREEN,
   },
   {
     icon: <OrdersIcon />,
     label: 'Service Orders',
-    // onPress: () => navigation.navigate('AccountScreen'),
+    screenName: SERVICE_ORDERS_SCREEN,
   },
   {
     icon: <ManageIcon />,
     label: 'Manage Orders',
-    // onPress: () => navigation.navigate('AccountScreen'),
+    screenName: MANAGE_ORDERS_SCREEN,
   },
   {
     icon: <WorksIcon />,
     label: 'My Recent Works',
-    screenName: 'RecentWorks',
-    // onPress: () => navigation.navigate('AccountScreen'),
+    screenName: RECENT_WORKS_SCREEN,
   },
 ];
 
@@ -72,17 +78,17 @@ const styles = StyleSheet.create({
     shadowColor: COLORS.black,
     shadowOffset: {
       width: 0,
-      height: 1,
+      height: 0.5,
     },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 2,
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 1,
     borderRadius: 20,
-    padding: SIZES.font8,
-    marginBottom: SIZES.font2,
+    padding: SIZES.font10,
+    marginBottom: SIZES.font4,
   },
   label: {
-    ...FONTS.body2,
+    ...FONTS.body3,
     marginLeft: SIZES.font8,
     width: '80%',
     paddingRight: SIZES.font10,

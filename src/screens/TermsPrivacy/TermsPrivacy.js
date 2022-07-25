@@ -3,7 +3,6 @@ import React, {useState} from 'react';
 import {BackArrow} from '../../assets/svgs/svg';
 import ChooseTerms, {TermsHeaders} from './chooseTerms';
 import CustomButton from '../../components/CustomButton';
-import Terms from './terms';
 import {TermsPrivacyStyles as styles} from './styles';
 import {SIZES} from '../../constants/theme';
 import Container from '../../components/Container';
@@ -48,7 +47,17 @@ const TermsAndPrivacy = ({navigation}) => {
           <Text style={styles.termsCondition}>Bytmos Terms & Conditions</Text>
           <FlatList
             data={[...Array(8)]}
-            renderItem={Terms}
+            renderItem={() => {
+              return (
+                <View style={styles.items}>
+                  <View style={styles.dot} />
+                  <Text style={styles.itemList}>
+                    Sell physical services at the location of {'\n'} clients or
+                    digital services from any location.
+                  </Text>
+                </View>
+              );
+            }}
             showsVerticalScrollIndicator={false}
           />
         </View>

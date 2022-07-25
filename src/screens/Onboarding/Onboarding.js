@@ -8,6 +8,7 @@ import Slide2 from './slide2';
 import Slide3 from './slide3';
 import {OnboardingStyles as styles} from './styles';
 import {onboardUser} from '../../services/authServices';
+import NotchResponsive from '../../components/NotchResponsive';
 
 const slides = [1, 2, 3];
 
@@ -49,6 +50,7 @@ export default function Onboarding({navigation}) {
 
   return (
     <View style={styles.container}>
+      <NotchResponsive />
       <AppIntroSlider
         renderItem={_renderItem}
         data={slides}
