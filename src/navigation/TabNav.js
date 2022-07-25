@@ -1,6 +1,5 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {Platform} from 'react-native';
 import TabComponent from '../components/TabComponent';
 import icons from '../constants/icons';
 import {COLORS, SIZES} from '../constants/theme';
@@ -8,8 +7,8 @@ import Tribe from '../screens/Tribe/Tribe';
 import Inbox from '../screens/Inbox/Inbox';
 import MyWallet from '../screens/MyWallet/MyWallet';
 import Profile from '../screens/Profile/Profile';
-import DrawerNav from './DrawerNav';
 import NotchResponsive from '../components/NotchResponsive';
+import Home from '../screens/Home/Home';
 
 const Tab = createBottomTabNavigator();
 
@@ -24,16 +23,16 @@ const BottomTabs = () => {
           tabBarShowLabel: false,
           lazy: false,
           tabBarStyle: {
-            height:
-              Platform.OS === 'android' ? SIZES.font5 * 2.8 : SIZES.font5 * 4,
+            // height:
+            //   Platform.OS === 'android' ? SIZES.font5 * 2.8 : SIZES.font5 * 4,
             borderTopColor: COLORS.input,
             paddingTop: SIZES.font10,
           },
         }}>
         <Tab.Screen
-          name="Home"
-          component={DrawerNav}
-          options={{
+          name="HomeTab"
+          component={Home}
+          options={({route}) => ({
             tabBarIcon: ({focused}) => (
               <TabComponent
                 label={'Home'}
@@ -41,7 +40,7 @@ const BottomTabs = () => {
                 icon={icons.Home}
               />
             ),
-          }}
+          })}
         />
         <Tab.Screen
           name="Tribe"

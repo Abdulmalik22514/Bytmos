@@ -8,7 +8,6 @@ import Login from '../screens/Login/Login';
 import Onboarding from '../screens/Onboarding/Onboarding';
 import TermsAndPrivacy from '../screens/TermsPrivacy/TermsPrivacy';
 import SignUp from '../screens/SignUp/SignUp';
-import BottomTabs from './TabNav';
 import {useFlusStores} from 'react-flus';
 import {
   BOTTOMTAB_SCREEN,
@@ -18,6 +17,7 @@ import {
   TERMS_AND_POLICY_SCREEN,
   VERIFY_OTP_SCREEN,
 } from '../constants/screens';
+import DrawerNav from './DrawerNav';
 
 const Stack = createNativeStackNavigator();
 
@@ -58,7 +58,7 @@ function RootNavigator() {
         ) : (
           <>
             {/* Auth protected screens should be stacked here  */}
-            <Stack.Screen name={BOTTOMTAB_SCREEN} component={BottomTabs} />
+            <Stack.Screen name={BOTTOMTAB_SCREEN} component={DrawerNav} />
           </>
         )}
       </Stack.Navigator>
