@@ -49,7 +49,7 @@ const Home = ({navigation}) => {
 				</View>
 
 				<ScrollView style={{paddingHorizontal: SIZES.font10}} showsVerticalScrollIndicator={false}>
-					<Image source={{url: auth?.user?.profile_photo}} resizeMode="contain" style={styles.profilepic} />
+					<Image source={{uri: auth?.user?.profile_photo}} resizeMode="contain" style={styles.profilepic} />
 					<Text style={styles.accountName}>
 						{auth?.user?.first_name} {auth?.user?.last_name}
 					</Text>
