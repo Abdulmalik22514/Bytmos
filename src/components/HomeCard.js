@@ -1,21 +1,14 @@
-import {Pressable, StyleSheet, Text, View} from 'react-native';
+import {Pressable, StyleSheet, Text} from 'react-native';
 import React from 'react';
 import {
-  Account,
   AccountIcon,
-  Manage,
   ManageIcon,
-  Orders,
   OrdersIcon,
-  Packages,
   PackagesIcon,
-  Services,
   ServicesIcon,
-  Works,
   WorksIcon,
 } from '../assets/svgs/svg';
 import {COLORS, FONTS, SIZES} from '../constants/theme';
-import {useNavigation} from '@react-navigation/native';
 import {
   ACCOUNT_SCREEN,
   MANAGE_ORDERS_SCREEN,
