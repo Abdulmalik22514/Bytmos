@@ -159,7 +159,6 @@ export default function PackageScreen({navigation}) {
       <TouchableOpacity onPress={handleGetstarted}>
         <View style={styles.doneButtonStyle}>
           <Text style={styles.getStartedText}>Get Started</Text>
-          <GetStartedArrow />
         </View>
       </TouchableOpacity>
     );
