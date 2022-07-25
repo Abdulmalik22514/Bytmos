@@ -1,13 +1,13 @@
-import {getToken, isActive, termsAccepted, userHasOnboarded} from "../../../services/authServices"
+import {getToken, getUser, isActive, termsAccepted, userHasOnboarded} from '../../../services/authServices'
 
 export const AuthStores = {
 	auth: {
 		isActive: isActive(),
-		user: null,
+		user: getUser(),
 		api_token: getToken(),
 		app: {
 			hasOnboarded: userHasOnboarded(),
-			termsAccepted: termsAccepted()
-		}
-	}
+			termsAccepted: termsAccepted(),
+		},
+	},
 }

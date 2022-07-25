@@ -19,7 +19,6 @@ export const COLORS = {
   line: '#959292',
   pictureBackground: '#E5E2E2',
   rating: '#F0EEEE',
-  border: '#E7E6E6',
 };
 export const SIZES = {
   // font sizes

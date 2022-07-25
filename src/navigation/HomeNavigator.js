@@ -5,6 +5,7 @@ import MyServices from '../screens/MyServices/MyServices';
 import ServiceOrders from '../screens/ServiceOrders/ServiceOrders';
 import ManageOrders from '../screens/ManageOrders/ManageOrders';
 import RecentWorks from '../screens/RecentWorks/RecentWorks';
+import Home from '../screens/Home/Home';
 import {
   ACCOUNT_SCREEN,
   HOME_SCREEN,
@@ -15,7 +16,6 @@ import {
   SERVICE_SCREEN,
 } from '../constants/screens';
 import AccountScreen from '../screens/Account/AccountScreen';
-import BottomTabs from './TabNav';
 
 const Stack = createNativeStackNavigator();
 
@@ -25,7 +25,7 @@ export const HomeNavigator = () => {
       screenOptions={{
         headerShown: false,
       }}>
-      <Stack.Screen name={HOME_SCREEN} component={BottomTabs} />
+      <Stack.Screen name={HOME_SCREEN} component={Home} />
       <Stack.Screen name={ACCOUNT_SCREEN} component={AccountScreen} />
       <Stack.Screen name={PACKAGE_SCREEN} component={PackageScreen} />
       <Stack.Screen name={SERVICE_SCREEN} component={MyServices} />

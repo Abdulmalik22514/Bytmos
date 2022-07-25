@@ -1,5 +1,6 @@
 import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
 import React, {useState} from 'react';
+import {useNavigation} from '@react-navigation/native';
 import Header from '../../components/Header';
 import {COLORS, FONTS, SIZES} from '../../constants/theme';
 import NotchResponsive from '../../components/NotchResponsive';
@@ -12,10 +13,17 @@ const BusinessAccount = ({screenName}) => {
   const [gender, setGender] = useState('');
   const [status, setStatus] = useState('');
 
+  const {goBack} = useNavigation();
+
   return (
     <View>
       <NotchResponsive />
-      <Header screenName={screenName} isNotHome isAccount />
+      <Header
+        screenName={screenName}
+        isNotHome
+        onPress={() => goBack()}
+        isAccount
+      />
       <View style={styles.profilePixContainer}>
         <Pressable style={styles.cameraBox}>
           <View style={{alignItems: 'flex-end'}}>

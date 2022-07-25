@@ -3,17 +3,15 @@ import React from 'react';
 import {BackIcon, BellIcon, MenuIcon, SearchIcon} from '../assets/svgs/svg';
 import icons from '../constants/icons';
 import {COLORS, FONTS, SIZES} from '../constants/theme';
-import {useNavigation} from '@react-navigation/native';
 
 const Header = ({onPress, isNotHome, screenName, isAccount}) => {
-  const {goBack} = useNavigation();
   return (
     <View>
       <View style={[styles.container, isAccount && styles.isAccount]}>
         <View style={styles.leftView}>
           {isNotHome ? (
             <>
-              <Pressable onPress={() => goBack()}>
+              <Pressable onPress={onPress}>
                 <BackIcon width={24} height={20} />
               </Pressable>
               <Text style={styles.screenName}>{screenName}</Text>
