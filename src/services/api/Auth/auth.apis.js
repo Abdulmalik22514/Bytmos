@@ -102,11 +102,12 @@ export const CreateAccount = async params => {
 		console.warn(`ASRE_ERROR:\n ${error}`)
 	}
 }
+
 /**
  * Update user personal account information
  * @param {object} params formData
  */
-export const UpdatePersoanlAccount = async params => {
+export const UpdatePersonalAccount = async params => {
 	try {
 		return await POST(AuthEndpoints.UPDATE_ACC, params)
 			.then(res => {

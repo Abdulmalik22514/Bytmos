@@ -9,9 +9,12 @@ import CustomButton from '../../components/CustomButton'
 import {ACCOUNT_SCREEN, PACKAGE_SCREEN} from '../../constants/screens'
 import Rating from '../../components/Performance'
 import {HomeStyles as styles} from './styles'
+import {useFlusStores} from 'react-flus'
 
 const Home = ({navigation}) => {
 	const [isModalVisible, setModalVisible] = useState(false)
+
+	const {auth} = useFlusStores()
 
 	const toggleModal = () => {
 		setModalVisible(!isModalVisible)
@@ -44,14 +47,19 @@ const Home = ({navigation}) => {
 				<View>
 					<Header onPress={() => navigation.openDrawer()} />
 				</View>
+
 				<ScrollView style={{paddingHorizontal: SIZES.font10}} showsVerticalScrollIndicator={false}>
-					<Image source={icons.ProfilePix} resizeMode="contain" style={styles.profilepic} />
-					<Text style={styles.accountName}>Flora’s Fashion Styles Ltd</Text>
+					<Image source={{url: auth?.user?.profile_photo}} resizeMode="contain" style={styles.profilepic} />
+					<Text style={styles.accountName}>
+						{auth?.user?.first_name} {auth?.user?.last_name}
+					</Text>
+
 					<View style={styles.itemContainer}>
 						{CardItems.map((item, index) => {
 							return <HomeCard key={index} icon={item.icon} label={item.label} onPress={() => handleAction(item.label)} />
 						})}
 					</View>
+
 					<View style={{paddingHorizontal: SIZES.font8}}>
 						<Text style={{...FONTS.h10, marginBottom: SIZES.font1}}>Performance</Text>
 						<Rating label="Client Ranking" />
