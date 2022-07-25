@@ -16,6 +16,7 @@ import {
   SERVICE_SCREEN,
 } from '../constants/screens';
 import AccountScreen from '../screens/Account/AccountScreen';
+import BottomTabs from './TabNav';
 
 const Stack = createNativeStackNavigator();
 
@@ -25,7 +26,7 @@ export const HomeNavigator = () => {
       screenOptions={{
         headerShown: false,
       }}>
-      <Stack.Screen name={HOME_SCREEN} component={Home} />
+      <Stack.Screen name={HOME_SCREEN} component={BottomTabs} />
       <Stack.Screen name={ACCOUNT_SCREEN} component={AccountScreen} />
       <Stack.Screen name={PACKAGE_SCREEN} component={PackageScreen} />
       <Stack.Screen name={SERVICE_SCREEN} component={MyServices} />
