@@ -13,6 +13,7 @@ const Profile = require('../assets/images/profile.png');
 const ProfilePix = require('../assets/images/profilePix.png');
 const DrawerPix = require('../assets/images/drawerIcon.png');
 const Message = require('../assets/images/message.png');
+const NewProfileImage = require('../assets/images/newProfileImage.png');
 
 export default {
   SplashIcon,
@@ -30,4 +31,5 @@ export default {
   ProfilePix,
   DrawerPix,
   Message,
+  NewProfileImage,
 };
