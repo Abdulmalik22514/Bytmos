@@ -17,6 +17,7 @@ import {
 import Rating from '../../components/Performance';
 import {HomeStyles as styles} from './styles';
 import {useFlusStores} from 'react-flus';
+import NotchResponsive from '../../components/NotchResponsive';
 
 const Home = ({navigation}) => {
   const [isModalVisible, setModalVisible] = useState(false);
@@ -49,48 +50,48 @@ const Home = ({navigation}) => {
   };
 
   return (
-    <>
-      <View style={styles.container}>
-        <View>
-          <Header onPress={() => navigation.openDrawer()} />
+    // <>
+    <View style={styles.container}>
+      <NotchResponsive />
+      <View>
+        <Header onPress={() => navigation.openDrawer()} />
+      </View>
+
+      <ScrollView
+        style={{paddingHorizontal: SIZES.font10}}
+        showsVerticalScrollIndicator={false}>
+        <Image
+          source={{uri: auth?.user?.profile_photo}}
+          resizeMode="contain"
+          style={styles.profilepic}
+        />
+        <Text style={styles.accountName}>
+          {auth?.user?.first_name} {auth?.user?.last_name}
+        </Text>
+
+        <View style={styles.itemContainer}>
+          {CardItems.map((item, index) => {
+            return (
+              <HomeCard
+                key={index}
+                icon={item.icon}
+                label={item.label}
+                onPress={() => handleAction(item.label)}
+              />
+            );
+          })}
         </View>
 
-        <ScrollView
-          style={{paddingHorizontal: SIZES.font10}}
-          showsVerticalScrollIndicator={false}>
-          <Image
-            source={{uri: auth?.user?.profile_photo}}
-            resizeMode="contain"
-            style={styles.profilepic}
-          />
-          <Text style={styles.accountName}>
-            {auth?.user?.first_name} {auth?.user?.last_name}
+        <View style={{paddingHorizontal: SIZES.font8}}>
+          <Text style={{...FONTS.h10, marginBottom: SIZES.font1}}>
+            Performance
           </Text>
-
-          <View style={styles.itemContainer}>
-            {CardItems.map((item, index) => {
-              return (
-                <HomeCard
-                  key={index}
-                  icon={item.icon}
-                  label={item.label}
-                  onPress={() => handleAction(item.label)}
-                />
-              );
-            })}
-          </View>
-
-          <View style={{paddingHorizontal: SIZES.font8}}>
-            <Text style={{...FONTS.h10, marginBottom: SIZES.font1}}>
-              Performance
-            </Text>
-            <Rating label="Client Ranking" />
-            <Rating label="Service Points" />
-            <Rating label="Tribality" />
-            <Rating label="Tribal Presence" />
-          </View>
-        </ScrollView>
-      </View>
+          <Rating label="Client Ranking" />
+          <Rating label="Service Points" />
+          <Rating label="Tribality" />
+          <Rating label="Tribal Presence" />
+        </View>
+      </ScrollView>
       <Modal
         onBackdropPress={toggleModal}
         isVisible={isModalVisible}
@@ -132,7 +133,9 @@ const Home = ({navigation}) => {
           </View>
         </View>
       </Modal>
-    </>
+    </View>
+
+    // </>
   );
 };
 

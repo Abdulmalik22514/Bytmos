@@ -1,9 +1,10 @@
 import {ScrollView, StyleSheet} from 'react-native';
 import React from 'react';
-import {COLORS, SIZES} from '../../constants/theme';
+import {COLORS} from '../../constants/theme';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import BusinessAccount from './BusinessAccount';
 import PersonalAccount from './PersonalAccount';
+import NotchResponsive from '../../components/NotchResponsive';
 
 const AccountScreen = ({route}) => {
   const {accountType} = route.params;
@@ -26,6 +27,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.white,
-    paddingHorizontal: SIZES.font8,
+    // paddingHorizontal: SIZES.font8,
   },
 });
