@@ -9,6 +9,7 @@ import Picker from '../../components/Picker';
 import ImageBottomSheet from '../../components/CameraBottomSheet';
 import {Formik} from 'formik';
 import NotchResponsive from '../../components/NotchResponsive';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 const PersonalAccount = ({screenName}) => {
   const [gender, setGender] = useState('');
@@ -41,69 +42,73 @@ const PersonalAccount = ({screenName}) => {
         <>
           <View style={{paddingHorizontal: 10}}>
             <NotchResponsive />
-            <Header screenName={screenName} isNotHome isAccount />
-            <View style={styles.profilePixContainer}>
-              <Pressable
-                style={styles.cameraBox}
-                onPress={() => {
-                  bottomSheetRef?.current?.snapToIndex(1);
-                }}>
-                <View style={{alignItems: 'flex-end'}}>
-                  <CameraIcon />
-                </View>
-              </Pressable>
-            </View>
-            <View>
-              <Image
-                source={imgeUri ? {uri: imgeUri} : icons.NewProfileImage}
-                resizeMode="contain"
-                style={styles.profilepic}
-              />
-
-              <Pressable
-                onPress={() => {
-                  bottomSheetRef?.current?.snapToIndex(1);
-                }}>
-                <CameraIcon
-                  style={{
-                    left: 200,
-                    marginTop: 45,
-                    zIndex: 100,
-                  }}
+            <Header screenName={screenName} isNotHome />
+            <KeyboardAwareScrollView
+              style={{marginVertical: SIZES.font1}}
+              showsVerticalScrollIndicator={false}>
+              <View style={styles.profilePixContainer}>
+                <Pressable
+                  style={styles.cameraBox}
+                  onPress={() => {
+                    bottomSheetRef?.current?.snapToIndex(1);
+                  }}>
+                  <View style={{alignItems: 'flex-end'}}>
+                    <CameraIcon />
+                  </View>
+                </Pressable>
+              </View>
+              <View>
+                <Image
+                  source={imgeUri ? {uri: imgeUri} : icons.NewProfileImage}
+                  resizeMode="contain"
+                  style={styles.profilepic}
                 />
-              </Pressable>
-            </View>
 
-            <InputField label="Registrar First Name*" />
-            <InputField label="Registrar Last Name*" />
-            <InputField label="Name of Company*" />
-            <InputField label="Registrar Position*" />
-            <View>
-              <Picker
-                placeHolder={'Choose Gender'}
-                value={gender}
-                data={['Male', 'Female']}
-                onPressItem={setGender}
-              />
-            </View>
-            <View>
-              <Picker
-                placeHolder={'Marital Status'}
-                value={status}
-                data={['Single', 'Married', 'Divorced']}
-                onPressItem={setStatus}
-              />
-            </View>
-            <InputField label="Email of Company*" />
-            <InputField label="Phone Number" />
-            <InputField label="Country/Region*" />
-            <InputField label="City/State*" />
-            <InputField label="Company Location in this City/State*" />
-            <Text style={styles.socialMediaText}>
-              Add links to social media pages
-            </Text>
-            <InputField label="Facebook" />
-            <InputField label="Instagram" />
+                <Pressable
+                  onPress={() => {
+                    bottomSheetRef?.current?.snapToIndex(1);
+                  }}>
+                  <CameraIcon
+                    style={{
+                      left: 200,
+                      marginTop: 45,
+                      zIndex: 100,
+                    }}
+                  />
+                </Pressable>
+              </View>
+
+              <InputField label="Registrar First Name*" />
+              <InputField label="Registrar Last Name*" />
+              <InputField label="Name of Company*" />
+              <InputField label="Registrar Position*" />
+              <View>
+                <Picker
+                  placeHolder={'Choose Gender'}
+                  value={gender}
+                  data={['Male', 'Female']}
+                  onPressItem={setGender}
+                />
+              </View>
+              <View>
+                <Picker
+                  placeHolder={'Marital Status'}
+                  value={status}
+                  data={['Single', 'Married', 'Divorced']}
+                  onPressItem={setStatus}
+                />
+              </View>
+              <InputField label="Email of Company*" />
+              <InputField label="Phone Number" />
+              <InputField label="Country/Region*" />
+              <InputField label="City/State*" />
+              <InputField label="Company Location in this City/State*" />
+              <Text style={styles.socialMediaText}>
+                Add links to social media pages
+              </Text>
+              <InputField label="Facebook" />
+              <InputField label="Instagram" />
+            </KeyboardAwareScrollView>
           </View>
           <ImageBottomSheet
             ref={bottomSheetRef}
