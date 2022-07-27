@@ -18,18 +18,19 @@ import {
   VERIFY_OTP_SCREEN,
 } from '../constants/screens';
 import DrawerNav from './DrawerNav';
+import BottomTabs from './TabNav';
 
 const Stack = createNativeStackNavigator();
 
 function RootNavigator() {
   const {auth} = useFlusStores();
 
-  console.log(auth);
+  // console.log(auth);
 
   return (
     <NavigationContainer>
       <StatusBar translucent={true} backgroundColor={'transparent'} />
-      <NotchResponsive />
+      {/* <NotchResponsive /> */}
       <Stack.Navigator
         screenOptions={{
           headerShown: false,
