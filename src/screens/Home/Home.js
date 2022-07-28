@@ -17,7 +17,7 @@ import {
 import Rating from '../../components/Performance';
 import {HomeStyles as styles} from './styles';
 import {useFlusStores} from 'react-flus';
-import NotchResponsive from '../../components/NotchResponsive';
+import Container from '../../components/Container';
 
 const Home = ({navigation}) => {
   const [isModalVisible, setModalVisible] = useState(false);
@@ -50,10 +50,8 @@ const Home = ({navigation}) => {
   };
 
   return (
-    // <>
-    <View style={styles.container}>
-      <NotchResponsive />
-      <View>
+    <Container style={styles.container}>
+      <View style={{paddingHorizontal: SIZES.font10}}>
         <Header onPress={() => navigation.openDrawer()} />
       </View>
 
@@ -133,9 +131,7 @@ const Home = ({navigation}) => {
           </View>
         </View>
       </Modal>
-    </View>
-
-    // </>
+    </Container>
   );
 };
 

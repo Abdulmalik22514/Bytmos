@@ -8,7 +8,6 @@ import InputField from '../../components/InputField';
 import Picker from '../../components/Picker';
 import ImageBottomSheet from '../../components/CameraBottomSheet';
 import {Formik} from 'formik';
-import NotchResponsive from '../../components/NotchResponsive';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 const PersonalAccount = ({screenName}) => {
@@ -41,7 +40,7 @@ const PersonalAccount = ({screenName}) => {
       {({}) => (
         <>
           <View style={{paddingHorizontal: 10}}>
-            <NotchResponsive />
+            {/* <NotchResponsive /> */}
             <Header screenName={screenName} isNotHome />
             <KeyboardAwareScrollView
               style={{marginVertical: SIZES.font1}}

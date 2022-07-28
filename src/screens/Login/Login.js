@@ -1,5 +1,5 @@
 import {Image, Pressable, Text, View} from 'react-native';
-import React, {useRef, useMemo, useCallback, useState} from 'react';
+import React, {useRef, useCallback} from 'react';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {FONTS, SIZES} from '../../constants/theme';
 import icons from '../../constants/icons';
@@ -23,7 +23,7 @@ import {
   resetPwdValidationSchema,
 } from '../../utils/validation';
 import BottomSheet1 from '../../utils/BottomSheet/BottomSheet1';
-import NotchResponsive from '../../components/NotchResponsive';
+import Container from '../../components/Container';
 
 const Login = () => {
   const {navigate} = useNavigation();
@@ -152,9 +152,8 @@ const Login = () => {
     loginAccountApi.isLoading;
 
   return (
-    <>
+    <Container>
       <KeyboardAwareScrollView contentContainerStyle={styles.container}>
-        <NotchResponsive />
         {/* Login Form */}
         <View style={styles.wrapper}>
           <Image
@@ -385,7 +384,7 @@ const Login = () => {
           )}
         </BottomSheet>
       </KeyboardAwareScrollView>
-    </>
+    </Container>
   );
 };
 
