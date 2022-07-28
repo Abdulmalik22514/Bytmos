@@ -1,22 +1,19 @@
-import {ScrollView, StyleSheet} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import React from 'react';
-import {COLORS, SIZES} from '../../constants/theme';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {COLORS} from '../../constants/theme';
 import BusinessAccount from './BusinessAccount';
 import PersonalAccount from './PersonalAccount';
 
 const AccountScreen = ({route}) => {
   const {accountType} = route.params;
   return (
-    <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
-      <KeyboardAwareScrollView>
-        {accountType === 'Business' ? (
-          <BusinessAccount screenName={`${accountType} Account`} />
-        ) : (
-          <PersonalAccount screenName={`${accountType} Account`} />
-        )}
-      </KeyboardAwareScrollView>
-    </ScrollView>
+    <View style={styles.container}>
+      {accountType === 'Business' ? (
+        <BusinessAccount screenName={`${accountType} Account`} />
+      ) : (
+        <PersonalAccount screenName={`${accountType} Account`} />
+      )}
+    </View>
   );
 };
 
@@ -26,6 +23,5 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.white,
-    paddingHorizontal: SIZES.font8,
   },
 });

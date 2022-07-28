@@ -10,14 +10,15 @@ const Picker = ({value, onPressItem, data = [], placeHolder}) => {
     <>
       <View style={styles.container}>
         <Text style={FONTS.body3}>{value || placeHolder}</Text>
-        <Pressable onPress={() => setOpen(true)}>
+        <Pressable onPress={() => setOpen(!open)}>
           <DropDown />
         </Pressable>
       </View>
       {open && (
         <View style={styles.dropDown}>
-          {data.map(item => (
+          {data.map((item, index) => (
             <Pressable
+              key={index}
               onPress={() => {
                 onPressItem(item);
                 setOpen(false);
