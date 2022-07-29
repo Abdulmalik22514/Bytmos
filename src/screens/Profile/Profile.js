@@ -1,18 +1,12 @@
-import {
-  Image,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
-import React from 'react';
+import {FlatList, Image, Pressable, ScrollView, Text, View} from 'react-native';
+import React, {useState} from 'react';
 import Container from '../../components/Container';
 import Header from '../../components/Header';
 import {COLORS, FONTS, SIZES} from '../../constants/theme';
 import icons from '../../constants/icons';
-import {DropDown, StarIcon} from '../../assets/svgs/svg';
+import {DropDown, StarIcon, UpArrow} from '../../assets/svgs/svg';
 import TribeButton from '../../components/TribeButton';
+import {ProfileStyles as styles} from './styles';
 
 const ServiceItems = [
   {icon: icons.FashionItem1},
@@ -24,6 +18,7 @@ const ServiceItems = [
 ];
 
 const Profile = () => {
+  const [open, setOpen] = useState(false);
   return (
     <Container>
       <Header isNotHome screenName="Sonia Fashion Styles" />
@@ -56,10 +51,42 @@ const Profile = () => {
         <View style={styles.tribingMessenger}>
           <TribeButton isMessage title={'Message'} />
           <TribeButton title={'Tribing'} />
-          <Pressable style={styles.dropDownBox}>
-            <DropDown color={COLORS.blue} />
+          <Pressable style={styles.dropDownBox} onPress={() => setOpen(!open)}>
+            {open ? <UpArrow /> : <DropDown color={COLORS.blue} />}
           </Pressable>
         </View>
+        {open && (
+          <View style={styles.dropDownView}>
+            <Text style={FONTS.body3}>Suggested for you</Text>
+            <FlatList
+              data={[...Array(8)]}
+              renderItem={() => {
+                return (
+                  <View style={styles.suggestedItems}>
+                    <Image
+                      source={icons.Sonia}
+                      style={[styles.soniaIamge, {marginRight: null}]}
+                    />
+                    <Text
+                      style={[
+                        FONTS.h9,
+                        {fontSize: 17, marginBottom: SIZES.font1 * 1.5},
+                      ]}>
+                      Sonia Fashion Styles
+                    </Text>
+                    <View style={styles.suggestedRating}>
+                      <StarIcon />
+                      <Text style={FONTS.body4}>5.0 (630 reviews)</Text>
+                    </View>
+                    <TribeButton title={'Tribe'} />
+                  </View>
+                );
+              }}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+            />
+          </View>
+        )}
         <View style={styles.itemsContainer}>
           {ServiceItems.map((item, index) => {
             return (
@@ -78,50 +105,3 @@ const Profile = () => {
 };
 
 export default Profile;
-
-const styles = StyleSheet.create({
-  soniaIamge: {
-    width: SIZES.font1 * 2.5,
-    height: SIZES.font1 * 2.5,
-    marginRight: SIZES.font10,
-  },
-  profileContainer: {
-    flexDirection: 'row',
-    // alignItems: 'center',
-    paddingHorizontal: SIZES.font10,
-    marginVertical: SIZES.font8,
-  },
-  ratingReview: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  serviceItems: {
-    width: SIZES.font1 + 147,
-    height: SIZES.font1 + 130,
-  },
-  tribingMessenger: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: SIZES.font10,
-    marginTop: SIZES.font1,
-  },
-  dropDownBox: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: SIZES.font1 * 1.2,
-    height: SIZES.font1 * 1.2,
-    borderColor: COLORS.blue,
-    borderWidth: 1,
-    borderRadius: 100,
-  },
-  itemsContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: SIZES.font10,
-    marginVertical: SIZES.font10,
-  },
-});
