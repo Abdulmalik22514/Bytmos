@@ -32,10 +32,9 @@ export const RegisterAccount = async params => {
 			.then(res => {
 				if (!res?.status) {
 					handleError(res)
-				} else {
-					Alert.alert('Success!', !Array.isArray(res?.message) ? res?.message : '')
-					return res
 				}
+
+				return res
 			})
 			.catch(res => console.error(res))
 	} catch (error) {
@@ -52,10 +51,9 @@ export const ResendOTP = async () => {
 			.then(res => {
 				if (!res?.status) {
 					handleError(res)
-				} else {
-					Alert.alert('Success!', !Array.isArray(res?.message) ? res?.message : '')
-					return res
 				}
+
+				return res
 			})
 			.catch(res => console.error(res))
 	} catch (error) {
@@ -72,16 +70,16 @@ export const VerifyOTP = async params => {
 			.then(res => {
 				if (!res?.status) {
 					handleError(res)
-				} else {
-					Alert.alert('Success!', !Array.isArray(res?.message) ? res?.message : '')
-					return res
 				}
+
+				return res
 			})
 			.catch(res => console.error(res))
 	} catch (error) {
 		console.warn(`ASRE_ERROR:\n ${error}`)
 	}
 }
+
 /**
  * Create user account type
  * @param {object} params formData
@@ -92,10 +90,8 @@ export const CreateAccount = async params => {
 			.then(res => {
 				if (!res?.status) {
 					handleError(res)
-				} else {
-					Alert.alert('Success!', !Array.isArray(res?.message) ? res?.message : '')
-					return res
 				}
+				return res
 			})
 			.catch(res => console.error(res))
 	} catch (error) {
@@ -113,10 +109,9 @@ export const UpdatePersonalAccount = async params => {
 			.then(res => {
 				if (!res?.status) {
 					handleError(res)
-				} else {
-					Alert.alert('Success!', !Array.isArray(res?.message) ? res?.message : '')
-					return res
 				}
+
+				return res
 			})
 			.catch(res => console.error(res))
 	} catch (error) {
@@ -134,10 +129,9 @@ export const UpdateCompanyAccount = async params => {
 			.then(res => {
 				if (!res?.status) {
 					handleError(res)
-				} else {
-					Alert.alert('Success!', !Array.isArray(res?.message) ? res?.message : '')
-					return res
 				}
+
+				return res
 			})
 			.catch(res => console.error(res))
 	} catch (error) {
@@ -154,10 +148,9 @@ export const FetchPersonalAccount = async () => {
 			.then(res => {
 				if (!res?.status) {
 					handleError(res)
-				} else {
-					Alert.alert('Success!', !Array.isArray(res?.message) ? res?.message : '')
-					return res
 				}
+
+				return res
 			})
 			.catch(res => console.error(res))
 	} catch (error) {
@@ -174,10 +167,8 @@ export const FetchCompanyAccount = async () => {
 			.then(res => {
 				if (!res?.status) {
 					handleError(res)
-				} else {
-					Alert.alert('Success!', !Array.isArray(res?.message) ? res?.message : '')
-					return res
 				}
+				return res
 			})
 			.catch(res => console.error(res))
 	} catch (error) {
@@ -195,10 +186,9 @@ export const ForgottenPassword = async params => {
 			.then(res => {
 				if (!res?.status) {
 					handleError(res)
-				} else {
-					Alert.alert('Success!', !Array.isArray(res?.message) ? res?.message : '')
-					return res
 				}
+
+				return res
 			})
 			.catch(res => console.error(res))
 	} catch (error) {
@@ -216,10 +206,9 @@ export const VerifyPasswordReset = async params => {
 			.then(res => {
 				if (!res?.status) {
 					handleError(res)
-				} else {
-					Alert.alert('Success!', !Array.isArray(res?.message) ? res?.message : '')
-					return res
 				}
+
+				return res
 			})
 			.catch(res => console.error(res))
 	} catch (error) {
@@ -237,10 +226,9 @@ export const ResetPassword = async params => {
 			.then(res => {
 				if (!res?.status) {
 					handleError(res)
-				} else {
-					Alert.alert('Success!', !Array.isArray(res?.message) ? res?.message : '')
-					return res
 				}
+
+				return res
 			})
 			.catch(res => console.error(res))
 	} catch (error) {
