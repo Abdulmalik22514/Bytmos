@@ -20,7 +20,7 @@ const Options = [
 
 const ImageBottomSheet = React.forwardRef(
   ({onSelectImage, handleClosePress}, ref) => {
-    const snapPoints = ['1%', '60%'];
+    const snapPoints = ['1%', '27%'];
 
     const handleActionType = actionType => {
       handleClosePress();
@@ -89,15 +89,16 @@ export default ImageBottomSheet;
 const styles = StyleSheet.create({
   sheetHandleStyle: {
     backgroundColor: COLORS.grey,
-    width: SIZES.font1 * 2.5,
+    width: SIZES.font1 * 2.0,
     height: SIZES.font10 - 5,
-    marginTop: SIZES.font10,
+    marginTop: SIZES.font10 - 8,
     borderRadius: 5,
   },
   sheetButton: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: SIZES.font4,
+    height: SIZES.font1,
   },
   contentContainer: {
     flex: 1,

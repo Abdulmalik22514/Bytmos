@@ -1,7 +1,6 @@
 import {Alert, Image, StyleSheet, Text, View} from 'react-native';
 import React, {useState} from 'react';
 import {COLORS, FONTS, SIZES} from '../constants/theme';
-import icons from '../constants/icons';
 import {DrawerContentScrollView, DrawerItem} from '@react-navigation/drawer';
 import {LOGOUT as LOGOUTSCREEN} from '../constants/screens';
 import {useFlusDispatcher, useFlusStores} from 'react-flus';
@@ -57,14 +56,18 @@ const CustomDrawer = props => {
             return (
               <DrawerItem
                 key={index}
-                label={item.label}
-                icon={item.icon}
-                labelStyle={{
-                  ...FONTS.body3,
-                  color: COLORS.black,
-                  marginLeft: -12,
-                }}
-                inactiveTintColor="red"
+                label={({focused}) => (
+                  <Text
+                    style={[
+                      styles.drawerLabel,
+                      {color: focused ? 'white' : 'black'},
+                    ]}>
+                    {item.label}
+                  </Text>
+                )}
+                icon={({focused}) => (
+                  <item.icon color={focused ? 'white' : 'black'} />
+                )}
                 focused={currentScreen === item.screenName}
                 activeBackgroundColor={COLORS.blue}
                 onPress={() => onPressItem(item.screenName)}
@@ -84,8 +87,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: SIZES.font7,
-    alignItems: 'center',
-    paddingHorizontal: SIZES.font10,
+    paddingHorizontal: SIZES.font10 - 7,
   },
   drawerHeader: {
     flexDirection: 'row',
@@ -99,10 +101,10 @@ const styles = StyleSheet.create({
     marginRight: SIZES.font10,
   },
   separator: {
-    // width: '100%',
     borderWidth: 0.6,
     borderColor: COLORS.line,
-    // marginLeft: SIZES.font1,
+    width: '95%',
+    alignSelf: 'center',
   },
   drawerList: {
     paddingTop: SIZES.font10,
@@ -111,6 +113,9 @@ const styles = StyleSheet.create({
     height: SIZES.font1 * 1.65,
     justifyContent: 'center',
     borderRadius: 5,
-    // marginHorizontal: SIZES.font8,
+  },
+  drawerLabel: {
+    ...FONTS.h10,
+    marginLeft: -12,
   },
 });
