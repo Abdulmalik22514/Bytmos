@@ -30,6 +30,7 @@ const CustomDrawer = props => {
       return;
     }
     setCurrentScreen(screenName);
+    navigation.toggleDrawer();
     navigation.navigate(screenName);
   };
 

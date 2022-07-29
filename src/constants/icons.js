@@ -14,6 +14,13 @@ const ProfilePix = require('../assets/images/profilePix.png');
 const DrawerPix = require('../assets/images/drawerIcon.png');
 const Message = require('../assets/images/message.png');
 const NewProfileImage = require('../assets/images/newProfileImage.png');
+const Sonia = require('../assets/images/Sonia.png');
+const FashionItem1 = require('../assets/images/fashionItem1.png');
+const FashionItem2 = require('../assets/images/fashionItem2.png');
+const FashionItem3 = require('../assets/images/fashionItem3.png');
+const FashionItem4 = require('../assets/images/fashionItem4.png');
+const FashionItem5 = require('../assets/images/fashionItem5.png');
+const FashionItem6 = require('../assets/images/fashionItem6.png');
 
 export default {
   SplashIcon,
@@ -32,4 +39,11 @@ export default {
   DrawerPix,
   Message,
   NewProfileImage,
+  Sonia,
+  FashionItem1,
+  FashionItem2,
+  FashionItem3,
+  FashionItem4,
+  FashionItem5,
+  FashionItem6,
 };

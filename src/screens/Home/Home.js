@@ -2,7 +2,6 @@ import {Image, ScrollView, Text, View} from 'react-native';
 import React, {useState} from 'react';
 import {FONTS, SIZES} from '../../constants/theme';
 import Header from '../../components/Header';
-import icons from '../../constants/icons';
 import HomeCard, {CardItems} from '../../components/HomeCard';
 import Modal from 'react-native-modal';
 import CustomButton from '../../components/CustomButton';
@@ -17,7 +16,7 @@ import {
 import Rating from '../../components/Performance';
 import {HomeStyles as styles} from './styles';
 import {useFlusStores} from 'react-flus';
-import NotchResponsive from '../../components/NotchResponsive';
+import Container from '../../components/Container';
 
 const Home = ({navigation}) => {
   const [isModalVisible, setModalVisible] = useState(false);
@@ -50,13 +49,8 @@ const Home = ({navigation}) => {
   };
 
   return (
-    // <>
-    <View style={styles.container}>
-      <NotchResponsive />
-      <View>
-        <Header onPress={() => navigation.openDrawer()} />
-      </View>
-
+    <Container style={styles.container}>
+      <Header onPress={() => navigation.toggleDrawer()} />
       <ScrollView
         style={{paddingHorizontal: SIZES.font10}}
         showsVerticalScrollIndicator={false}>
@@ -133,9 +127,7 @@ const Home = ({navigation}) => {
           </View>
         </View>
       </Modal>
-    </View>
-
-    // </>
+    </Container>
   );
 };
 

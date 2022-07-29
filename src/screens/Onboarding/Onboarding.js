@@ -3,12 +3,12 @@ import {Text, TouchableOpacity, View} from 'react-native';
 import AppIntroSlider from 'react-native-app-intro-slider';
 import {COLORS} from '../../constants/theme';
 import {GetStartedArrow} from '../../assets/svgs/svg';
-import Slide1 from './slide1';
-import Slide2 from './slide2';
-import Slide3 from './slide3';
 import {OnboardingStyles as styles} from './styles';
 import {onboardUser} from '../../services/authServices';
-import NotchResponsive from '../../components/NotchResponsive';
+import Slide1 from './Slides/slide1';
+import Slide2 from './Slides/slide2';
+import Slide3 from './Slides/slide3';
+import Container from '../../components/Container';
 
 const slides = [1, 2, 3];
 
@@ -49,8 +49,7 @@ export default function Onboarding({navigation}) {
   };
 
   return (
-    <View style={styles.container}>
-      <NotchResponsive />
+    <Container style={styles.container}>
       <AppIntroSlider
         renderItem={_renderItem}
         data={slides}
@@ -60,6 +59,6 @@ export default function Onboarding({navigation}) {
         renderDoneButton={_renderDoneButton}
         showNextButton={false}
       />
-    </View>
+    </Container>
   );
 }

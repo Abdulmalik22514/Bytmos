@@ -1,8 +1,6 @@
 import * as React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {StatusBar} from 'react-native';
-import NotchResponsive from '../components/NotchResponsive';
 import VerifyOtp from '../screens/VerifyOtp/VerifyOtp';
 import Login from '../screens/Login/Login';
 import Onboarding from '../screens/Onboarding/Onboarding';
@@ -18,7 +16,6 @@ import {
   VERIFY_OTP_SCREEN,
 } from '../constants/screens';
 import DrawerNav from './DrawerNav';
-import BottomTabs from './TabNav';
 
 const Stack = createNativeStackNavigator();
 
@@ -29,8 +26,6 @@ function RootNavigator() {
 
   return (
     <NavigationContainer>
-      <StatusBar translucent={true} backgroundColor={'transparent'} />
-      {/* <NotchResponsive /> */}
       <Stack.Navigator
         screenOptions={{
           headerShown: false,

@@ -12,6 +12,7 @@ const TabComponent = ({focused, label, icon}) => {
           width: SIZES.font1 - 7,
           height: SIZES.font1 - 7,
           tintColor: focused ? COLORS.blue : COLORS.input,
+          marginBottom: 3,
         }}
       />
 

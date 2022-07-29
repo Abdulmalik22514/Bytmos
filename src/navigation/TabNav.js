@@ -8,96 +8,88 @@ import Tribe from '../screens/Tribe/Tribe';
 import Inbox from '../screens/Inbox/Inbox';
 import MyWallet from '../screens/MyWallet/MyWallet';
 import Profile from '../screens/Profile/Profile';
-import NotchResponsive from '../components/NotchResponsive';
 import Home from '../screens/Home/Home';
 
 const Tab = createBottomTabNavigator();
 
 const BottomTabs = () => {
   return (
-    <>
-      <NotchResponsive />
-      <Tab.Navigator
-        detachInactiveScreens
-        screenOptions={{
-          headerShown: false,
-          tabBarShowLabel: false,
-          lazy: false,
-          tabBarStyle: {
-            height:
-              Platform.OS === 'android' ? SIZES.font5 * 2.8 : SIZES.font5 * 4,
-            borderTopColor: COLORS.input,
-            paddingTop: SIZES.font10,
-          },
-        }}>
-        <Tab.Screen
-          name="HomeTab"
-          component={Home}
-          options={{
-            tabBarIcon: ({focused}) => (
-              <TabComponent
-                label={'Home'}
-                focused={focused}
-                icon={icons.Home}
-              />
-            ),
-          }}
-        />
-        <Tab.Screen
-          name="Tribe"
-          component={Tribe}
-          options={{
-            tabBarIcon: ({focused}) => (
-              <TabComponent
-                label={'Tribe'}
-                focused={focused}
-                icon={icons.Tribe}
-              />
-            ),
-          }}
-        />
+    <Tab.Navigator
+      detachInactiveScreens
+      screenOptions={{
+        headerShown: false,
+        tabBarShowLabel: false,
+        lazy: false,
+        tabBarStyle: {
+          height:
+            Platform.OS === 'android' ? SIZES.font5 * 2.8 : SIZES.font5 * 4,
+          borderTopColor: COLORS.input,
+          paddingTop: SIZES.font10,
+        },
+      }}>
+      <Tab.Screen
+        name="HomeTab"
+        component={Home}
+        options={{
+          tabBarIcon: ({focused}) => (
+            <TabComponent label={'Home'} focused={focused} icon={icons.Home} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Tribe"
+        component={Tribe}
+        options={{
+          tabBarIcon: ({focused}) => (
+            <TabComponent
+              label={'Tribe'}
+              focused={focused}
+              icon={icons.Tribe}
+            />
+          ),
+        }}
+      />
 
-        <Tab.Screen
-          name={'Message'}
-          component={Inbox}
-          options={{
-            tabBarIcon: ({focused}) => (
-              <TabComponent
-                label={'Message'}
-                focused={focused}
-                icon={icons.Message}
-              />
-            ),
-          }}
-        />
-        <Tab.Screen
-          name={'MyWallet'}
-          component={MyWallet}
-          options={{
-            tabBarIcon: ({focused}) => (
-              <TabComponent
-                label={'Wallet'}
-                focused={focused}
-                icon={icons.Wallet}
-              />
-            ),
-          }}
-        />
-        <Tab.Screen
-          name="Profile"
-          component={Profile}
-          options={{
-            tabBarIcon: ({focused}) => (
-              <TabComponent
-                label={'Profile'}
-                focused={focused}
-                icon={icons.Profile}
-              />
-            ),
-          }}
-        />
-      </Tab.Navigator>
-    </>
+      <Tab.Screen
+        name={'Message'}
+        component={Inbox}
+        options={{
+          tabBarIcon: ({focused}) => (
+            <TabComponent
+              label={'Message'}
+              focused={focused}
+              icon={icons.Message}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name={'MyWallet'}
+        component={MyWallet}
+        options={{
+          tabBarIcon: ({focused}) => (
+            <TabComponent
+              label={'Wallet'}
+              focused={focused}
+              icon={icons.Wallet}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Profile"
+        component={Profile}
+        options={{
+          tabBarIcon: ({focused}) => (
+            <TabComponent
+              label={'Profile'}
+              focused={focused}
+              icon={icons.Profile}
+            />
+          ),
+        }}
+      />
+    </Tab.Navigator>
   );
 };
 

@@ -75,8 +75,8 @@ const SignUp = () => {
   // ----------------------------------------------------------------------------
 
   return (
-    <KeyboardAwareScrollView contentContainerStyle={{flex: 1}}>
-      <Container>
+    <Container>
+      <KeyboardAwareScrollView contentContainerStyle={{flex: 1}}>
         <View style={styles.container}>
           <Image
             source={icons.BlueLogo}
@@ -173,8 +173,8 @@ const SignUp = () => {
             )}
           </Formik>
         </View>
-      </Container>
-    </KeyboardAwareScrollView>
+      </KeyboardAwareScrollView>
+    </Container>
   );
 };
 

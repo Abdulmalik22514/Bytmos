@@ -1,7 +1,7 @@
 import {Image, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
-import icons from '../../constants/icons';
-import {FONTS, SIZES} from '../../constants/theme';
+import icons from '../../../constants/icons';
+import {FONTS, SIZES} from '../../../constants/theme';
 
 const Slide3 = () => {
   return (
