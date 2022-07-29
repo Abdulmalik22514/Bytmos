@@ -53,6 +53,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     marginVertical: SIZES.font10,
+    paddingHorizontal: SIZES.font10,
   },
   image: {
     width: SIZES.font1 * 6.5,
