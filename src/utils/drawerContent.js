@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   HelpIcon,
   HomeIcon,
@@ -18,32 +17,32 @@ import {
 export const DrawerItems = [
   {
     label: 'Home',
-    icon: () => <HomeIcon />,
+    icon: HomeIcon,
     screenName: 'DrawerHome',
   },
   {
     label: 'Leave a Feedback',
-    icon: () => <PencilIcon />,
+    icon: PencilIcon,
     screenName: LEAVE_FEEDBACK,
   },
   {
     label: 'Invite friends',
-    icon: () => <InviteIcon />,
+    icon: InviteIcon,
     screenName: INVITE_FRIENDS,
   },
   {
     label: 'Settings',
-    icon: () => <SettingsIcon />,
+    icon: SettingsIcon,
     screenName: SETTINGS,
   },
   {
     label: 'Help',
-    icon: () => <HelpIcon />,
+    icon: HelpIcon,
     screenName: HELP,
   },
   {
     label: 'Logout',
-    icon: () => <LogoutIcon />,
+    icon: LogoutIcon,
     screenName: LOGOUTSCREEN,
   },
 ];

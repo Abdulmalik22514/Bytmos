@@ -58,7 +58,6 @@ const PersonalAccount = ({screenName}) => {
               <View>
                 <Image
                   source={imgeUri ? {uri: imgeUri} : icons.NewProfileImage}
-                  resizeMode="contain"
                   style={styles.profilepic}
                 />
 
