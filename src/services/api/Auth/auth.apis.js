@@ -212,7 +212,7 @@ export const ForgottenPassword = async params => {
  */
 export const VerifyPasswordReset = async params => {
 	try {
-		return await POST(AuthEndpoints.FORGOT_PWD, params)
+		return await POST(AuthEndpoints.VERIFY_PWD, params)
 			.then(res => {
 				if (!res?.status) {
 					handleError(res)
@@ -233,7 +233,7 @@ export const VerifyPasswordReset = async params => {
  */
 export const ResetPassword = async params => {
 	try {
-		return await POST(AuthEndpoints.RESEND_OTP, params)
+		return await POST(AuthEndpoints.RESET_PWD, params)
 			.then(res => {
 				if (!res?.status) {
 					handleError(res)
