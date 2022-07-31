@@ -8,7 +8,7 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {Formik} from 'formik';
 import * as yup from 'yup';
 import {VerifyOtpStyle as styles} from './styles';
-import {ACCOUNT_SCREEN} from '../../constants/screens';
+import {ACCOUNT_TYPE} from '../../constants/screens';
 import {useMutation} from 'react-query';
 import {useAuthApis} from '../../services/api/Auth/auth.index';
 import {resetToken} from '../../services/authServices';
@@ -16,7 +16,6 @@ import {sleep} from './../../utils/utils';
 import Container from '../../components/Container';
 import {CheckMark} from '../../assets/svgs/svg';
 import {FONTS, SIZES} from '../../constants/theme';
-import Modal from 'react-native-modal';
 
 const otpValiditor = yup.object().shape({
   otp: yup.string().required('Otp is required'),
@@ -70,10 +69,8 @@ const VerifyOtp = () => {
             Verification Successful!
           </Text>
           <CustomButton
-            title="Start"
-            onPress={() => {
-              setModalVisible(!isModalVisible);
-            }}
+            title="Continue"
+            onPress={() => navigate(ACCOUNT_TYPE)}
             style={styles.startButton}
           />
         </View>
@@ -167,47 +164,6 @@ const VerifyOtp = () => {
           )}
         </Formik>
       )}
-      <Modal
-        onBackdropPress={toggleModal}
-        isVisible={isModalVisible}
-        backdropOpacity={0.7}>
-        <View>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalText}>Create a</Text>
-            <CustomButton
-              title="Personal Account"
-              style={styles.modalButton}
-              onPress={() => {
-                toggleModal();
-                //to delay navigation after modal is closed
-                setTimeout(
-                  () =>
-                    navigate(ACCOUNT_SCREEN, {
-                      accountType: 'Personal',
-                    }),
-                  150,
-                );
-              }}
-            />
-            <Text style={{...FONTS.body4, fontSize: 22}}>OR</Text>
-            <CustomButton
-              title="Business Account"
-              style={styles.modalButton}
-              onPress={() => {
-                toggleModal();
-                //to delay navigation after modal is closed
-                setTimeout(
-                  () =>
-                    navigate(ACCOUNT_SCREEN, {
-                      accountType: 'Business',
-                    }),
-                  150,
-                );
-              }}
-            />
-          </View>
-        </View>
-      </Modal>
     </Container>
   );
 };
