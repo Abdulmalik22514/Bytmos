@@ -28,21 +28,4 @@ export const HomeStyles = StyleSheet.create({
     ...FONTS.h6,
     alignSelf: 'center',
   },
-  modalContent: {
-    backgroundColor: COLORS.white,
-    paddingVertical: SIZES.font1 * 4,
-    paddingHorizontal: SIZES.font1,
-    borderRadius: 20,
-    alignItems: 'center',
-  },
-  modalButton: {
-    marginVertical: SIZES.font1,
-    width: '80%',
-    borderRadius: 22,
-  },
-  modalText: {
-    ...FONTS.body4,
-    fontSize: 25,
-    marginVertical: SIZES.font5,
-  },
 });
