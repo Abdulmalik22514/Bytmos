@@ -99,14 +99,22 @@ const SignUp = () => {
               <>
                 <CustomInput
                   name="fullName"
-                  placeholder="Full Name"
+                  placeholder="Firstname"
                   onChangeText={handleChange('fullName')}
                   value={values.fullName}
                   error={
                     touched.fullName && errors.fullName ? errors.fullName : null
                   }
                 />
-
+                <CustomInput
+                  name="fullName"
+                  placeholder="Lastname"
+                  onChangeText={handleChange('fullName')}
+                  value={values.fullName}
+                  error={
+                    touched.fullName && errors.fullName ? errors.fullName : null
+                  }
+                />
                 <CustomInput
                   name="email"
                   placeholder="Email Address"
