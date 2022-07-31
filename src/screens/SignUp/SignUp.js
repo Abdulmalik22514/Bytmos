@@ -1,4 +1,4 @@
-import {Alert, Image, View} from 'react-native';
+import {Image, View} from 'react-native';
 import {getDeviceName} from 'react-native-device-info';
 import React from 'react';
 import icons from '../../constants/icons';
@@ -6,7 +6,6 @@ import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
 import {Formik} from 'formik';
 import {signUpValidationSchema} from '../../utils/validation';
-import {apis} from '../../services/api';
 import {useNavigation} from '@react-navigation/native';
 import Container from '../../components/Container';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
@@ -164,7 +163,7 @@ const SignUp = () => {
                   <View style={styles.separator} />
 
                   <CustomButton
-                    title="Login"
+                    title="Log in"
                     style={styles.button}
                     onPress={() => navigate('Login')}
                   />
