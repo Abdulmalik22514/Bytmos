@@ -8,6 +8,7 @@ import TermsAndPrivacy from '../screens/TermsPrivacy/TermsPrivacy';
 import SignUp from '../screens/SignUp/SignUp';
 import {useFlusStores} from 'react-flus';
 import {
+  ACCOUNT_SCREEN,
   BOTTOMTAB_SCREEN,
   LOGIN_SCREEN,
   ONBOARD_SCREEN,
@@ -16,6 +17,7 @@ import {
   VERIFY_OTP_SCREEN,
 } from '../constants/screens';
 import DrawerNav from './DrawerNav';
+import AccountScreen from '../screens/Account/AccountScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -50,6 +52,7 @@ function RootNavigator() {
             <Stack.Screen name={LOGIN_SCREEN} component={Login} />
             <Stack.Screen name={SIGNUP_SCREEN} component={SignUp} />
             <Stack.Screen name={VERIFY_OTP_SCREEN} component={VerifyOtp} />
+            <Stack.Screen name={ACCOUNT_SCREEN} component={AccountScreen} />
           </>
         ) : (
           <>
