@@ -9,6 +9,7 @@ import Picker from '../../components/Picker';
 import ImageBottomSheet from '../../components/CameraBottomSheet';
 import {Formik} from 'formik';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import CustomButton from '../../components/CustomButton';
 
 const PersonalAccount = ({screenName}) => {
   const [gender, setGender] = useState('');
@@ -17,7 +18,7 @@ const PersonalAccount = ({screenName}) => {
 
   const bottomSheetRef = useRef(null);
 
-  console.log({imgeUri});
+  // console.log({imgeUri});
 
   const initialValues = {
     firstName: '',
@@ -39,11 +40,11 @@ const PersonalAccount = ({screenName}) => {
     <Formik initialValues={initialValues}>
       {({}) => (
         <>
-          <View style={{paddingHorizontal: 10}}>
-            <Header screenName={screenName} isNotHome />
-            <KeyboardAwareScrollView
-              style={{marginVertical: SIZES.font1}}
-              showsVerticalScrollIndicator={false}>
+          <Header screenName={screenName} isNotHome />
+          <KeyboardAwareScrollView
+            style={{marginVertical: SIZES.font1}}
+            showsVerticalScrollIndicator={false}>
+            <View style={{paddingHorizontal: SIZES.font8}}>
               <View style={styles.profilePixContainer}>
                 <Pressable
                   style={styles.cameraBox}
@@ -105,8 +106,10 @@ const PersonalAccount = ({screenName}) => {
               </Text>
               <InputField label="Facebook" />
               <InputField label="Instagram" />
-            </KeyboardAwareScrollView>
-          </View>
+              <CustomButton title="Save" style={styles.saveButton} />
+            </View>
+          </KeyboardAwareScrollView>
+
           <ImageBottomSheet
             ref={bottomSheetRef}
             handleClosePress={handleClosePress}
@@ -144,5 +147,11 @@ const styles = StyleSheet.create({
     marginBottom: SIZES.font10,
     marginTop: SIZES.font1,
     fontWeight: '600',
+  },
+  saveButton: {
+    marginTop: SIZES.font1 * 2,
+    width: '90%',
+    alignSelf: 'center',
+    marginBottom: SIZES.font1 * 2,
   },
 });
