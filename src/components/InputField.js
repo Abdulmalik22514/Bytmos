@@ -1,14 +1,12 @@
 import {StyleSheet, Text, TextInput, View} from 'react-native';
 import React from 'react';
 import {COLORS, FONTS, SIZES} from '../constants/theme';
-import {PencilIcon} from '../assets/svgs/svg';
 
-const InputField = ({label, compulsory}) => {
+const InputField = ({label}) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.label}>{label}</Text>
-        <PencilIcon color={COLORS.blue} />
       </View>
       <TextInput style={[styles.textInput]} />
     </View>

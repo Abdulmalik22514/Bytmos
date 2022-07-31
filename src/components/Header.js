@@ -5,11 +5,11 @@ import icons from '../constants/icons';
 import {COLORS, FONTS, SIZES} from '../constants/theme';
 import {useNavigation} from '@react-navigation/native';
 
-const Header = ({onPress, isNotHome, screenName, isAccount}) => {
+const Header = ({onPress, isNotHome, screenName, isAccount, style}) => {
   const {goBack} = useNavigation();
   return (
     <View>
-      <View style={[styles.container, isAccount && styles.isAccount]}>
+      <View style={[styles.container, isAccount && styles.isAccount, style]}>
         <View style={styles.leftView}>
           {isNotHome ? (
             <>
@@ -40,7 +40,7 @@ const Header = ({onPress, isNotHome, screenName, isAccount}) => {
           </Pressable>
         </View>
       </View>
-      {isAccount ? null : <View style={styles.separator} />}
+      <View style={styles.separator} />
     </View>
   );
 };
