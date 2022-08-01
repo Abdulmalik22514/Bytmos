@@ -38,7 +38,7 @@ const setEmail = email => {
 }
 
 const setToken = token => {
-	if (token) {
+	if (token !== '' && token !== null) {
 		MMKV.setString(APITOKEN, token, (err, res) => {
 			if (err) console.error(err)
 		})

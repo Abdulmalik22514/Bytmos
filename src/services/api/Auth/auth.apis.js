@@ -33,7 +33,7 @@ export const RegisterAccount = async params => {
 				if (!res?.status) {
 					handleError(res)
 				} else {
-					Alert.alert('Success!', !Array.isArray(res?.message) ? res?.message : '')
+					Alert.alert('Success!', 'Account created success, please verify the OTP sent your email address.')
 					return res
 				}
 			})
@@ -53,7 +53,7 @@ export const ResendOTP = async () => {
 				if (!res?.status) {
 					handleError(res)
 				} else {
-					Alert.alert('Success!', !Array.isArray(res?.message) ? res?.message : '')
+					Alert.alert('Success!', 'OTP resent to your registered email.')
 					return res
 				}
 			})
@@ -72,10 +72,9 @@ export const VerifyOTP = async params => {
 			.then(res => {
 				if (!res?.status) {
 					handleError(res)
-				} else {
-					Alert.alert('Success!', !Array.isArray(res?.message) ? res?.message : '')
-					return res
 				}
+
+				return res
 			})
 			.catch(res => console.error(res))
 	} catch (error) {

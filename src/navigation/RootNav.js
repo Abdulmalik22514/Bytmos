@@ -17,7 +17,7 @@ const Stack = createNativeStackNavigator()
 function RootNavigator() {
 	const {auth} = useFlusStores()
 
-	// console.log(auth);
+	console.log(auth?.user)
 
 	return (
 		<NavigationContainer>
@@ -38,15 +38,15 @@ function RootNavigator() {
 						<Stack.Screen name={LOGIN_SCREEN} component={Login} />
 						<Stack.Screen name={SIGNUP_SCREEN} component={SignUp} />
 						<Stack.Screen name={VERIFY_OTP_SCREEN} component={VerifyOtp} />
-						<Stack.Screen name={ACCOUNT_TYPE} component={AccountType} />
 
 						<Stack.Screen name={ACCOUNT_SCREEN} component={AccountScreen} />
+						<Stack.Screen name={ACCOUNT_TYPE} component={AccountType} />
 					</>
 				) : (
 					<>
 						{/* Auth protected screens should be stacked here  */}
-						<Stack.Screen name={ACCOUNT_TYPE} component={AccountType} />
 						<Stack.Screen name={BOTTOMTAB_SCREEN} component={DrawerNav} />
+						<Stack.Screen name={ACCOUNT_TYPE} component={AccountType} />
 					</>
 				)}
 			</Stack.Navigator>

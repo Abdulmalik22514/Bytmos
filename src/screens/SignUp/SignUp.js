@@ -14,7 +14,7 @@ import {useMutation} from 'react-query'
 import {useAuthApis} from '../../services/api/Auth/auth.index'
 import {useFlusDispatcher} from 'react-flus'
 import {SET_API_TOKEN} from '../../flus/constants/auth.const'
-import {VERIFY_OTP_SCREEN} from '../../constants/screens'
+import { LOGIN_SCREEN, VERIFY_OTP_SCREEN} from '../../constants/screens'
 
 const initialValues = {
 	fullName: '',
@@ -92,7 +92,7 @@ const SignUp = () => {
 									<CustomButton title={'Sign Up'} style={styles.button} onPress={handleSubmit} isLoading={isSubmitting || isLoading} />
 									<View style={styles.separator} />
 
-									<CustomButton title="Log in" style={styles.button} onPress={() => navigate('Login')} />
+									<CustomButton title="Log in" style={styles.button} onPress={() => navigate(LOGIN_SCREEN)} />
 								</View>
 							</>
 						)}
