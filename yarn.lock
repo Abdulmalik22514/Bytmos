@@ -5870,7 +5870,7 @@ prompts@^2.0.1, prompts@^2.4.0:
     kleur "^3.0.3"
     sisteransi "^1.0.5"
 
-prop-types@*, prop-types@^15.6.2, prop-types@^15.7.2, prop-types@^15.8.1:
+prop-types@*, prop-types@^15.5.10, prop-types@^15.6.2, prop-types@^15.7.2, prop-types@^15.8.1:
   version "15.8.1"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.8.1.tgz#67d87bf1a694f48435cf332c24af10214a3140b5"
   integrity sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==
@@ -6020,6 +6020,13 @@ react-native-mmkv-storage@^0.7.6:
   version "0.7.6"
   resolved "https://registry.yarnpkg.com/react-native-mmkv-storage/-/react-native-mmkv-storage-0.7.6.tgz#c4b2d6d342efda91f69edb6ba4b9c0ff6c34d70c"
   integrity sha512-Uxc8U3vRJMAeLIu9Dr8VpbaaCUlMd4vJfkEme2sXh2GGCYrbXqrE3XPLjtuA/fSd2VBKZNFBkJhyf4RzU9VX3A==
+
+react-native-modal-selector@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/react-native-modal-selector/-/react-native-modal-selector-2.1.1.tgz#9c3a544f82f805c739866894edadc0915979c4d8"
+  integrity sha512-ol5WRL3jrYsH8vPbZiu9xID5SLlv56Pp9b1LBx5DNL+rGq23vInk6uuhxOU8hd1a1C0aAkBmweJFaO55Kwh8iA==
+  dependencies:
+    prop-types "^15.5.10"
 
 react-native-modal@^13.0.1:
   version "13.0.1"

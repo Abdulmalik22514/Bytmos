@@ -12,7 +12,8 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 import CustomButton from '../../components/CustomButton'
 import {useAuthApis} from '../../services/api/Auth/auth.index'
 import {useMutation} from 'react-query'
-import {useFlusDispatcher} from 'react-flus'
+import {useFlusDispatcher, useFlusStores} from 'react-flus'
+import {USER_LOGIN} from '../../flus/constants/auth.const'
 
 const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
 	const [gender, setGender] = useState('')
@@ -20,6 +21,7 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
 	const [imgeUri, setImageUri] = useState('')
 
 	const dispatcher = useFlusDispatcher()
+	const {user} = useFlusStores()?.auth
 
 	const {UpdateCompanyAccount} = useAuthApis()
 
@@ -27,37 +29,43 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
 		onSuccess: res => {
 			if (res?.status) {
 				if (from === 'signup_process') {
-					/* Dispatch user login otherwise */
-				} else {
-					/* Update user data */
+					dispatcher({
+						type: USER_LOGIN,
+						payload: {
+							user: null,
+							access_token: null,
+						},
+					})
 				}
 			}
 		},
 	})
 
 	const handleAccountUpdate = formData => {
-		console.log(formData)
+		formData.gender = gender
+		formData.marital_status = status
+		updateCompanyAccountApi.mutateAsync(formData)
 	}
+
 	/* The api loading state. */
 	const isLoading = updateCompanyAccountApi.isLoading
 
 	const bottomSheetRef = useRef(null)
 
 	const initialValues = {
-		firstName: '',
-		lastName: '',
-		email: '',
-		nameOfBusiness: '',
-		phoneNumber: '',
-		country: '',
-		city: '',
-		state: '',
-		location: '',
-		position: '',
-		gender: '',
-		maritalStatus: '',
-		faceBook: '',
-		instagram: '',
+		first_name: user?.registrar_first_name,
+		last_name: user?.registrar_last_name,
+		company_name: user?.company_name,
+		country: user?.country,
+		state: user?.state,
+		location: user?.current_location,
+		longitude: '2312311',
+		latitude: '1131431',
+		registrar_position: user?.registrar_position,
+		gender: user?.gender,
+		marital_status: user?.marital_status,
+		facebook_link: user?.facebook_link,
+		instagram_link: user?.instagram_link,
 	}
 
 	const handleClosePress = () => bottomSheetRef.current.close()
@@ -81,7 +89,7 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
 								</Pressable>
 							</View>
 							<View>
-								<Image source={imgeUri ? {uri: imgeUri} : icons.NewProfileImage} resizeMode="contain" style={styles.profilepic} />
+								<Image source={imgeUri ? {uri: imgeUri} : {uri: user?.profile_photo}} resizeMode="contain" style={styles.profilepic} />
 
 								<Pressable
 									onPress={() => {
@@ -97,24 +105,23 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
 								</Pressable>
 							</View>
 
-							<InputField label="Registrar First Name*" onChangeText={handleChange('firstName')} value={values?.firstName} />
-							<InputField label="Registrar Last Name*" onChangeText={handleChange('lastName')} value={values?.lastName} />
-							<InputField label="Name of Company*" onChangeText={handleChange('nameOfBusiness')} value={values?.nameOfBusiness} />
-							<InputField label="Registrar Position*" onChangeText={handleChange('position')} value={values?.position} />
+							<InputField label="Registrar First Name" onChangeText={handleChange('first_name')} value={values?.first_name} />
+							<InputField label="Registrar Last Name" onChangeText={handleChange('last_name')} value={values?.last_name} />
+							<InputField label="Company Name" onChangeText={handleChange('company_name')} value={values?.company_name} />
+							<InputField label="Registrar Position" onChangeText={handleChange('registrar_position')} value={values?.position} />
+
 							<View>
 								<Picker placeHolder={'Choose Gender'} value={gender ? gender : values?.gender} data={['Male', 'Female']} onPressItem={setGender} />
 							</View>
 							<View>
-								<Picker placeHolder={'Marital Status'} value={status ? status : values?.maritalStatus} data={['Single', 'Married', 'Divorced']} onPressItem={setStatus} />
+								<Picker placeHolder={'Marital Status'} value={status ? status : values?.marital_status} data={['Single', 'Married', 'Divorced']} onPressItem={setStatus} />
 							</View>
-							<InputField label="Email of Company*" onChangeText={handleChange('email')} value={values?.email} />
-							<InputField label="Phone Number" onChangeText={handleChange('phoneNumber')} value={values?.phoneNumber} />
-							<InputField label="Country/Region*" onChangeText={handleChange('country')} value={values?.country} />
+							<InputField label="Country*" onChangeText={handleChange('country')} value={values?.country} />
 							<InputField label="City/State*" onChangeText={handleChange('state')} value={values?.state} />
 							<InputField label="Company Location in this City/State*" onChangeText={handleChange('location')} value={values?.location} />
 							<Text style={styles.socialMediaText}>Add links to social media pages</Text>
-							<InputField label="Facebook" onChangeText={handleChange('faceBook')} value={values?.faceBook} />
-							<InputField label="Instagram" onChangeText={handleChange('instagram')} value={values?.instagram} />
+							<InputField label="Facebook_link" onChangeText={handleChange('facebook_link')} value={values?.facebook_link} />
+							<InputField label="Instagram" onChangeText={handleChange('instagram_link')} value={values?.instagram_link} />
 
 							<CustomButton title="Save" style={styles.saveButton} onPress={handleSubmit} isLoading={isLoading} disabled={isLoading} />
 						</View>

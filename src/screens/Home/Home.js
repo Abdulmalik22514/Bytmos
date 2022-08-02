@@ -22,28 +22,35 @@ const Home = ({navigation}) => {
 
 	const {CheckUserStatus, initializeApp} = useAppApis()
 
+	/* Initialize app  */
+	const fetchAccountApi = useMutation(initializeApp, {
+		onSuccess: res => {
+			/* first api in init app is the Performance api so grap it */
+			const _performance = res[0]?.status ? res[0]?.data : null
+			const _profileData = res[1]?.status ? res[1]?.data : null
+
+			dispatcher({type: UPDATE_USER, payload: {data: {..._profileData, performance: {..._performance}}}})
+		},
+	})
+
+	/* This api check if the user has created account or has verified his or her account */
 	const checkAccountApi = useMutation(CheckUserStatus, {
 		onSuccess: res => {
 			if (res?.status) {
-				const {has_created_account, has_verified_account} = res?.data
-
-				if (!has_created_account) {
+				if (!res?.data?.has_created_account) {
 					Alert.alert('Account Update Required', 'Please update your account.')
 					navigator(ACCOUNT_TYPE)
 				}
 
-				if (has_created_account && has_verified_account) {
+				if (res?.data?.has_created_account && res?.data?.has_verified_account) {
 					dispatcher({type: UPDATE_USER, payload: {data: {account: res?.data}}})
 				}
-			} else if (has_verified_account !== true) {
-				console.log('has not verified yet')
-			} else {
-				console.log('dispatching...')
 			}
 		},
 	})
 
 	const handleAccountChecking = async () => await checkAccountApi.mutateAsync()
+	const handleAccountFetching = async () => await fetchAccountApi.mutateAsync(auth?.user?.account?.user_type.toLowerCase())
 
 	const handleAction = title => {
 		if (title === 'Account') {
@@ -76,27 +83,29 @@ const Home = ({navigation}) => {
 	return (
 		<Container style={styles.container}>
 			<AwaitResponse api={handleAccountChecking}>
-				<Header onPress={() => navigation.toggleDrawer()} />
-				<ScrollView style={{paddingHorizontal: SIZES.font10}} showsVerticalScrollIndicator={false}>
-					<Image source={{uri: auth?.user?.profile_photo}} resizeMode="contain" style={styles.profilepic} />
-					<Text style={styles.accountName}>
-						{auth?.user?.first_name} {auth?.user?.last_name}
-					</Text>
+				<AwaitResponse api={handleAccountFetching}>
+					<Header onPress={() => navigation.toggleDrawer()} />
+					<ScrollView style={{paddingHorizontal: SIZES.font10}} showsVerticalScrollIndicator={false}>
+						<Image source={{uri: auth?.user?.profile_photo}} resizeMode="contain" style={styles.profilepic} />
+						<Text style={styles.accountName}>
+							{auth?.user?.first_name} {auth?.user?.last_name}
+						</Text>
 
-					<View style={styles.itemContainer}>
-						{CardItems.map((item, index) => {
-							return <HomeCard key={index} icon={item.icon} label={item.label} onPress={() => handleAction(item.label)} />
-						})}
-					</View>
+						<View style={styles.itemContainer}>
+							{CardItems.map((item, index) => {
+								return <HomeCard key={index} icon={item.icon} label={item.label} onPress={() => handleAction(item.label)} />
+							})}
+						</View>
 
-					<View style={{paddingHorizontal: SIZES.font8}}>
-						<Text style={{...FONTS.h10, marginBottom: SIZES.font1}}>Performance</Text>
-						<Rating label="Client Ranking" />
-						<Rating label="Service Points" />
-						<Rating label="Tribality" />
-						<Rating label="Tribal Presence" />
-					</View>
-				</ScrollView>
+						<View style={{paddingHorizontal: SIZES.font8}}>
+							<Text style={{...FONTS.h10, marginBottom: SIZES.font1}}>Performance</Text>
+							<Rating label="Client Ranking" />
+							<Rating label="Service Points" />
+							<Rating label="Tribality" />
+							<Rating label="Tribal Presence" />
+						</View>
+					</ScrollView>
+				</AwaitResponse>
 			</AwaitResponse>
 		</Container>
 	)
