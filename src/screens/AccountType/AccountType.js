@@ -9,8 +9,9 @@ import {useAuthApis} from '../../services/api/Auth/auth.index'
 import {useMutation} from 'react-query'
 import OverlayLoaderIndicator from '../../components/OverlayLoaderIndicator'
 
-const AccountType = () => {
+const AccountType = ({route}) => {
 	const {navigate} = useNavigation()
+	const {flowFrom} = route.params
 
 	const {CreateAccount} = useAuthApis()
 
@@ -18,11 +19,11 @@ const AccountType = () => {
 		onSuccess: (res, params) => {
 			if (res?.status) {
 				if (params?.account_type === 0) {
-					navigate(ACCOUNT_SCREEN, {accountType: 'Personal', from: 'signup_process'})
+					navigate(ACCOUNT_SCREEN, {accountType: 'Personal', from: flowFrom})
 				}
 
 				if (params?.account_type === 1) {
-					navigate(ACCOUNT_SCREEN, {accountType: 'Business', from: 'signup_process'})
+					navigate(ACCOUNT_SCREEN, {accountType: 'Business', from: flowFrom})
 				}
 			}
 		},
@@ -30,7 +31,7 @@ const AccountType = () => {
 
 	const isLoading = createAccountApi.isLoading
 
-	const handleAccountCreation = (accountType = 1) => {
+	const handleAccountCreation = (accountType = 0) => {
 		const formData = {account_type: accountType}
 
 		createAccountApi.mutateAsync(formData)

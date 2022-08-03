@@ -62,7 +62,7 @@ const VerifyOtp = () => {
 				<View style={{alignItems: 'center'}}>
 					<CheckMark style={{marginTop: SIZES.font1 * 4}} />
 					<Text style={[FONTS.body3, {marginTop: SIZES.font10}]}>Verification Successful!</Text>
-					<CustomButton title="Continue" onPress={() => navigate(ACCOUNT_TYPE)} style={styles.startButton} />
+					<CustomButton title="Continue" onPress={() => navigate(ACCOUNT_TYPE, {flowFrom: 'signup_process'})} style={styles.startButton} />
 				</View>
 			) : (
 				<Formik initialValues={{otp: ''}} validationSchema={otpValiditor} onSubmit={handleOTPVerification} innerRef={formRef}>

@@ -39,7 +39,7 @@ const Home = ({navigation}) => {
 			if (res?.status) {
 				if (!res?.data?.has_created_account) {
 					Alert.alert('Account Update Required', 'Please update your account.')
-					navigator(ACCOUNT_TYPE)
+					navigator.navigate(ACCOUNT_TYPE, {flowFrom: 'inapp_process'})
 				}
 
 				if (res?.data?.has_created_account && res?.data?.has_verified_account) {

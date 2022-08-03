@@ -13,18 +13,27 @@ import CustomButton from '../../components/CustomButton'
 import {useAuthApis} from '../../services/api/Auth/auth.index'
 import {useMutation} from 'react-query'
 import {useFlusDispatcher, useFlusStores} from 'react-flus'
-import {USER_LOGIN} from '../../flus/constants/auth.const'
+import {UPDATE_USER, USER_LOGIN} from '../../flus/constants/auth.const'
 
 const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
-	const [gender, setGender] = useState('')
-	const [status, setStatus] = useState('')
-	const [imgeUri, setImageUri] = useState('')
-
 	const dispatcher = useFlusDispatcher()
 	const {user} = useFlusStores()?.auth
 
-	const {UpdateCompanyAccount} = useAuthApis()
+	const [gender, setGender] = useState(user?.gender)
+	const [status, setStatus] = useState(user?.marital_status)
+	const [imgeUri, setImageUri] = useState('')
 
+	const {UpdateCompanyAccount, FetchCompanyAccount} = useAuthApis()
+
+	const fetchAccountApi = useMutation(FetchCompanyAccount, {
+		onSuccess: res => {
+			if (res?.status) {
+				dispatcher({type: UPDATE_USER, payload: {data: {...res?.data}}})
+			}
+		},
+	})
+
+	/* update company account api */
 	const updateCompanyAccountApi = useMutation(UpdateCompanyAccount, {
 		onSuccess: res => {
 			if (res?.status) {
@@ -36,11 +45,16 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
 							access_token: null,
 						},
 					})
+				} else {
+					/* Fetch user account information after update profile to update the user 
+					data object. */
+					fetchAccountApi.mutateAsync()
 				}
 			}
 		},
 	})
 
+	/* Handle user account update */
 	const handleAccountUpdate = formData => {
 		formData.gender = gender
 		formData.marital_status = status
@@ -48,17 +62,18 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
 	}
 
 	/* The api loading state. */
-	const isLoading = updateCompanyAccountApi.isLoading
+	const isLoading = updateCompanyAccountApi.isLoading || fetchAccountApi.isLoading
 
 	const bottomSheetRef = useRef(null)
 
+	/* The initial form data  */
 	const initialValues = {
 		first_name: user?.registrar_first_name,
 		last_name: user?.registrar_last_name,
 		company_name: user?.company_name,
 		country: user?.country,
 		state: user?.state,
-		location: user?.current_location,
+		location: user?.location,
 		longitude: '2312311',
 		latitude: '1131431',
 		registrar_position: user?.registrar_position,
@@ -108,13 +123,13 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
 							<InputField label="Registrar First Name" onChangeText={handleChange('first_name')} value={values?.first_name} />
 							<InputField label="Registrar Last Name" onChangeText={handleChange('last_name')} value={values?.last_name} />
 							<InputField label="Company Name" onChangeText={handleChange('company_name')} value={values?.company_name} />
-							<InputField label="Registrar Position" onChangeText={handleChange('registrar_position')} value={values?.position} />
+							<InputField label="Registrar Position" onChangeText={handleChange('registrar_position')} value={values?.registrar_position} />
 
 							<View>
-								<Picker placeHolder={'Choose Gender'} value={gender ? gender : values?.gender} data={['Male', 'Female']} onPressItem={setGender} />
+								<Picker placeHolder={values?.gender ? values?.gender : 'Choose Gender'} value={gender ? gender : values?.gender} data={['Male', 'Female']} onPressItem={setGender} />
 							</View>
 							<View>
-								<Picker placeHolder={'Marital Status'} value={status ? status : values?.marital_status} data={['Single', 'Married', 'Divorced']} onPressItem={setStatus} />
+								<Picker placeHolder={values?.marital_status ? values?.marital_status : 'Marital Status'} value={status ? status : values?.marital_status} data={['Single', 'Married', 'Divorced']} onPressItem={setStatus} />
 							</View>
 							<InputField label="Country*" onChangeText={handleChange('country')} value={values?.country} />
 							<InputField label="City/State*" onChangeText={handleChange('state')} value={values?.state} />

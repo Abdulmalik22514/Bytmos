@@ -92,7 +92,7 @@ export const CreateAccount = async params => {
 				if (!res?.status) {
 					handleError(res)
 				} else {
-					Alert.alert('Success!', !Array.isArray(res?.message) ? res?.message : '')
+					Alert.alert('Success!', 'Account created successfully! Please update your profile.')
 					return res
 				}
 			})
@@ -112,6 +112,8 @@ export const UpdatePersonalAccount = async params => {
 			.then(res => {
 				if (!res?.status) {
 					handleError(res)
+				} else {
+					Alert.alert('Success', 'Account updated successfully!')
 				}
 				return res
 			})
@@ -151,10 +153,9 @@ export const FetchPersonalAccount = async () => {
 			.then(res => {
 				if (!res?.status) {
 					handleError(res)
-				} else {
-					Alert.alert('Success!', !Array.isArray(res?.message) ? res?.message : '')
-					return res
 				}
+
+				return res
 			})
 			.catch(res => console.error(res))
 	} catch (error) {
