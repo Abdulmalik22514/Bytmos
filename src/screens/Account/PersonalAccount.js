@@ -15,6 +15,7 @@ import {UPDATE_USER, USER_LOGIN} from '../../flus/constants/auth.const';
 import {useMutation} from 'react-query';
 import {useAuthApis} from '../../services/api/Auth/auth.index';
 import {UpdatePersonalAccount} from '../../services/api/Auth/auth.apis';
+import {DatePicker} from '../../components/DateOfBirth';
 
 const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
   const {user} = useFlusStores()?.auth;
@@ -172,6 +173,14 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
                 value={values?.location}
               />
               <View>
+                <View style={{marginVertical: SIZES.font10}}>
+                  <Text style={FONTS.body3}>Date of birth</Text>
+                  <View style={styles.dateContainer}>
+                    <DatePicker label="Day" />
+                    <DatePicker label="Month" isMonth />
+                    <DatePicker label="Year" />
+                  </View>
+                </View>
                 <Picker
                   placeHolder={
                     values?.gender ? values?.gender : 'Choose Gender'
@@ -261,5 +270,10 @@ const styles = StyleSheet.create({
     width: '90%',
     alignSelf: 'center',
     marginBottom: SIZES.font1 * 2,
+  },
+  dateContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
 });

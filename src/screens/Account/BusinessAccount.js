@@ -13,6 +13,7 @@ import {useAuthApis} from '../../services/api/Auth/auth.index';
 import {useMutation} from 'react-query';
 import {useFlusDispatcher, useFlusStores} from 'react-flus';
 import {USER_LOGIN} from '../../flus/constants/auth.const';
+import {DatePicker} from '../../components/DateOfBirth';
 
 const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
   const [gender, setGender] = useState('');
@@ -135,6 +136,14 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
               />
 
               <View>
+                <View style={{marginVertical: SIZES.font10}}>
+                  <Text style={FONTS.body3}>Date of birth</Text>
+                  <View style={styles.dateContainer}>
+                    <DatePicker label="Day" />
+                    <DatePicker label="Month" isMonth />
+                    <DatePicker label="Year" />
+                  </View>
+                </View>
                 <Picker
                   placeHolder={'Choose Gender'}
                   value={gender ? gender : values?.gender}
@@ -231,5 +240,10 @@ const styles = StyleSheet.create({
     width: '90%',
     alignSelf: 'center',
     marginBottom: SIZES.font1 * 2,
+  },
+  dateContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
 });
