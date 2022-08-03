@@ -21,6 +21,11 @@ const FashionItem3 = require('../assets/images/fashionItem3.png');
 const FashionItem4 = require('../assets/images/fashionItem4.png');
 const FashionItem5 = require('../assets/images/fashionItem5.png');
 const FashionItem6 = require('../assets/images/fashionItem6.png');
+const AllCategory = require('../assets/images/allCat.png');
+const TechCategory = require('../assets/images/techCat.png');
+const EventCategory = require('../assets/images/eventCat.png');
+const BeautyCategory = require('../assets/images/beautyCat.png');
+const SoniaFashion = require('../assets/images/soniaFashion.png');
 
 export default {
   SplashIcon,
@@ -46,4 +51,9 @@ export default {
   FashionItem4,
   FashionItem5,
   FashionItem6,
+  AllCategory,
+  TechCategory,
+  EventCategory,
+  BeautyCategory,
+  SoniaFashion,
 };
