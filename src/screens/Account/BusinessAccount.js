@@ -14,6 +14,8 @@ import {useAuthApis} from '../../services/api/Auth/auth.index'
 import {useMutation} from 'react-query'
 import {useFlusDispatcher, useFlusStores} from 'react-flus'
 import {UPDATE_USER, USER_LOGIN} from '../../flus/constants/auth.const'
+import {useStorageApi} from '../../services/api/storage/storage.index'
+import {config} from '../../configs/config'
 
 const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
 	const dispatcher = useFlusDispatcher()
@@ -24,7 +26,9 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
 	const [imgeUri, setImageUri] = useState('')
 
 	const {UpdateCompanyAccount, FetchCompanyAccount} = useAuthApis()
+	const {UploadImageMedia} = useStorageApi()
 
+	/* Fetch user account after updating profile */
 	const fetchAccountApi = useMutation(FetchCompanyAccount, {
 		onSuccess: res => {
 			if (res?.status) {
@@ -53,6 +57,29 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
 			}
 		},
 	})
+
+	/* uploade the image and  */
+	const uploadImageApi = useMutation(UploadImageMedia, {
+		onSuccess: res => {
+			if (res?.asset_id) {
+				const formData = {profile_photo: res?.secure_url}
+
+				updateCompanyAccountApi.mutateAsync(formData)
+			}
+		},
+	})
+
+	const handleFileUpload = imageUrl => {
+		if (imageUrl) {
+			setImageUri(imageUrl)
+
+			const formData = new FormData()
+			formData.append('file', imageUrl)
+			formData.append('upload_preset', config('services.cloudinary.preset'))
+
+			uploadImageApi.mutateAsync(formData)
+		}
+	}
 
 	/* Handle user account update */
 	const handleAccountUpdate = formData => {
@@ -141,7 +168,7 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
 							<CustomButton title="Save" style={styles.saveButton} onPress={handleSubmit} isLoading={isLoading} disabled={isLoading} />
 						</View>
 					</KeyboardAwareScrollView>
-					<ImageBottomSheet ref={bottomSheetRef} handleClosePress={handleClosePress} onSelectImage={setImageUri} />
+					<ImageBottomSheet ref={bottomSheetRef} handleClosePress={handleClosePress} onSelectImage={handleFileUpload} />
 				</>
 			)}
 		</Formik>
