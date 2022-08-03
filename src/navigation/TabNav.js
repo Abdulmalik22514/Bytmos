@@ -58,7 +58,7 @@ const BottomTabs = () => {
             <TabComponent
               label={'Inbox'}
               focused={focused}
-              icon={icons.Message}
+              icon={icons.Envelope}
             />
           ),
         }}
