@@ -1,6 +1,7 @@
 import React from 'react';
 import {View, StatusBar, StyleSheet} from 'react-native';
 import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
+import {COLORS} from '../constants/theme';
 
 export default function Container({
   children,
@@ -14,7 +15,11 @@ export default function Container({
 
   return (
     <>
-      <StatusBar barStyle={barIconColor} backgroundColor={'white'} />
+      <StatusBar
+        barStyle={barIconColor}
+        backgroundColor={COLORS.blue}
+        translucent={false}
+      />
       <View style={styles.coreLayer}>
         <View style={styles.upperPart} />
         <View style={styles.lowerPart} />
