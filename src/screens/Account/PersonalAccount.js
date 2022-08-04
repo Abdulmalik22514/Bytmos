@@ -3,7 +3,6 @@ import React, {useRef, useState} from 'react';
 import Header from '../../components/Header';
 import {COLORS, FONTS, SIZES} from '../../constants/theme';
 import {CameraIcon} from '../../assets/svgs/svg';
-import icons from '../../constants/icons';
 import InputField from '../../components/InputField';
 import Picker from '../../components/Picker';
 import ImageBottomSheet from '../../components/CameraBottomSheet';
@@ -14,8 +13,7 @@ import {useFlusDispatcher, useFlusStores} from 'react-flus';
 import {UPDATE_USER, USER_LOGIN} from '../../flus/constants/auth.const';
 import {useMutation} from 'react-query';
 import {useAuthApis} from '../../services/api/Auth/auth.index';
-import {UpdatePersonalAccount} from '../../services/api/Auth/auth.apis';
-import {DatePicker} from '../../components/DateOfBirth';
+import {DatePicker} from '../../components/DatePicker';
 
 const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
   const {user} = useFlusStores()?.auth;
@@ -24,6 +22,7 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
   const [gender, setGender] = useState(user?.gender);
   const [status, setStatus] = useState(user?.marital_status);
   const [imgeUri, setImageUri] = useState('');
+  const [dateValue, setDateValue] = useState('');
 
   const {UpdatePersonalAccount, FetchPersonalAccount} = useAuthApis();
 
@@ -94,7 +93,7 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
       initialValues={initialValues}
       enableReinitialize
       onSubmit={handleAccountUpdate}>
-      {({handleChange, handleSubmit, errors, touched, values}) => (
+      {({handleChange, handleSubmit, values}) => (
         <>
           <Header screenName={screenName} isNotHome />
           <KeyboardAwareScrollView
@@ -174,12 +173,10 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
               />
               <View>
                 <View style={{marginVertical: SIZES.font10}}>
-                  <Text style={FONTS.body3}>Date of birth</Text>
-                  <View style={styles.dateContainer}>
-                    <DatePicker label="Day" />
-                    <DatePicker label="Month" isMonth />
-                    <DatePicker label="Year" />
-                  </View>
+                  <DatePicker
+                    onSelectDate={setDateValue}
+                    dateValue={dateValue}
+                  />
                 </View>
                 <Picker
                   placeHolder={
@@ -270,10 +267,5 @@ const styles = StyleSheet.create({
     width: '90%',
     alignSelf: 'center',
     marginBottom: SIZES.font1 * 2,
-  },
-  dateContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
   },
 });

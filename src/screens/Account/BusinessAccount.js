@@ -13,12 +13,13 @@ import {useAuthApis} from '../../services/api/Auth/auth.index';
 import {useMutation} from 'react-query';
 import {useFlusDispatcher, useFlusStores} from 'react-flus';
 import {USER_LOGIN} from '../../flus/constants/auth.const';
-import {DatePicker} from '../../components/DateOfBirth';
+import {DatePicker} from '../../components/DatePicker';
 
 const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
   const [gender, setGender] = useState('');
   const [status, setStatus] = useState('');
   const [imgeUri, setImageUri] = useState('');
+  const [dateValue, setDateValue] = useState('');
 
   const dispatcher = useFlusDispatcher();
   const {user} = useFlusStores()?.auth;
@@ -137,12 +138,10 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
 
               <View>
                 <View style={{marginVertical: SIZES.font10}}>
-                  <Text style={FONTS.body3}>Date of birth</Text>
-                  <View style={styles.dateContainer}>
-                    <DatePicker label="Day" />
-                    <DatePicker label="Month" isMonth />
-                    <DatePicker label="Year" />
-                  </View>
+                  <DatePicker
+                    onSelectDate={setDateValue}
+                    dateValue={dateValue}
+                  />
                 </View>
                 <Picker
                   placeHolder={'Choose Gender'}
