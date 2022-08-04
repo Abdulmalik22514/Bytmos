@@ -1,7 +1,14 @@
-import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
+import {
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+  ImageBackground,
+} from 'react-native';
 import React, {useRef, useState} from 'react';
 import Header from '../../components/Header';
-import {COLORS, FONTS, SIZES} from '../../constants/theme';
+import {FONTS, SIZES} from '../../constants/theme';
 import {CameraIcon} from '../../assets/svgs/svg';
 import InputField from '../../components/InputField';
 import Picker from '../../components/Picker';
@@ -23,6 +30,8 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
   const [status, setStatus] = useState(user?.marital_status);
   const [imgeUri, setImageUri] = useState('');
   const [dateValue, setDateValue] = useState('');
+  const [type, setType] = useState('');
+  const [coverPhoto, setCoverPhoto] = useState('');
 
   const {UpdatePersonalAccount, FetchPersonalAccount} = useAuthApis();
 
@@ -33,6 +42,11 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
       }
     },
   });
+
+  const onOpenModal = type => {
+    setType(type);
+    bottomSheetRef?.current?.snapToIndex(1);
+  };
 
   /* update company account api */
   const updateCompanyAccountApi = useMutation(UpdatePersonalAccount, {
@@ -96,21 +110,25 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
       {({handleChange, handleSubmit, values}) => (
         <>
           <Header screenName={screenName} isNotHome />
-          <KeyboardAwareScrollView
-            style={{marginVertical: SIZES.font1}}
-            showsVerticalScrollIndicator={false}>
+          <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
             <View style={{paddingHorizontal: SIZES.font8}}>
-              <View style={styles.profilePixContainer}>
+              <ImageBackground
+                resizeMode={'cover'}
+                source={
+                  coverPhoto ? {uri: coverPhoto} : {uri: user?.profile_photo}
+                }
+                style={styles.profilePixContainer}>
                 <Pressable
                   style={styles.cameraBox}
                   onPress={() => {
-                    bottomSheetRef?.current?.snapToIndex(1);
+                    onOpenModal('coverPhoto');
                   }}>
                   <View style={{alignItems: 'flex-end'}}>
                     <CameraIcon />
                   </View>
                 </Pressable>
-              </View>
+              </ImageBackground>
+
               <View>
                 <Image
                   source={imgeUri ? {uri: imgeUri} : {uri: user?.profile_photo}}
@@ -119,12 +137,12 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
 
                 <Pressable
                   onPress={() => {
-                    bottomSheetRef?.current?.snapToIndex(1);
+                    onOpenModal('displayPicture');
                   }}>
                   <CameraIcon
                     style={{
                       left: 200,
-                      marginTop: 45,
+                      marginTop: 35,
                       zIndex: 100,
                     }}
                   />
@@ -228,6 +246,8 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
             ref={bottomSheetRef}
             handleClosePress={handleClosePress}
             onSelectImage={setImageUri}
+            type={type}
+            onCoverPhotoSelect={setCoverPhoto}
           />
         </>
       )}
@@ -239,9 +259,9 @@ export default PersonalAccount;
 
 const styles = StyleSheet.create({
   profilePixContainer: {
-    backgroundColor: COLORS.pictureBackground,
     width: '100%',
-    height: SIZES.font1 * 3.5,
+    height: SIZES.font1 * 5.5,
+    marginTop: SIZES.font5,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
   },
@@ -252,7 +272,7 @@ const styles = StyleSheet.create({
     width: SIZES.font1 * 4.5,
     height: SIZES.font1 * 4.5,
     alignSelf: 'center',
-    marginTop: -60,
+    marginTop: -70,
     position: 'absolute',
     borderRadius: 100,
   },

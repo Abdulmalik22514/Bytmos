@@ -19,7 +19,7 @@ const Options = [
 ];
 
 const ImageBottomSheet = React.forwardRef(
-  ({onSelectImage, handleClosePress}, ref) => {
+  ({onSelectImage, handleClosePress, type, onCoverPhotoSelect}, ref) => {
     const snapPoints = ['1%', '27%'];
 
     const handleActionType = actionType => {
@@ -30,7 +30,9 @@ const ImageBottomSheet = React.forwardRef(
           height: 400,
           cropping: true,
         }).then(image => {
-          onSelectImage(image.path);
+          type === 'coverPhoto'
+            ? onCoverPhotoSelect?.(image.path)
+            : onSelectImage(image.path);
           console.log({image});
         });
       }
@@ -40,7 +42,9 @@ const ImageBottomSheet = React.forwardRef(
           height: 400,
           cropping: true,
         }).then(image => {
-          onSelectImage(image.path);
+          type === 'coverPhoto'
+            ? onCoverPhotoSelect?.(image.path)
+            : onSelectImage(image.path);
           console.log(image);
         });
       }

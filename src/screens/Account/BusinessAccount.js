@@ -20,11 +20,18 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
   const [status, setStatus] = useState('');
   const [imgeUri, setImageUri] = useState('');
   const [dateValue, setDateValue] = useState('');
+  const [type, setType] = useState('');
+  const [coverPhoto, setCoverPhoto] = useState('');
 
   const dispatcher = useFlusDispatcher();
   const {user} = useFlusStores()?.auth;
 
   const {UpdateCompanyAccount} = useAuthApis();
+
+  const onOpenModal = type => {
+    setType(type);
+    bottomSheetRef?.current?.snapToIndex(1);
+  };
 
   const updateCompanyAccountApi = useMutation(UpdateCompanyAccount, {
     onSuccess: res => {
@@ -79,36 +86,39 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
       {({handleChange, handleSubmit, values}) => (
         <>
           <Header screenName={screenName} isNotHome />
-          <KeyboardAwareScrollView
-            style={{marginVertical: SIZES.font1}}
-            showsVerticalScrollIndicator={false}>
+          <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
             <View style={{paddingHorizontal: SIZES.font8}}>
-              <View style={styles.profilePixContainer}>
+              <ImageBackground
+                resizeMode={'cover'}
+                source={
+                  coverPhoto ? {uri: coverPhoto} : {uri: user?.profile_photo}
+                }
+                style={styles.profilePixContainer}>
                 <Pressable
                   style={styles.cameraBox}
                   onPress={() => {
-                    bottomSheetRef?.current?.snapToIndex(1);
+                    onOpenModal('coverPhoto');
                   }}>
                   <View style={{alignItems: 'flex-end'}}>
                     <CameraIcon />
                   </View>
                 </Pressable>
-              </View>
+              </ImageBackground>
+
               <View>
                 <Image
                   source={imgeUri ? {uri: imgeUri} : {uri: user?.profile_photo}}
-                  resizeMode="contain"
                   style={styles.profilepic}
                 />
 
                 <Pressable
                   onPress={() => {
-                    bottomSheetRef?.current?.snapToIndex(1);
+                    onOpenModal('displayPicture');
                   }}>
                   <CameraIcon
                     style={{
                       left: 200,
-                      marginTop: 45,
+                      marginTop: 35,
                       zIndex: 100,
                     }}
                   />
@@ -200,6 +210,8 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
             ref={bottomSheetRef}
             handleClosePress={handleClosePress}
             onSelectImage={setImageUri}
+            type={type}
+            onCoverPhotoSelect={setCoverPhoto}
           />
         </>
       )}
