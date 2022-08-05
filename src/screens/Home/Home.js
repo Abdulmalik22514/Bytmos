@@ -107,7 +107,7 @@ const Home = ({navigation}) => {
             showsVerticalScrollIndicator={false}>
             <Image
               source={{uri: auth?.user?.profile_photo}}
-              resizeMode="contain"
+              // resizeMode="contain"
               style={styles.profilepic}
             />
             <Text style={styles.accountName}>

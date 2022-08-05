@@ -88,22 +88,24 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
           <Header screenName={screenName} isNotHome />
           <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
             <View style={{paddingHorizontal: SIZES.font8}}>
-              <ImageBackground
-                resizeMode={'cover'}
-                source={
-                  coverPhoto ? {uri: coverPhoto} : {uri: user?.profile_photo}
-                }
-                style={styles.profilePixContainer}>
-                <Pressable
-                  style={styles.cameraBox}
-                  onPress={() => {
-                    onOpenModal('coverPhoto');
-                  }}>
-                  <View style={{alignItems: 'flex-end'}}>
-                    <CameraIcon />
-                  </View>
-                </Pressable>
-              </ImageBackground>
+              <View style={styles.profilePixContainer}>
+                <ImageBackground
+                  resizeMode={'cover'}
+                  style={styles.imgBackground}
+                  source={
+                    coverPhoto ? {uri: coverPhoto} : {uri: user?.profile_photo}
+                  }>
+                  <Pressable
+                    style={styles.cameraBox}
+                    onPress={() => {
+                      onOpenModal('coverPhoto');
+                    }}>
+                    <View style={{alignItems: 'flex-end'}}>
+                      <CameraIcon />
+                    </View>
+                  </Pressable>
+                </ImageBackground>
+              </View>
 
               <View>
                 <Image
@@ -256,5 +258,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+  },
+  imgBackground: {
+    overflow: 'hidden',
+    height: '100%',
+    borderTopLeftRadius: 22,
+    borderTopRightRadius: 22,
   },
 });

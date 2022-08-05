@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import React, {useRef, useState} from 'react';
 import Header from '../../components/Header';
-import {FONTS, SIZES} from '../../constants/theme';
+import {COLORS, FONTS, SIZES} from '../../constants/theme';
 import {CameraIcon} from '../../assets/svgs/svg';
 import InputField from '../../components/InputField';
 import Picker from '../../components/Picker';
@@ -112,22 +112,24 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
           <Header screenName={screenName} isNotHome />
           <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
             <View style={{paddingHorizontal: SIZES.font8}}>
-              <ImageBackground
-                resizeMode={'cover'}
-                source={
-                  coverPhoto ? {uri: coverPhoto} : {uri: user?.profile_photo}
-                }
-                style={styles.profilePixContainer}>
-                <Pressable
-                  style={styles.cameraBox}
-                  onPress={() => {
-                    onOpenModal('coverPhoto');
-                  }}>
-                  <View style={{alignItems: 'flex-end'}}>
-                    <CameraIcon />
-                  </View>
-                </Pressable>
-              </ImageBackground>
+              <View style={styles.profilePixContainer}>
+                <ImageBackground
+                  // resizeMode={'contain'}
+                  style={styles.imgBackground}
+                  source={
+                    coverPhoto ? {uri: coverPhoto} : {uri: user?.profile_photo}
+                  }>
+                  <Pressable
+                    style={styles.cameraBox}
+                    onPress={() => {
+                      onOpenModal('coverPhoto');
+                    }}>
+                    <View style={{alignItems: 'flex-end'}}>
+                      <CameraIcon />
+                    </View>
+                  </Pressable>
+                </ImageBackground>
+              </View>
 
               <View>
                 <Image
@@ -259,11 +261,18 @@ export default PersonalAccount;
 
 const styles = StyleSheet.create({
   profilePixContainer: {
+    backgroundColor: COLORS.pictureBackground,
     width: '100%',
     height: SIZES.font1 * 5.5,
     marginTop: SIZES.font5,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
+  },
+  imgBackground: {
+    overflow: 'hidden',
+    height: '100%',
+    borderTopLeftRadius: 22,
+    borderTopRightRadius: 22,
   },
   cameraBox: {
     padding: SIZES.font10 - 2,
