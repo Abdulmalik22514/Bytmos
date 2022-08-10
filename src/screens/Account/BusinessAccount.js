@@ -19,6 +19,7 @@ import {
   getBusinessInputValues,
 } from '../../utils/getInputValues';
 import CountryPicker from 'react-native-country-picker-modal';
+import Container from '../../components/Container';
 
 const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
   const [imgeUri, setImageUri] = useState('');
@@ -85,58 +86,61 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
 
   return (
     <>
-      <Formik
-        initialValues={initialValues}
-        enableReinitialize
-        onSubmit={handleAccountUpdate}>
-        {({handleChange, handleSubmit, values, setFieldValue}) => (
-          <>
-            <Header screenName={screenName} isNotHome />
-            <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
-              <View style={{paddingHorizontal: SIZES.font8}}>
-                <CameraComponent
-                  coverPhotoValue={
-                    values.coverPhoto
-                      ? {uri: values.coverPhoto}
-                      : {uri: user?.profile_photo}
-                  }
-                  setCoverPhoto={() => onOpenModal('coverPhoto')}
-                  profilePhotoValue={
-                    imgeUri ? {uri: imgeUri} : {uri: user?.profile_photo}
-                  }
-                  setProfilePhoto={() => onOpenModal('displayPicture')}
-                />
-                {getBusinessInputValues(BUS_UPPER_KEYS).map(({label, key}) => (
-                  <InputField
-                    key={key}
-                    label={label}
-                    onChangeText={handleChange(key)}
-                    value={values[key]}
+      <Container>
+        <Formik
+          initialValues={initialValues}
+          enableReinitialize
+          onSubmit={handleAccountUpdate}>
+          {({handleChange, handleSubmit, values, setFieldValue}) => (
+            <>
+              <Header screenName={screenName} isNotHome />
+              <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
+                <View style={{paddingHorizontal: SIZES.font8}}>
+                  <CameraComponent
+                    coverPhotoValue={
+                      values.coverPhoto
+                        ? {uri: values.coverPhoto}
+                        : {uri: user?.profile_photo}
+                    }
+                    setCoverPhoto={() => onOpenModal('coverPhoto')}
+                    profilePhotoValue={
+                      imgeUri ? {uri: imgeUri} : {uri: user?.profile_photo}
+                    }
+                    setProfilePhoto={() => onOpenModal('displayPicture')}
                   />
-                ))}
-                <View style={{marginBottom: SIZES.font10}}>
-                  <DatePicker
-                    onSelectDate={setDateValue}
-                    dateValue={dateValue}
+                  {getBusinessInputValues(BUS_UPPER_KEYS).map(
+                    ({label, key}) => (
+                      <InputField
+                        key={key}
+                        label={label}
+                        onChangeText={handleChange(key)}
+                        value={values[key]}
+                      />
+                    ),
+                  )}
+                  <View style={{marginBottom: SIZES.font10}}>
+                    <DatePicker
+                      onSelectDate={setDateValue}
+                      dateValue={dateValue}
+                    />
+                  </View>
+                  <Picker
+                    placeHolder={'Choose Gender'}
+                    value={values?.gender}
+                    data={['Male', 'Female']}
+                    onPressItem={data => setFieldValue('gender', data)}
                   />
-                </View>
-                <Picker
-                  placeHolder={'Choose Gender'}
-                  value={values?.gender}
-                  data={['Male', 'Female']}
-                  onPressItem={data => setFieldValue('gender', data)}
-                />
-                <Picker
-                  placeHolder={
-                    values?.marital_status
-                      ? values?.marital_status
-                      : 'Marital Status'
-                  }
-                  value={values?.marital_status}
-                  data={['Single', 'Married', 'Divorced']}
-                  onPressItem={data => setFieldValue('marital_status', data)}
-                />
-                {/* {getInputValues(['company_email', 'phone_number']).map(
+                  <Picker
+                    placeHolder={
+                      values?.marital_status
+                        ? values?.marital_status
+                        : 'Marital Status'
+                    }
+                    value={values?.marital_status}
+                    data={['Single', 'Married', 'Divorced']}
+                    onPressItem={data => setFieldValue('marital_status', data)}
+                  />
+                  {/* {getInputValues(['company_email', 'phone_number']).map(
                 ({label, key}) => (
                   <InputField
                     key={key}
@@ -146,58 +150,59 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
                   />
                 ),
               )} */}
-                <Text style={[FONTS.body4, {marginBottom: SIZES.font10}]}>
-                  Country/Region*
-                </Text>
-                <CountryPicker
-                  withFilter
-                  withAlphaFilter
-                  placeholder={values?.country || 'Select your country'}
-                  onSelect={data => setFieldValue('country', data?.name)}
-                  containerButtonStyle={styles.countryContainer}
-                />
-                {getInputValues(['location']).map(({label, key}) => (
-                  <InputField
-                    key={key}
-                    label={label}
-                    onChangeText={handleChange(key)}
-                    value={values[key]}
+                  <Text style={[FONTS.body4, {marginBottom: SIZES.font10}]}>
+                    Country/Region*
+                  </Text>
+                  <CountryPicker
+                    withFilter
+                    withAlphaFilter
+                    placeholder={values?.country || 'Select your country'}
+                    onSelect={data => setFieldValue('country', data?.name)}
+                    containerButtonStyle={styles.countryContainer}
                   />
-                ))}
-
-                <Text style={styles.socialMediaText}>
-                  Add links to social media pages
-                </Text>
-                {getInputValues(['facebook_link', 'instagram_link']).map(
-                  ({label, key}) => (
+                  {getInputValues(['location']).map(({label, key}) => (
                     <InputField
                       key={key}
                       label={label}
                       onChangeText={handleChange(key)}
                       value={values[key]}
                     />
-                  ),
-                )}
+                  ))}
 
-                <CustomButton
-                  title="Save"
-                  style={styles.saveButton}
-                  onPress={handleSubmit}
-                  isLoading={isLoading}
-                  disabled={isLoading}
-                />
-              </View>
-            </KeyboardAwareScrollView>
-            <ImageBottomSheet
-              ref={bottomSheetRef}
-              handleClosePress={handleClosePress}
-              onSelectImage={setImageUri}
-              type={type}
-              onCoverPhotoSelect={data => setFieldValue('coverPhoto', data)}
-            />
-          </>
-        )}
-      </Formik>
+                  <Text style={styles.socialMediaText}>
+                    Add links to social media pages
+                  </Text>
+                  {getInputValues(['facebook_link', 'instagram_link']).map(
+                    ({label, key}) => (
+                      <InputField
+                        key={key}
+                        label={label}
+                        onChangeText={handleChange(key)}
+                        value={values[key]}
+                      />
+                    ),
+                  )}
+
+                  <CustomButton
+                    title="Save"
+                    style={styles.saveButton}
+                    onPress={handleSubmit}
+                    isLoading={isLoading}
+                    disabled={isLoading}
+                  />
+                </View>
+              </KeyboardAwareScrollView>
+            </>
+          )}
+        </Formik>
+      </Container>
+      <ImageBottomSheet
+        ref={bottomSheetRef}
+        handleClosePress={handleClosePress}
+        onSelectImage={setImageUri}
+        type={type}
+        onCoverPhotoSelect={data => setFieldValue('coverPhoto', data)}
+      />
     </>
   );
 };
