@@ -47,11 +47,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: COLORS.line,
     borderRadius: 15,
-    marginTop: SIZES.font10,
+    marginVertical: SIZES.font10,
     justifyContent: 'space-between',
     padding: SIZES.font8,
-  },
-  isMonth: {
-    width: SIZES.font1 * 4.7,
   },
 });

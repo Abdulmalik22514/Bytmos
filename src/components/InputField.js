@@ -15,7 +15,7 @@ export default InputField;
 
 const styles = StyleSheet.create({
   container: {
-    marginVertical: SIZES.font10,
+    marginBottom: SIZES.font5,
   },
   textInput: {
     ...FONTS.body3,
