@@ -1,8 +1,7 @@
-import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import React, {useRef, useState} from 'react';
 import Header from '../../components/Header';
 import {COLORS, FONTS, SIZES} from '../../constants/theme';
-import {CameraIcon} from '../../assets/svgs/svg';
 import InputField from '../../components/InputField';
 import Picker from '../../components/Picker';
 import ImageBottomSheet from '../../components/CameraBottomSheet';
@@ -14,14 +13,17 @@ import {useMutation} from 'react-query';
 import {useFlusDispatcher, useFlusStores} from 'react-flus';
 import {USER_LOGIN} from '../../flus/constants/auth.const';
 import {DatePicker} from '../../components/DatePicker';
+import CameraComponent from '../../components/CameraComponent';
+import {
+  BUS_UPPER_KEYS,
+  getBusinessInputValues,
+} from '../../utils/getInputValues';
+import CountryPicker from 'react-native-country-picker-modal';
 
 const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
-  const [gender, setGender] = useState('');
-  const [status, setStatus] = useState('');
   const [imgeUri, setImageUri] = useState('');
   const [dateValue, setDateValue] = useState('');
   const [type, setType] = useState('');
-  const [coverPhoto, setCoverPhoto] = useState('');
 
   const dispatcher = useFlusDispatcher();
   const {user} = useFlusStores()?.auth;
@@ -74,82 +76,45 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
     marital_status: user?.marital_status,
     facebook_link: user?.facebook_link,
     instagram_link: user?.instagram_link,
+    //email and phone number of company no need for registration but included in the design
+    // email: user?.company_email,
+    // phone_number: user?.phone_number,
   };
 
   const handleClosePress = () => bottomSheetRef.current.close();
 
   return (
-    <Formik
-      initialValues={initialValues}
-      enableReinitialize
-      onSubmit={handleAccountUpdate}>
-      {({handleChange, handleSubmit, values}) => (
-        <>
-          <Header screenName={screenName} isNotHome />
-          <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
-            <View style={{paddingHorizontal: SIZES.font8}}>
-              <View style={styles.profilePixContainer}>
-                <ImageBackground
-                  resizeMode={'cover'}
-                  style={styles.imgBackground}
-                  source={
-                    coverPhoto ? {uri: coverPhoto} : {uri: user?.profile_photo}
-                  }>
-                  <Pressable
-                    style={styles.cameraBox}
-                    onPress={() => {
-                      onOpenModal('coverPhoto');
-                    }}>
-                    <View style={{alignItems: 'flex-end'}}>
-                      <CameraIcon />
-                    </View>
-                  </Pressable>
-                </ImageBackground>
-              </View>
-
-              <View>
-                <Image
-                  source={imgeUri ? {uri: imgeUri} : {uri: user?.profile_photo}}
-                  style={styles.profilepic}
+    <>
+      <Formik
+        initialValues={initialValues}
+        enableReinitialize
+        onSubmit={handleAccountUpdate}>
+        {({handleChange, handleSubmit, values, setFieldValue}) => (
+          <>
+            <Header screenName={screenName} isNotHome />
+            <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
+              <View style={{paddingHorizontal: SIZES.font8}}>
+                <CameraComponent
+                  coverPhotoValue={
+                    values.coverPhoto
+                      ? {uri: values.coverPhoto}
+                      : {uri: user?.profile_photo}
+                  }
+                  setCoverPhoto={() => onOpenModal('coverPhoto')}
+                  profilePhotoValue={
+                    imgeUri ? {uri: imgeUri} : {uri: user?.profile_photo}
+                  }
+                  setProfilePhoto={() => onOpenModal('displayPicture')}
                 />
-
-                <Pressable
-                  onPress={() => {
-                    onOpenModal('displayPicture');
-                  }}>
-                  <CameraIcon
-                    style={{
-                      left: 200,
-                      marginTop: 35,
-                      zIndex: 100,
-                    }}
+                {getBusinessInputValues(BUS_UPPER_KEYS).map(({label, key}) => (
+                  <InputField
+                    key={key}
+                    label={label}
+                    onChangeText={handleChange(key)}
+                    value={values[key]}
                   />
-                </Pressable>
-              </View>
-
-              <InputField
-                label="Registrar First Name"
-                onChangeText={handleChange('first_name')}
-                value={values?.first_name}
-              />
-              <InputField
-                label="Registrar Last Name"
-                onChangeText={handleChange('last_name')}
-                value={values?.last_name}
-              />
-              <InputField
-                label="Company Name"
-                onChangeText={handleChange('company_name')}
-                value={values?.company_name}
-              />
-              <InputField
-                label="Registrar Position"
-                onChangeText={handleChange('registrar_position')}
-                value={values?.position}
-              />
-
-              <View>
-                <View style={{marginVertical: SIZES.font10}}>
+                ))}
+                <View style={{marginBottom: SIZES.font10}}>
                   <DatePicker
                     onSelectDate={setDateValue}
                     dateValue={dateValue}
@@ -157,91 +122,89 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
                 </View>
                 <Picker
                   placeHolder={'Choose Gender'}
-                  value={gender ? gender : values?.gender}
+                  value={values?.gender}
                   data={['Male', 'Female']}
-                  onPressItem={setGender}
+                  onPressItem={data => setFieldValue('gender', data)}
                 />
-              </View>
-              <View>
                 <Picker
-                  placeHolder={'Marital Status'}
-                  value={status ? status : values?.marital_status}
+                  placeHolder={
+                    values?.marital_status
+                      ? values?.marital_status
+                      : 'Marital Status'
+                  }
+                  value={values?.marital_status}
                   data={['Single', 'Married', 'Divorced']}
-                  onPressItem={setStatus}
+                  onPressItem={data => setFieldValue('marital_status', data)}
+                />
+                {/* {getInputValues(['company_email', 'phone_number']).map(
+                ({label, key}) => (
+                  <InputField
+                    key={key}
+                    label={label}
+                    onChangeText={handleChange(key)}
+                    value={values[key]}
+                  />
+                ),
+              )} */}
+                <Text style={[FONTS.body4, {marginBottom: SIZES.font10}]}>
+                  Country/Region*
+                </Text>
+                <CountryPicker
+                  withFilter
+                  withAlphaFilter
+                  placeholder={values?.country || 'Select your country'}
+                  onSelect={data => setFieldValue('country', data?.name)}
+                  containerButtonStyle={styles.countryContainer}
+                />
+                {getInputValues(['location']).map(({label, key}) => (
+                  <InputField
+                    key={key}
+                    label={label}
+                    onChangeText={handleChange(key)}
+                    value={values[key]}
+                  />
+                ))}
+
+                <Text style={styles.socialMediaText}>
+                  Add links to social media pages
+                </Text>
+                {getInputValues(['facebook_link', 'instagram_link']).map(
+                  ({label, key}) => (
+                    <InputField
+                      key={key}
+                      label={label}
+                      onChangeText={handleChange(key)}
+                      value={values[key]}
+                    />
+                  ),
+                )}
+
+                <CustomButton
+                  title="Save"
+                  style={styles.saveButton}
+                  onPress={handleSubmit}
+                  isLoading={isLoading}
+                  disabled={isLoading}
                 />
               </View>
-              <InputField
-                label="Country*"
-                onChangeText={handleChange('country')}
-                value={values?.country}
-              />
-              <InputField
-                label="City/State*"
-                onChangeText={handleChange('state')}
-                value={values?.state}
-              />
-              <InputField
-                label="Company Location in this City/State*"
-                onChangeText={handleChange('location')}
-                value={values?.location}
-              />
-              <Text style={styles.socialMediaText}>
-                Add links to social media pages
-              </Text>
-              <InputField
-                label="Facebook_link"
-                onChangeText={handleChange('facebook_link')}
-                value={values?.facebook_link}
-              />
-              <InputField
-                label="Instagram"
-                onChangeText={handleChange('instagram_link')}
-                value={values?.instagram_link}
-              />
-
-              <CustomButton
-                title="Save"
-                style={styles.saveButton}
-                onPress={handleSubmit}
-                isLoading={isLoading}
-                disabled={isLoading}
-              />
-            </View>
-          </KeyboardAwareScrollView>
-          <ImageBottomSheet
-            ref={bottomSheetRef}
-            handleClosePress={handleClosePress}
-            onSelectImage={setImageUri}
-            type={type}
-            onCoverPhotoSelect={setCoverPhoto}
-          />
-        </>
-      )}
-    </Formik>
+            </KeyboardAwareScrollView>
+            <ImageBottomSheet
+              ref={bottomSheetRef}
+              handleClosePress={handleClosePress}
+              onSelectImage={setImageUri}
+              type={type}
+              onCoverPhotoSelect={data => setFieldValue('coverPhoto', data)}
+            />
+          </>
+        )}
+      </Formik>
+    </>
   );
 };
 
 export default PersonalAccount;
 
 const styles = StyleSheet.create({
-  profilePixContainer: {
-    backgroundColor: COLORS.pictureBackground,
-    width: '100%',
-    height: SIZES.font1 * 3.5,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-  },
-  cameraBox: {
-    padding: SIZES.font10 - 2,
-  },
-  profilepic: {
-    width: SIZES.font1 * 4.5,
-    height: SIZES.font1 * 4.5,
-    alignSelf: 'center',
-    marginTop: -60,
-    position: 'absolute',
-    borderRadius: 100,
-  },
   socialMediaText: {
     ...FONTS.body3,
     marginBottom: SIZES.font10,
@@ -254,15 +217,14 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginBottom: SIZES.font1 * 2,
   },
-  dateContainer: {
+  countryContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-  },
-  imgBackground: {
-    overflow: 'hidden',
-    height: '100%',
-    borderTopLeftRadius: 22,
-    borderTopRightRadius: 22,
+    padding: SIZES.font8,
+    borderWidth: 1,
+    borderColor: COLORS.line,
+    borderRadius: 15,
+    marginBottom: SIZES.font1,
   },
 });
