@@ -29,8 +29,10 @@ const SoniaFashion = require('../assets/images/soniaFashion.png');
 const HeartImage = require('../assets/images/heart.png');
 const ChatImage = require('../assets/images/chat.png');
 const SendImage = require('../assets/images/send.png');
+const NewServiceImage = require('../assets/images/newService.png');
 
 export default {
+  NewServiceImage,
   SplashIcon,
   Onboarding1,
   Onboarding2,
