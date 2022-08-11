@@ -13,14 +13,8 @@ import Header from '../../components/Header';
 import {COLORS, FONTS, SIZES} from '../../constants/theme';
 import TribeCategories, {CATEGORIES} from '../../components/TribeCategories';
 import icons from '../../constants/icons';
-import {
-  ChatIcon,
-  HeartIcon,
-  InviteIcon,
-  OptionIcon,
-  PlusIcon,
-  StarIcon,
-} from '../../assets/svgs/svg';
+import {OptionIcon, PlusIcon, StarIcon} from '../../assets/svgs/svg';
+import LikeActions, {ACTIONS} from '../../components/LikeActions';
 
 const Tribe = () => {
   const [active, setActive] = useState('All');
@@ -91,9 +85,9 @@ const Tribe = () => {
           </View>
           <Text style={[FONTS.body4, {color: COLORS.input}]}>August 30</Text>
           <View style={styles.iconsContainer}>
-            <ChatIcon />
-            <HeartIcon />
-            <InviteIcon />
+            {ACTIONS.map((item, index) => (
+              <LikeActions item={item} key={index} />
+            ))}
           </View>
         </View>
       </ScrollView>
