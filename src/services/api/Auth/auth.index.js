@@ -1,17 +1,4 @@
-import {
-	LoginAccount,
-	RegisterAccount,
-	ResendOTP,
-	VerifyOTP,
-	CreateAccount,
-	UpdatePersoanlAccount,
-	UpdateCompanyAccount,
-	FetchPersonalAccount,
-	FetchCompanyAccount,
-	ForgottenPassword,
-	VerifyPasswordReset,
-	ResetPassword
-} from "./auth.apis"
+import {LoginAccount, RegisterAccount, ResendOTP, VerifyOTP, CreateAccount, UpdatePersonalAccount, UpdateCompanyAccount, FetchPersonalAccount, FetchCompanyAccount, ForgottenPassword, VerifyPasswordReset, ResetPassword} from './auth.apis'
 
 export const useAuthApis = () => ({
 	LoginAccount,
@@ -19,11 +6,11 @@ export const useAuthApis = () => ({
 	ResendOTP,
 	VerifyOTP,
 	CreateAccount,
-	UpdatePersoanlAccount,
+	UpdatePersonalAccount,
 	UpdateCompanyAccount,
 	FetchPersonalAccount,
 	FetchCompanyAccount,
 	ForgottenPassword,
 	VerifyPasswordReset,
-	ResetPassword
+	ResetPassword,
 })

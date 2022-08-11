@@ -33,7 +33,7 @@ export const RegisterAccount = async params => {
 				if (!res?.status) {
 					handleError(res)
 				} else {
-					Alert.alert('Success!', !Array.isArray(res?.message) ? res?.message : '')
+					Alert.alert('Success!', 'Account created success, please verify the OTP sent your email address.')
 					return res
 				}
 			})
@@ -53,7 +53,7 @@ export const ResendOTP = async () => {
 				if (!res?.status) {
 					handleError(res)
 				} else {
-					Alert.alert('Success!', !Array.isArray(res?.message) ? res?.message : '')
+					Alert.alert('Success!', 'OTP resent to your registered email.')
 					return res
 				}
 			})
@@ -72,10 +72,9 @@ export const VerifyOTP = async params => {
 			.then(res => {
 				if (!res?.status) {
 					handleError(res)
-				} else {
-					Alert.alert('Success!', !Array.isArray(res?.message) ? res?.message : '')
-					return res
 				}
+
+				return res
 			})
 			.catch(res => console.error(res))
 	} catch (error) {
@@ -93,7 +92,7 @@ export const CreateAccount = async params => {
 				if (!res?.status) {
 					handleError(res)
 				} else {
-					Alert.alert('Success!', !Array.isArray(res?.message) ? res?.message : '')
+					Alert.alert('Success!', 'Account created successfully! Please update your profile.')
 					return res
 				}
 			})
@@ -114,9 +113,9 @@ export const UpdatePersonalAccount = async params => {
 				if (!res?.status) {
 					handleError(res)
 				} else {
-					Alert.alert('Success!', !Array.isArray(res?.message) ? res?.message : '')
-					return res
+					Alert.alert('Success', 'Account updated successfully!')
 				}
+				return res
 			})
 			.catch(res => console.error(res))
 	} catch (error) {
@@ -135,7 +134,7 @@ export const UpdateCompanyAccount = async params => {
 				if (!res?.status) {
 					handleError(res)
 				} else {
-					Alert.alert('Success!', !Array.isArray(res?.message) ? res?.message : '')
+					Alert.alert('Success!', 'Account updated successfully!')
 					return res
 				}
 			})
@@ -154,10 +153,9 @@ export const FetchPersonalAccount = async () => {
 			.then(res => {
 				if (!res?.status) {
 					handleError(res)
-				} else {
-					Alert.alert('Success!', !Array.isArray(res?.message) ? res?.message : '')
-					return res
 				}
+
+				return res
 			})
 			.catch(res => console.error(res))
 	} catch (error) {
@@ -174,10 +172,8 @@ export const FetchCompanyAccount = async () => {
 			.then(res => {
 				if (!res?.status) {
 					handleError(res)
-				} else {
-					Alert.alert('Success!', !Array.isArray(res?.message) ? res?.message : '')
-					return res
 				}
+				return res
 			})
 			.catch(res => console.error(res))
 	} catch (error) {
@@ -212,7 +208,7 @@ export const ForgottenPassword = async params => {
  */
 export const VerifyPasswordReset = async params => {
 	try {
-		return await POST(AuthEndpoints.FORGOT_PWD, params)
+		return await POST(AuthEndpoints.VERIFY_PWD, params)
 			.then(res => {
 				if (!res?.status) {
 					handleError(res)
@@ -233,7 +229,7 @@ export const VerifyPasswordReset = async params => {
  */
 export const ResetPassword = async params => {
 	try {
-		return await POST(AuthEndpoints.RESEND_OTP, params)
+		return await POST(AuthEndpoints.RESET_PWD, params)
 			.then(res => {
 				if (!res?.status) {
 					handleError(res)
