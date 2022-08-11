@@ -26,6 +26,9 @@ const TechCategory = require('../assets/images/techCat.png');
 const EventCategory = require('../assets/images/eventCat.png');
 const BeautyCategory = require('../assets/images/beautyCat.png');
 const SoniaFashion = require('../assets/images/soniaFashion.png');
+const HeartImage = require('../assets/images/heart.png');
+const ChatImage = require('../assets/images/chat.png');
+const SendImage = require('../assets/images/send.png');
 
 export default {
   SplashIcon,
@@ -56,4 +59,7 @@ export default {
   EventCategory,
   BeautyCategory,
   SoniaFashion,
+  HeartImage,
+  ChatImage,
+  SendImage,
 };
