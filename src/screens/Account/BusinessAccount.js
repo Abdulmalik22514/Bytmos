@@ -1,44 +1,38 @@
-import {Image, Pressable, StyleSheet, Text, View} from 'react-native'
+import {StyleSheet, Text, View} from 'react-native'
 import React, {useRef, useState} from 'react'
 import Header from '../../components/Header'
 import {COLORS, FONTS, SIZES} from '../../constants/theme'
-import {CameraIcon} from '../../assets/svgs/svg'
-import icons from '../../constants/icons'
 import InputField from '../../components/InputField'
 import Picker from '../../components/Picker'
 import ImageBottomSheet from '../../components/CameraBottomSheet'
 import {Formik} from 'formik'
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
-
 import CustomButton from '../../components/CustomButton'
 import {useAuthApis} from '../../services/api/Auth/auth.index'
 import {useMutation} from 'react-query'
 import {useFlusDispatcher, useFlusStores} from 'react-flus'
-import {UPDATE_USER, USER_LOGIN} from '../../flus/constants/auth.const'
-import {useStorageApi} from '../../services/api/storage/storage.index'
-import {config} from '../../configs/config'
+import {USER_LOGIN} from '../../flus/constants/auth.const'
+import {DatePicker} from '../../components/DatePicker'
+import CameraComponent from '../../components/CameraComponent'
+import {BUS_UPPER_KEYS, getBusinessInputValues} from '../../utils/getInputValues'
+import CountryPicker from 'react-native-country-picker-modal'
+import Container from '../../components/Container'
 
 const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
+	const [imgeUri, setImageUri] = useState('')
+	const [dateValue, setDateValue] = useState('')
+	const [type, setType] = useState('')
+
 	const dispatcher = useFlusDispatcher()
 	const {user} = useFlusStores()?.auth
 
-	const [gender, setGender] = useState(user?.gender)
-	const [status, setStatus] = useState(user?.marital_status)
-	const [imgeUri, setImageUri] = useState('')
+	const {UpdateCompanyAccount} = useAuthApis()
 
-	const {UpdateCompanyAccount, FetchCompanyAccount} = useAuthApis()
-	const {UploadImageMedia} = useStorageApi()
+	const onOpenModal = type => {
+		setType(type)
+		bottomSheetRef?.current?.snapToIndex(1)
+	}
 
-	/* Fetch user account after updating profile */
-	const fetchAccountApi = useMutation(FetchCompanyAccount, {
-		onSuccess: res => {
-			if (res?.status) {
-				dispatcher({type: UPDATE_USER, payload: {data: {...res?.data}}})
-			}
-		},
-	})
-
-	/* update company account api */
 	const updateCompanyAccountApi = useMutation(UpdateCompanyAccount, {
 		onSuccess: res => {
 			if (res?.status) {
@@ -50,40 +44,11 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
 							access_token: null,
 						},
 					})
-				} else {
-					/* Fetch user account information after update profile to update the user 
-					data object. */
-					fetchAccountApi.mutateAsync()
 				}
 			}
 		},
 	})
 
-	/* uploade the image and  */
-	const uploadImageApi = useMutation(UploadImageMedia, {
-		onSuccess: res => {
-			if (res?.asset_id) {
-				const formData = {profile_photo: res?.secure_url}
-
-				updateCompanyAccountApi.mutateAsync(formData)
-			}
-		},
-	})
-
-	/* handle user file uploading  */
-	const handleFileUpload = imageUrl => {
-		if (imageUrl) {
-			setImageUri(imageUrl)
-
-			const formData = new FormData()
-			formData.append('file', imageUrl)
-			formData.append('upload_preset', config('services.cloudinary.preset'))
-
-			uploadImageApi.mutateAsync(formData)
-		}
-	}
-
-	/* Handle user account update */
 	const handleAccountUpdate = formData => {
 		formData.gender = gender
 		formData.marital_status = status
@@ -91,18 +56,17 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
 	}
 
 	/* The api loading state. */
-	const isLoading = updateCompanyAccountApi.isLoading || fetchAccountApi.isLoading
+	const isLoading = updateCompanyAccountApi.isLoading
 
 	const bottomSheetRef = useRef(null)
 
-	/* The initial form data  */
 	const initialValues = {
 		first_name: user?.registrar_first_name,
 		last_name: user?.registrar_last_name,
 		company_name: user?.company_name,
 		country: user?.country,
 		state: user?.state,
-		location: user?.location,
+		location: user?.current_location,
 		longitude: '2312311',
 		latitude: '1131431',
 		registrar_position: user?.registrar_position,
@@ -110,113 +74,87 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
 		marital_status: user?.marital_status,
 		facebook_link: user?.facebook_link,
 		instagram_link: user?.instagram_link,
-
+		//email and phone number of company no need for registration but included in the design
+		// email: user?.company_email,
+		// phone_number: user?.phone_number,
 	}
 
 	const handleClosePress = () => bottomSheetRef.current.close()
 
 	return (
-
-		<Formik initialValues={initialValues} enableReinitialize onSubmit={handleAccountUpdate}>
-			{({handleChange, handleSubmit, errors, touched, values}) => (
-				<>
-					<Header screenName={screenName} isNotHome />
-					<KeyboardAwareScrollView style={{marginVertical: SIZES.font1}} showsVerticalScrollIndicator={false}>
-						<View style={{paddingHorizontal: SIZES.font8}}>
-
-							<View style={styles.profilePixContainer}>
-								<Pressable
-									style={styles.cameraBox}
-									onPress={() => {
-										bottomSheetRef?.current?.snapToIndex(1)
-									}}>
-									<View style={{alignItems: 'flex-end'}}>
-										<CameraIcon />
+		<>
+			<Container>
+				<Formik initialValues={initialValues} enableReinitialize onSubmit={handleAccountUpdate}>
+					{({handleChange, handleSubmit, values, setFieldValue}) => (
+						<>
+							<Header screenName={screenName} isNotHome />
+							<KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
+								<View style={{paddingHorizontal: SIZES.font8}}>
+									<CameraComponent coverPhotoValue={values.coverPhoto ? {uri: values.coverPhoto} : {uri: user?.profile_photo}} setCoverPhoto={() => onOpenModal('coverPhoto')} profilePhotoValue={imgeUri ? {uri: imgeUri} : {uri: user?.profile_photo}} setProfilePhoto={() => onOpenModal('displayPicture')} />
+									{getBusinessInputValues(BUS_UPPER_KEYS).map(({label, key}) => (
+										<InputField key={key} label={label} onChangeText={handleChange(key)} value={values[key]} />
+									))}
+									<View style={{marginBottom: SIZES.font10}}>
+										<DatePicker onSelectDate={setDateValue} dateValue={dateValue} />
 									</View>
-								</Pressable>
-							</View>
-							<View>
+									<Picker placeHolder={'Choose Gender'} value={values?.gender} data={['Male', 'Female']} onPressItem={data => setFieldValue('gender', data)} />
+									<Picker placeHolder={values?.marital_status ? values?.marital_status : 'Marital Status'} value={values?.marital_status} data={['Single', 'Married', 'Divorced']} onPressItem={data => setFieldValue('marital_status', data)} />
+									{/* {getInputValues(['company_email', 'phone_number']).map(
+                ({label, key}) => (
+                  <InputField
+                    key={key}
+                    label={label}
+                    onChangeText={handleChange(key)}
+                    value={values[key]}
+                  />
+                ),
+              )} */}
+									<Text style={[FONTS.body4, {marginBottom: SIZES.font10}]}>Country/Region*</Text>
+									<CountryPicker withFilter withAlphaFilter placeholder={values?.country || 'Select your country'} onSelect={data => setFieldValue('country', data?.name)} containerButtonStyle={styles.countryContainer} />
+									{getInputValues(['location']).map(({label, key}) => (
+										<InputField key={key} label={label} onChangeText={handleChange(key)} value={values[key]} />
+									))}
 
-								<Image source={imgeUri ? {uri: imgeUri} : {uri: user?.profile_photo}} resizeMode="contain" style={styles.profilepic} />
+									<Text style={styles.socialMediaText}>Add links to social media pages</Text>
+									{getInputValues(['facebook_link', 'instagram_link']).map(({label, key}) => (
+										<InputField key={key} label={label} onChangeText={handleChange(key)} value={values[key]} />
+									))}
 
-
-								<Pressable
-									onPress={() => {
-										bottomSheetRef?.current?.snapToIndex(1)
-									}}>
-									<CameraIcon
-										style={{
-											left: 200,
-											marginTop: 45,
-											zIndex: 100,
-										}}
-									/>
-								</Pressable>
-							</View>
-
-
-							<InputField label="Registrar First Name" onChangeText={handleChange('first_name')} value={values?.first_name} />
-							<InputField label="Registrar Last Name" onChangeText={handleChange('last_name')} value={values?.last_name} />
-							<InputField label="Company Name" onChangeText={handleChange('company_name')} value={values?.company_name} />
-							<InputField label="Registrar Position" onChangeText={handleChange('registrar_position')} value={values?.registrar_position} />
-
-							<View>
-								<Picker placeHolder={values?.gender ? values?.gender : 'Choose Gender'} value={gender ? gender : values?.gender} data={['Male', 'Female']} onPressItem={setGender} />
-							</View>
-							<View>
-								<Picker placeHolder={values?.marital_status ? values?.marital_status : 'Marital Status'} value={status ? status : values?.marital_status} data={['Single', 'Married', 'Divorced']} onPressItem={setStatus} />
-							</View>
-							<InputField label="Country*" onChangeText={handleChange('country')} value={values?.country} />
-							<InputField label="City/State*" onChangeText={handleChange('state')} value={values?.state} />
-							<InputField label="Company Location in this City/State*" onChangeText={handleChange('location')} value={values?.location} />
-							<Text style={styles.socialMediaText}>Add links to social media pages</Text>
-							<InputField label="Facebook_link" onChangeText={handleChange('facebook_link')} value={values?.facebook_link} />
-							<InputField label="Instagram" onChangeText={handleChange('instagram_link')} value={values?.instagram_link} />
-
-							<CustomButton title="Save" style={styles.saveButton} onPress={handleSubmit} isLoading={isLoading} disabled={isLoading} />
-						</View>
-					</KeyboardAwareScrollView>
-					<ImageBottomSheet ref={bottomSheetRef} handleClosePress={handleClosePress} onSelectImage={handleFileUpload} />
-
-				</>
-			)}
-		</Formik>
+									<CustomButton title="Save" style={styles.saveButton} onPress={handleSubmit} isLoading={isLoading} disabled={isLoading} />
+								</View>
+							</KeyboardAwareScrollView>
+						</>
+					)}
+				</Formik>
+			</Container>
+			<ImageBottomSheet ref={bottomSheetRef} handleClosePress={handleClosePress} onSelectImage={setImageUri} type={type} onCoverPhotoSelect={data => setFieldValue('coverPhoto', data)} />
+		</>
 	)
 }
 
 export default PersonalAccount
 
 const styles = StyleSheet.create({
-	profilePixContainer: {
-		backgroundColor: COLORS.pictureBackground,
-		width: '100%',
-		height: SIZES.font1 * 3.5,
-		borderTopLeftRadius: 20,
-		borderTopRightRadius: 20,
-	},
-	cameraBox: {
-		padding: SIZES.font10 - 2,
-	},
-	profilepic: {
-		width: SIZES.font1 * 4.5,
-		height: SIZES.font1 * 4.5,
-		alignSelf: 'center',
-		marginTop: -60,
-		position: 'absolute',
-		borderRadius: 100,
-	},
 	socialMediaText: {
 		...FONTS.body3,
 		marginBottom: SIZES.font10,
 		marginTop: SIZES.font1,
 		fontWeight: '600',
 	},
-
 	saveButton: {
 		marginTop: SIZES.font1 * 2,
 		width: '90%',
 		alignSelf: 'center',
 		marginBottom: SIZES.font1 * 2,
 	},
-
+	countryContainer: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'space-between',
+		padding: SIZES.font8,
+		borderWidth: 1,
+		borderColor: COLORS.line,
+		borderRadius: 15,
+		marginBottom: SIZES.font1,
+	},
 })

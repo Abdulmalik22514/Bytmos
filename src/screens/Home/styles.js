@@ -14,6 +14,7 @@ export const HomeStyles = StyleSheet.create({
 	profilepic: {
 		width: SIZES.font1 * 4.5,
 		height: SIZES.font1 * 4.5,
+		borderRadius: 100,
 		alignSelf: 'center',
 		marginVertical: SIZES.font10,
 		borderRadius: 100,
