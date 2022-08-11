@@ -1,23 +1,20 @@
-import {
-  Image,
-  ImageBackground,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import {Image, Pressable, ScrollView, Text, View} from 'react-native';
 import React, {useState} from 'react';
 import Container from '../../components/Container';
 import Header from '../../components/Header';
 import {COLORS, FONTS, SIZES} from '../../constants/theme';
 import TribeCategories, {CATEGORIES} from '../../components/TribeCategories';
 import icons from '../../constants/icons';
-import {OptionIcon, PlusIcon, StarIcon} from '../../assets/svgs/svg';
+import {OptionIcon, StarIcon} from '../../assets/svgs/svg';
 import LikeActions, {ACTIONS} from '../../components/LikeActions';
+import Swiper from 'react-native-swiper';
+import SwiperContent, {SWIPER_IMAGES} from '../../components/SwiperContent';
+import {TribeStyles as styles} from './styles';
 
 const Tribe = () => {
   const [active, setActive] = useState('All');
+  const [tribe, setTribe] = useState(false);
+
   return (
     <Container>
       <Header />
@@ -61,33 +58,39 @@ const Tribe = () => {
             </View>
           </View>
           <View style={styles.leftSide}>
-            <Pressable>
-              <Text style={styles.tribeButton}>+Tribe</Text>
+            <Pressable onPress={() => setTribe(!tribe)}>
+              <Text
+                style={[
+                  styles.tribeButton,
+                  {color: tribe ? 'black' : COLORS.blue},
+                ]}>
+                {tribe ? 'Tribing' : '+Tribe'}
+              </Text>
             </Pressable>
             <OptionIcon />
           </View>
         </View>
-        <ImageBackground
-          source={icons.SoniaFashion}
-          style={styles.uploads}
-          resizeMode="cover">
-          <View style={styles.plusContainer}>
-            <PlusIcon />
-          </View>
-        </ImageBackground>
-        <View style={{padding: SIZES.font10 - 5}}>
-          <View style={styles.content}>
-            <Text style={FONTS.body4}>
-              Sonia Fashion Styles just launched a new fleet of wedding gowns
-              with great styles and ....
-              <Text style={{color: COLORS.input}}> See more</Text>
-            </Text>
-          </View>
-          <Text style={[FONTS.body4, {color: COLORS.input}]}>August 30</Text>
+        <Swiper
+          style={styles.wrapper}
+          height={SIZES.font1 * 14.7}
+          activeDotStyle={styles.dotStyle}
+          activeDotColor={COLORS.blue}
+          dotStyle={styles.dotStyle}>
+          {SWIPER_IMAGES.map((item, index) => {
+            return <SwiperContent key={index} item={item} />;
+          })}
+        </Swiper>
+
+        <View style={{paddingHorizontal: SIZES.font10 - 5}}>
           <View style={styles.iconsContainer}>
             {ACTIONS.map((item, index) => (
               <LikeActions item={item} key={index} />
             ))}
+          </View>
+          <View style={styles.actionsAmount}>
+            <Text style={{color: COLORS.input}}>120 Comments</Text>
+            <Text style={{color: COLORS.input}}>2,300 Likes</Text>
+            <Text style={{color: COLORS.input}}>300 Shares</Text>
           </View>
         </View>
       </ScrollView>
@@ -96,70 +99,3 @@ const Tribe = () => {
 };
 
 export default Tribe;
-
-const styles = StyleSheet.create({
-  separator: {
-    width: '100%',
-    borderWidth: 0.5,
-    borderColor: COLORS.separator,
-  },
-  userContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: SIZES.font10,
-  },
-  rightSide: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  leftSide: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  profilePic: {
-    width: SIZES.font1 * 2.5,
-    height: SIZES.font1 * 2.5,
-    marginRight: SIZES.font10,
-  },
-  tribals: {
-    ...FONTS.body4,
-    color: COLORS.input,
-  },
-  tribeButton: {
-    ...FONTS.h10,
-    color: COLORS.blue,
-    marginRight: SIZES.font10,
-  },
-  uploads: {
-    width: '100%',
-    height: SIZES.font1 * 11,
-  },
-  plusContainer: {
-    width: SIZES.font1 * 1.5,
-    height: SIZES.font1 * 1.5,
-    backgroundColor: COLORS.blue,
-    alignItems: 'center',
-    justifyContent: 'center',
-    alignSelf: 'flex-end',
-    borderRadius: 100,
-    marginTop: SIZES.font1 * 9,
-    marginRight: SIZES.font8,
-  },
-  content: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    width: '100%',
-    alignSelf: 'center',
-  },
-  iconsContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    width: SIZES.font1 * 3.3,
-    marginTop: SIZES.font1,
-    marginBottom: SIZES.font10,
-  },
-});
