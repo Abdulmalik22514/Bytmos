@@ -50,7 +50,7 @@ const Home = ({navigation}) => {
 
   return (
     <Container style={styles.container}>
-      <Header onPress={() => navigation.toggleDrawer()} />
+      <Header />
       <ScrollView
         style={{paddingHorizontal: SIZES.font10}}
         showsVerticalScrollIndicator={false}>
