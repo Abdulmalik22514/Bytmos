@@ -15,6 +15,8 @@ import {UPDATE_USER, USER_LOGIN} from '../../flus/constants/auth.const'
 import {useMutation} from 'react-query'
 import {useAuthApis} from '../../services/api/Auth/auth.index'
 import {UpdatePersonalAccount} from '../../services/api/Auth/auth.apis'
+import {useStorageApi} from '../../services/api/storage/storage.index'
+import {config} from '../../configs/config'
 
 const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
 	const {user} = useFlusStores()?.auth
@@ -25,6 +27,7 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
 	const [imgeUri, setImageUri] = useState('')
 
 	const {UpdatePersonalAccount, FetchPersonalAccount} = useAuthApis()
+	const {UploadImageMedia} = useStorageApi()
 
 	const fetchAccountApi = useMutation(FetchPersonalAccount, {
 		onSuccess: res => {
@@ -35,7 +38,7 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
 	})
 
 	/* update company account api */
-	const updateCompanyAccountApi = useMutation(UpdatePersonalAccount, {
+	const updatePersonalAccountApi = useMutation(UpdatePersonalAccount, {
 		onSuccess: res => {
 			if (res?.status) {
 				if (from === 'signup_process') {
@@ -55,15 +58,38 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
 		},
 	})
 
+	/* uploade the image and  */
+	const uploadImageApi = useMutation(UploadImageMedia, {
+		onSuccess: res => {
+			if (res?.asset_id) {
+				const formData = {profile_photo: res?.secure_url}
+
+				updatePersonalAccountApi.mutateAsync(formData)
+			}
+		},
+	})
+
+	/* handle user file uploading  */
+	const handleFileUpload = imageUrl => {
+		if (imageUrl) {
+			setImageUri(imageUrl)
+
+			const formData = new FormData()
+			formData.append('file', imageUrl)
+			formData.append('upload_preset', config('services.cloudinary.preset'))
+
+			uploadImageApi.mutateAsync(formData)
+		}
+	}
 	/* Handle user account update */
 	const handleAccountUpdate = formData => {
 		formData.gender = gender
 		formData.marital_status = status
-		updateCompanyAccountApi.mutateAsync(formData)
+		updatePersonalAccountApi.mutateAsync(formData)
 	}
 
 	/* The api loading state. */
-	const isLoading = updateCompanyAccountApi.isLoading || fetchAccountApi.isLoading
+	const isLoading = updatePersonalAccountApi.isLoading || fetchAccountApi.isLoading
 
 	const bottomSheetRef = useRef(null)
 
@@ -145,7 +171,7 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
 						</View>
 					</KeyboardAwareScrollView>
 
-					<ImageBottomSheet ref={bottomSheetRef} handleClosePress={handleClosePress} onSelectImage={setImageUri} />
+					<ImageBottomSheet ref={bottomSheetRef} handleClosePress={handleClosePress} onSelectImage={handleFileUpload} />
 				</>
 			)}
 		</Formik>

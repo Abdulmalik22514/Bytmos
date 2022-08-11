@@ -69,6 +69,7 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
 		},
 	})
 
+	/* handle user file uploading  */
 	const handleFileUpload = imageUrl => {
 		if (imageUrl) {
 			setImageUri(imageUrl)
