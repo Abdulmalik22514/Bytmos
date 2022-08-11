@@ -39,6 +39,7 @@
     "react-native-screens": "^3.13.1",
     "react-native-splash-screen": "^3.3.0",
     "react-native-svg": "^12.4.3",
+    "react-native-swiper": "^1.6.0",
     "react-native-vector-icons": "^9.1.0",
     "react-query": "^3.39.1",
     "yup": "^0.32.11"
