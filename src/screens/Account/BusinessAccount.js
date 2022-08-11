@@ -9,6 +9,7 @@ import Picker from '../../components/Picker'
 import ImageBottomSheet from '../../components/CameraBottomSheet'
 import {Formik} from 'formik'
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
+
 import CustomButton from '../../components/CustomButton'
 import {useAuthApis} from '../../services/api/Auth/auth.index'
 import {useMutation} from 'react-query'
@@ -109,17 +110,20 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
 		marital_status: user?.marital_status,
 		facebook_link: user?.facebook_link,
 		instagram_link: user?.instagram_link,
+
 	}
 
 	const handleClosePress = () => bottomSheetRef.current.close()
 
 	return (
+
 		<Formik initialValues={initialValues} enableReinitialize onSubmit={handleAccountUpdate}>
 			{({handleChange, handleSubmit, errors, touched, values}) => (
 				<>
 					<Header screenName={screenName} isNotHome />
 					<KeyboardAwareScrollView style={{marginVertical: SIZES.font1}} showsVerticalScrollIndicator={false}>
 						<View style={{paddingHorizontal: SIZES.font8}}>
+
 							<View style={styles.profilePixContainer}>
 								<Pressable
 									style={styles.cameraBox}
@@ -132,7 +136,9 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
 								</Pressable>
 							</View>
 							<View>
+
 								<Image source={imgeUri ? {uri: imgeUri} : {uri: user?.profile_photo}} resizeMode="contain" style={styles.profilepic} />
+
 
 								<Pressable
 									onPress={() => {
@@ -147,6 +153,7 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
 									/>
 								</Pressable>
 							</View>
+
 
 							<InputField label="Registrar First Name" onChangeText={handleChange('first_name')} value={values?.first_name} />
 							<InputField label="Registrar Last Name" onChangeText={handleChange('last_name')} value={values?.last_name} />
@@ -170,6 +177,7 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
 						</View>
 					</KeyboardAwareScrollView>
 					<ImageBottomSheet ref={bottomSheetRef} handleClosePress={handleClosePress} onSelectImage={handleFileUpload} />
+
 				</>
 			)}
 		</Formik>
@@ -203,10 +211,12 @@ const styles = StyleSheet.create({
 		marginTop: SIZES.font1,
 		fontWeight: '600',
 	},
+
 	saveButton: {
 		marginTop: SIZES.font1 * 2,
 		width: '90%',
 		alignSelf: 'center',
 		marginBottom: SIZES.font1 * 2,
 	},
+
 })
