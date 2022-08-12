@@ -28,20 +28,24 @@ const ImageBottomSheet = React.forwardRef(({onSelectImage, handleClosePress, typ
 				width: 300,
 				height: 400,
 				cropping: true,
-			}).then(image => {
-				onSelectImage(image.path)
-				console.log({image})
+				includeBase64: true,
 			})
+				.then(image => {
+					onSelectImage(type, `data:${image.mime};base64,${image.data}`)
+				})
+				.catch(err => console.warn(err))
 		}
 		if (actionType === 'Open Gallery') {
 			ImagePicker.openPicker({
 				width: 300,
 				height: 400,
 				cropping: true,
-			}).then(image => {
-				onSelectImage(image.path)
-				console.log(image)
+				includeBase64: true,
 			})
+				.then(image => {
+					onSelectImage(type, `data:${image.mime};base64,${image.data}`)
+				})
+				.catch(err => console.warn(err))
 		}
 	}
 

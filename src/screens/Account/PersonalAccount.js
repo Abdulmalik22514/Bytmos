@@ -17,13 +17,15 @@ import {getInputValues, UPPER_KEYS} from '../../utils/getInputValues'
 import CountryPicker from 'react-native-country-picker-modal'
 import CameraComponent from '../../components/CameraComponent'
 import Container from '../../components/Container'
+import {useStorageApi} from './../../services/api/storage/storage.index'
+import {config} from '../../configs/config'
 
 const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
 	const {user} = useFlusStores()?.auth
 	const dispatcher = useFlusDispatcher()
 
-	const [imgeUri, setImageUri] = useState('')
-	const [dateValue, setDateValue] = useState('')
+	const [profileImageUri, setProfileImageUri] = useState('')
+	const [coverPhotoUri, setCoverPhotoUri] = useState('')
 	const [type, setType] = useState('')
 
 	const {UpdatePersonalAccount, FetchPersonalAccount} = useAuthApis()
@@ -43,7 +45,7 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
 	}
 
 	/* update company account api */
-	const updateCompanyAccountApi = useMutation(UpdatePersonalAccount, {
+	const updatePersonalAccountApi = useMutation(UpdatePersonalAccount, {
 		onSuccess: res => {
 			if (res?.status) {
 				if (from === 'signup_process') {
@@ -65,9 +67,19 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
 
 	/* uploade the image and  */
 	const uploadImageApi = useMutation(UploadImageMedia, {
-		onSuccess: res => {
+		onSuccess: (res, params) => {
 			if (res?.asset_id) {
-				const formData = {profile_photo: res?.secure_url}
+				let formData = {}
+
+				switch (params?.upload_type) {
+					case 'profile':
+						formData = {profile_photo: res?.secure_url}
+						break
+					case 'cover':
+						formData = {cover_photo: res?.secure_url}
+						break
+					default:
+				}
 
 				updatePersonalAccountApi.mutateAsync(formData)
 			}
@@ -75,21 +87,31 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
 	})
 
 	/* handle user file uploading  */
-	const handleFileUpload = imageUrl => {
-		if (imageUrl) {
-			setImageUri(imageUrl)
+	const handleFileUpload = (type, imageUrl) => {
+		if (imageUrl !== null && typeof imageUrl !== 'undefined' && type !== null && typeof type !== 'undefined') {
+			switch (type) {
+				case 'profile':
+					setProfileImageUri(imageUrl)
+					break
+				case 'cover':
+					setCoverPhotoUri(imageUrl)
+					break
+				default:
+					/* do nothing  */
+					break
+			}
 
 			const formData = new FormData()
 			formData.append('file', imageUrl)
+			formData.append('upload_type', type)
 			formData.append('upload_preset', config('services.cloudinary.preset'))
 
 			uploadImageApi.mutateAsync(formData)
 		}
 	}
+
 	/* Handle user account update */
 	const handleAccountUpdate = formData => {
-		formData.gender = gender
-		formData.marital_status = status
 		updatePersonalAccountApi.mutateAsync(formData)
 	}
 
@@ -97,8 +119,6 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
 	const isLoading = updatePersonalAccountApi.isLoading || fetchAccountApi.isLoading
 
 	const bottomSheetRef = useRef(null)
-
-	// console.log({imgeUri});
 
 	const initialValues = {
 		first_name: user?.first_name,
@@ -111,12 +131,15 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
 		location: user?.location,
 		longitude: '2312311',
 		latitude: '1131431',
+		dob: user?.dob,
 		gender: user?.gender,
 		marital_status: user?.marital_status,
 		facebook_link: user?.facebook_link,
 		instagram_link: user?.instagram_link,
-		coverPhoto: '',
+		profile_photo: user?.profile_photo,
+		cover_photo: user?.cover_photo,
 	}
+
 	const handleClosePress = () => bottomSheetRef.current.close()
 
 	return (
@@ -128,18 +151,19 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
 							<Header screenName={screenName} isNotHome />
 							<KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
 								<View style={{paddingHorizontal: SIZES.font8}}>
-									<CameraComponent coverPhotoValue={values.coverPhoto ? {uri: values.coverPhoto} : {uri: user?.profile_photo}} setCoverPhoto={() => onOpenModal('coverPhoto')} profilePhotoValue={imgeUri ? {uri: imgeUri} : {uri: user?.profile_photo}} setProfilePhoto={() => onOpenModal('displayPicture')} />
+									<CameraComponent coverPhotoValue={coverPhotoUri ? {uri: coverPhotoUri} : {uri: values?.cover_photo}} setCoverPhoto={() => onOpenModal('cover')} profilePhotoValue={profileImageUri ? {uri: profileImageUri} : {uri: values?.profile_photo}} setProfilePhoto={() => onOpenModal('profile')} />
 
 									{getInputValues(UPPER_KEYS).map(({label, key}) => (
 										<InputField key={key} label={label} onChangeText={handleChange(key)} value={values[key]} />
 									))}
+
 									<Text style={[FONTS.body4, {marginBottom: SIZES.font10}]}>Country/Region*</Text>
 									<CountryPicker withFilter withAlphaFilter placeholder={values?.country || 'Select your country'} onSelect={data => setFieldValue('country', data?.name)} containerButtonStyle={styles.countryContainer} />
 									{getInputValues(['state', 'location']).map(({label, key}) => (
 										<InputField key={key} label={label} onChangeText={handleChange(key)} value={values[key]} />
 									))}
 									<View style={{marginBottom: SIZES.font10}}>
-										<DatePicker onSelectDate={setDateValue} dateValue={dateValue} />
+										<DatePicker onSelectDate={dob => setFieldValue('dob', dob)} dateValue={values?.dob !== null ? values?.dob : ''} />
 									</View>
 									<Picker placeHolder={'Choose Gender'} value={values?.gender} data={['Male', 'Female']} onPressItem={data => setFieldValue('gender', data)} />
 									<Picker placeHolder={values?.marital_status ? values?.marital_status : 'Marital Status'} value={values?.marital_status} data={['Single', 'Married', 'Divorced']} onPressItem={data => setFieldValue('marital_status', data)} />
@@ -157,7 +181,7 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
 					)}
 				</Formik>
 			</Container>
-			<ImageBottomSheet ref={bottomSheetRef} handleClosePress={handleClosePress} onSelectImage={setImageUri} type={type} onCoverPhotoSelect={data => setFieldValue('coverPhoto', data)} />
+			<ImageBottomSheet ref={bottomSheetRef} handleClosePress={handleClosePress} onSelectImage={handleFileUpload} type={type} onCoverPhotoSelect={data => setFieldValue('coverPhoto', data)} />
 		</>
 	)
 }

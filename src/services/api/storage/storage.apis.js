@@ -1,5 +1,4 @@
 import {UPLOADER_POST} from '../../../configs/api'
-import {handleError} from '../../../utils/handleErrors'
 import {storageEndpoint} from './storage.endpoints'
 
 export const UploadImageMedia = async params => {

@@ -11,22 +11,33 @@ import CustomButton from '../../components/CustomButton'
 import {useAuthApis} from '../../services/api/Auth/auth.index'
 import {useMutation} from 'react-query'
 import {useFlusDispatcher, useFlusStores} from 'react-flus'
-import {USER_LOGIN} from '../../flus/constants/auth.const'
+import {UPDATE_USER, USER_LOGIN} from '../../flus/constants/auth.const'
 import {DatePicker} from '../../components/DatePicker'
 import CameraComponent from '../../components/CameraComponent'
-import {BUS_UPPER_KEYS, getBusinessInputValues} from '../../utils/getInputValues'
+import {BUS_UPPER_KEYS, getBusinessInputValues, getInputValues} from '../../utils/getInputValues'
 import CountryPicker from 'react-native-country-picker-modal'
 import Container from '../../components/Container'
+import {useStorageApi} from '../../services/api/storage/storage.index'
+import {config} from '../../configs/config'
 
 const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
-	const [imgeUri, setImageUri] = useState('')
-	const [dateValue, setDateValue] = useState('')
+	const [profileImageUri, setProfileImageUri] = useState('')
+	const [coverPhotoUri, setCoverPhotoUri] = useState('')
 	const [type, setType] = useState('')
 
 	const dispatcher = useFlusDispatcher()
 	const {user} = useFlusStores()?.auth
 
-	const {UpdateCompanyAccount} = useAuthApis()
+	const {UpdateCompanyAccount, FetchCompanyAccount} = useAuthApis()
+	const {UploadImageMedia} = useStorageApi()
+
+	const fetchAccountApi = useMutation(FetchCompanyAccount, {
+		onSuccess: res => {
+			if (res?.status && res?.data) {
+				dispatcher({type: UPDATE_USER, payload: {data: {...res?.data}}})
+			}
+		},
+	})
 
 	const onOpenModal = type => {
 		setType(type)
@@ -44,14 +55,61 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
 							access_token: null,
 						},
 					})
+				} else {
+					/* Fetch user account information after update profile to update the user 
+					data object. */
+					fetchAccountApi.mutateAsync()
 				}
 			}
 		},
 	})
 
+	/* uploade the image and  */
+	const uploadImageApi = useMutation(UploadImageMedia, {
+		onSuccess: (res, params) => {
+			if (res?.asset_id) {
+				let formData = {}
+
+				switch (params?.upload_type) {
+					case 'profile':
+						formData = {profile_photo: res?.secure_url}
+						break
+					case 'cover':
+						formData = {cover_photo: res?.secure_url}
+						break
+					default:
+				}
+
+				updateCompanyAccountApi.mutateAsync(formData)
+			}
+		},
+	})
+
+	/* handle user file uploading  */
+	const handleFileUpload = (type, imageUrl) => {
+		if (imageUrl !== null && typeof imageUrl !== 'undefined' && type !== null && typeof type !== 'undefined') {
+			switch (type) {
+				case 'profile':
+					setProfileImageUri(imageUrl)
+					break
+				case 'cover':
+					setCoverPhotoUri(imageUrl)
+					break
+				default:
+					/* do nothing  */
+					break
+			}
+
+			const formData = new FormData()
+			formData.append('file', imageUrl)
+			formData.append('upload_type', type)
+			formData.append('upload_preset', config('services.cloudinary.preset'))
+
+			uploadImageApi.mutateAsync(formData)
+		}
+	}
+
 	const handleAccountUpdate = formData => {
-		formData.gender = gender
-		formData.marital_status = status
 		updateCompanyAccountApi.mutateAsync(formData)
 	}
 
@@ -66,6 +124,8 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
 		company_name: user?.company_name,
 		country: user?.country,
 		state: user?.state,
+		profile_photo: user?.profile_photo,
+		cover_photo: user?.cover_photo,
 		location: user?.current_location,
 		longitude: '2312311',
 		latitude: '1131431',
@@ -74,9 +134,7 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
 		marital_status: user?.marital_status,
 		facebook_link: user?.facebook_link,
 		instagram_link: user?.instagram_link,
-		//email and phone number of company no need for registration but included in the design
-		// email: user?.company_email,
-		// phone_number: user?.phone_number,
+		dob: user?.dob,
 	}
 
 	const handleClosePress = () => bottomSheetRef.current.close()
@@ -90,25 +148,16 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
 							<Header screenName={screenName} isNotHome />
 							<KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
 								<View style={{paddingHorizontal: SIZES.font8}}>
-									<CameraComponent coverPhotoValue={values.coverPhoto ? {uri: values.coverPhoto} : {uri: user?.profile_photo}} setCoverPhoto={() => onOpenModal('coverPhoto')} profilePhotoValue={imgeUri ? {uri: imgeUri} : {uri: user?.profile_photo}} setProfilePhoto={() => onOpenModal('displayPicture')} />
+									<CameraComponent coverPhotoValue={coverPhotoUri ? {uri: coverPhotoUri} : {uri: values?.cover_photo}} setCoverPhoto={() => onOpenModal('cover')} profilePhotoValue={profileImageUri ? {uri: profileImageUri} : {uri: values?.profile_photo}} setProfilePhoto={() => onOpenModal('profile')} />
 									{getBusinessInputValues(BUS_UPPER_KEYS).map(({label, key}) => (
 										<InputField key={key} label={label} onChangeText={handleChange(key)} value={values[key]} />
 									))}
 									<View style={{marginBottom: SIZES.font10}}>
-										<DatePicker onSelectDate={setDateValue} dateValue={dateValue} />
+										<DatePicker onSelectDate={dob => setFieldValue('dob', dob)} dateValue={values?.dob !== null ? values?.dob : ''} />
 									</View>
 									<Picker placeHolder={'Choose Gender'} value={values?.gender} data={['Male', 'Female']} onPressItem={data => setFieldValue('gender', data)} />
 									<Picker placeHolder={values?.marital_status ? values?.marital_status : 'Marital Status'} value={values?.marital_status} data={['Single', 'Married', 'Divorced']} onPressItem={data => setFieldValue('marital_status', data)} />
-									{/* {getInputValues(['company_email', 'phone_number']).map(
-                ({label, key}) => (
-                  <InputField
-                    key={key}
-                    label={label}
-                    onChangeText={handleChange(key)}
-                    value={values[key]}
-                  />
-                ),
-              )} */}
+
 									<Text style={[FONTS.body4, {marginBottom: SIZES.font10}]}>Country/Region*</Text>
 									<CountryPicker withFilter withAlphaFilter placeholder={values?.country || 'Select your country'} onSelect={data => setFieldValue('country', data?.name)} containerButtonStyle={styles.countryContainer} />
 									{getInputValues(['location']).map(({label, key}) => (
@@ -127,7 +176,7 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
 					)}
 				</Formik>
 			</Container>
-			<ImageBottomSheet ref={bottomSheetRef} handleClosePress={handleClosePress} onSelectImage={setImageUri} type={type} onCoverPhotoSelect={data => setFieldValue('coverPhoto', data)} />
+			<ImageBottomSheet ref={bottomSheetRef} handleClosePress={handleClosePress} onSelectImage={handleFileUpload} type={type} onCoverPhotoSelect={data => setFieldValue('coverPhoto', data)} />
 		</>
 	)
 }
