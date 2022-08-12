@@ -68,14 +68,13 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
 	const uploadImageApi = useMutation(UploadImageMedia, {
 		onSuccess: (res, params) => {
 			if (res?.asset_id) {
-				let formData = {}
-
+				const formData = {}
 				switch (params?.upload_type) {
 					case 'profile':
-						formData = {profile_photo: res?.secure_url}
+						formData.profile_photo = res?.secure_url
 						break
 					case 'cover':
-						formData = {cover_photo: res?.secure_url}
+						formData.cover_photo = res?.secure_url
 						break
 					default:
 				}
@@ -100,10 +99,10 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
 					break
 			}
 
-			const formData = new FormData()
-			formData.append('file', imageUrl)
-			formData.append('upload_type', type)
-			formData.append('upload_preset', config('services.cloudinary.preset'))
+			const formData = {}
+			formData.file = imageUrl
+			formData.upload_type = type
+			formData.upload_preset = config('services.cloudinary.preset')
 
 			uploadImageApi.mutateAsync(formData)
 		}

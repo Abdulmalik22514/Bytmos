@@ -17,9 +17,9 @@ const Stack = createNativeStackNavigator()
 function RootNavigator() {
 	const {auth} = useFlusStores()
 
-	console.log('====================================')
-	console.log(auth?.user)
-	console.log('====================================')
+	// console.log('====================================')
+	// console.log(auth?.user)
+	// console.log('====================================')
 
 	return (
 		<NavigationContainer>

@@ -101,10 +101,10 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
 					break
 			}
 
-			const formData = new FormData()
-			formData.append('file', imageUrl)
-			formData.append('upload_type', type)
-			formData.append('upload_preset', config('services.cloudinary.preset'))
+			const formData = {}
+			formData.file = imageUrl
+			formData.upload_type = type
+			formData.upload_preset = config('services.cloudinary.preset')
 
 			uploadImageApi.mutateAsync(formData)
 		}
