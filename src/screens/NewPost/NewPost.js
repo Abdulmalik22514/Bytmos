@@ -24,15 +24,17 @@ const NewPost = () => {
           <DropDown />
         </Pressable>
         <View style={styles.separator} />
-        <Pressable style={styles.postContent}>
-          <Image source={icons.NewServiceImage} style={styles.image} />
+        <View style={styles.postContent}>
+          <Pressable>
+            <Image source={icons.NewServiceImage} style={styles.image} />
+          </Pressable>
           <TextInput
             style={styles.serviceDetails}
             placeholder="What's new about your business or industry?"
             placeholderTextColor={COLORS.input}
             multiline={true}
           />
-        </Pressable>
+        </View>
         <View style={styles.separator} />
       </ScrollView>
     </Container>

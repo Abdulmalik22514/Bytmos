@@ -61,6 +61,10 @@ const BottomTabs = () => {
               icon={icons.Message}
             />
           ),
+          tabBarBadge: 5,
+          tabBarBadgeStyle: {
+            backgroundColor: '#C63636',
+          },
         }}
       />
       <Tab.Screen

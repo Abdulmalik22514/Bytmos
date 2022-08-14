@@ -49,11 +49,24 @@ export const TribeStyles = StyleSheet.create({
     justifyContent: 'space-between',
     width: SIZES.font1 * 9,
     marginTop: SIZES.font10,
-    marginBottom: SIZES.font10,
+    marginBottom: SIZES.font1,
   },
   dotStyle: {
     width: SIZES.font10 - 2,
     height: SIZES.font10 - 2,
     borderRadius: (SIZES.font10 - 2) / 2,
+  },
+  shareContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingRight: SIZES.font10,
+  },
+  sheetHandleStyle: {
+    backgroundColor: COLORS.input,
+    width: SIZES.font1 * 2,
+    height: SIZES.font10 - 8,
+    marginTop: SIZES.font10,
+    borderRadius: 2,
   },
 });
