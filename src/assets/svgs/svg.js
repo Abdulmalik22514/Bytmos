@@ -383,12 +383,12 @@ export const UpArrow = props => {
   );
 };
 
-export const OptionIcon = props => {
+export const CheckMark = props => {
   return (
     <Svg
-      width="8"
-      height="25"
-      viewBox="0 0 8 25"
+      width="122"
+      height="122"
+      viewBox="0 0 122 122"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       {...props}>

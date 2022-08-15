@@ -10,7 +10,7 @@ const Header = ({onPress, isNotHome, screenName, isAccount}) => {
 
   return (
     <View>
-      <View style={[styles.container, isAccount && styles.isAccount]}>
+      <View style={[styles.container, isAccount && styles.isAccount, style]}>
         <View style={styles.leftView}>
           {isNotHome ? (
             <>
@@ -41,7 +41,7 @@ const Header = ({onPress, isNotHome, screenName, isAccount}) => {
           </Pressable>
         </View>
       </View>
-      {isAccount ? null : <View style={styles.separator} />}
+      <View style={styles.separator} />
     </View>
   );
 };

@@ -18,3 +18,4 @@ export const HELP = 'Help_Screen';
 export const LOGOUT = 'Logout_Screen';
 export const TRIBE_SCREEN = 'Tribe_Screen';
 export const NEWPOST_SCREEN = 'NewPost_Screen';
+export const ACCOUNT_TYPE = 'AccountType_Screen';

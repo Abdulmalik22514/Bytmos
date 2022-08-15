@@ -1,12 +1,11 @@
-import {Image, ScrollView, Text, View} from 'react-native';
-import React, {useState} from 'react';
+import {Alert, Image, ScrollView, Text, View} from 'react-native';
+import React from 'react';
 import {FONTS, SIZES} from '../../constants/theme';
 import Header from '../../components/Header';
 import HomeCard, {CardItems} from '../../components/HomeCard';
-import Modal from 'react-native-modal';
-import CustomButton from '../../components/CustomButton';
 import {
   ACCOUNT_SCREEN,
+  ACCOUNT_TYPE,
   MANAGE_ORDERS_SCREEN,
   PACKAGE_SCREEN,
   RECENT_WORKS_SCREEN,
@@ -15,21 +14,71 @@ import {
 } from '../../constants/screens';
 import Rating from '../../components/Performance';
 import {HomeStyles as styles} from './styles';
-import {useFlusStores} from 'react-flus';
+import {useFlusDispatcher, useFlusStores} from 'react-flus';
 import Container from '../../components/Container';
+import {useAppApis} from '../../services/api/app/app.index';
+import {useMutation} from 'react-query';
+import AwaitResponse from './../../components/AwaiteResponse';
+import {UPDATE_USER} from '../../flus/constants/auth.const';
+import {useNavigation} from '@react-navigation/native';
 
 const Home = ({navigation}) => {
-  const [isModalVisible, setModalVisible] = useState(false);
-
   const {auth} = useFlusStores();
+  const navigator = useNavigation();
 
-  const toggleModal = () => {
-    setModalVisible(!isModalVisible);
-  };
+  const dispatcher = useFlusDispatcher();
+
+  const {CheckUserStatus, initializeApp} = useAppApis();
+
+  /* Initialize app  */
+  const fetchAccountApi = useMutation(initializeApp, {
+    onSuccess: res => {
+      /* first api in init app is the Performance api so grap it */
+      const _performance = res[0]?.status ? res[0]?.data : null;
+      const _profileData = res[1]?.status ? res[1]?.data : null;
+
+      dispatcher({
+        type: UPDATE_USER,
+        payload: {data: {..._profileData, performance: {..._performance}}},
+      });
+    },
+  });
+
+  /* This api check if the user has created account or has verified his or her account */
+  const checkAccountApi = useMutation(CheckUserStatus, {
+    onSuccess: res => {
+      if (res?.status) {
+        if (!res?.data?.has_created_account) {
+          Alert.alert('Account Update Required', 'Please update your account.');
+          navigator.navigate(ACCOUNT_TYPE, {flowFrom: 'inapp_process'});
+        }
+
+        if (res?.data?.has_created_account && res?.data?.has_verified_account) {
+          dispatcher({
+            type: UPDATE_USER,
+            payload: {data: {account: res?.data}},
+          });
+        }
+      }
+    },
+  });
+
+  const handleAccountChecking = async () => await checkAccountApi.mutateAsync();
+  const handleAccountFetching = async () =>
+    await fetchAccountApi.mutateAsync(
+      auth?.user?.account?.user_type.toLowerCase(),
+    );
 
   const handleAction = title => {
     if (title === 'Account') {
-      return toggleModal();
+      // Here, user needs to navigate to the account type selected during account creation
+      if (auth?.user?.account?.user_type?.toLowerCase() === 'personal') {
+        navigation.navigate(ACCOUNT_SCREEN, {accountType: 'Personal'});
+      }
+
+      if (auth?.user?.account?.user_type?.toLowerCase() === 'company') {
+        navigation.navigate(ACCOUNT_SCREEN, {accountType: 'Business'});
+      }
     }
     if (title === 'Packages') {
       return navigation.navigate(PACKAGE_SCREEN);
@@ -50,83 +99,46 @@ const Home = ({navigation}) => {
 
   return (
     <Container style={styles.container}>
-      <Header />
-      <ScrollView
-        style={{paddingHorizontal: SIZES.font10}}
-        showsVerticalScrollIndicator={false}>
-        <Image
-          source={{uri: auth?.user?.profile_photo}}
-          resizeMode="contain"
-          style={styles.profilepic}
-        />
-        <Text style={styles.accountName}>
-          {auth?.user?.first_name} {auth?.user?.last_name}
-        </Text>
-
-        <View style={styles.itemContainer}>
-          {CardItems.map((item, index) => {
-            return (
-              <HomeCard
-                key={index}
-                icon={item.icon}
-                label={item.label}
-                onPress={() => handleAction(item.label)}
-              />
-            );
-          })}
-        </View>
-
-        <View style={{paddingHorizontal: SIZES.font8}}>
-          <Text style={{...FONTS.h10, marginBottom: SIZES.font1}}>
-            Performance
-          </Text>
-          <Rating label="Client Ranking" />
-          <Rating label="Service Points" />
-          <Rating label="Tribality" />
-          <Rating label="Tribal Presence" />
-        </View>
-      </ScrollView>
-      <Modal
-        onBackdropPress={toggleModal}
-        isVisible={isModalVisible}
-        backdropOpacity={0.7}>
-        <View>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalText}>Create a</Text>
-            <CustomButton
-              title="Personal Account"
-              style={styles.modalButton}
-              onPress={() => {
-                toggleModal();
-                //to delay navigation after modal is closed
-                setTimeout(
-                  () =>
-                    navigation.navigate(ACCOUNT_SCREEN, {
-                      accountType: 'Personal',
-                    }),
-                  150,
-                );
-              }}
+      <AwaitResponse api={handleAccountChecking}>
+        <AwaitResponse api={handleAccountFetching}>
+          <Header />
+          <ScrollView
+            style={{paddingHorizontal: SIZES.font10}}
+            showsVerticalScrollIndicator={false}>
+            <Image
+              source={{uri: auth?.user?.profile_photo}}
+              resizeMode="contain"
+              style={styles.profilepic}
             />
-            <Text style={{...FONTS.body4, fontSize: 22}}>OR</Text>
-            <CustomButton
-              title="Business Account"
-              style={styles.modalButton}
-              onPress={() => {
-                toggleModal();
-                //to delay navigation after modal is closed
-                setTimeout(
-                  () =>
-                    navigation.navigate(ACCOUNT_SCREEN, {
-                      accountType: 'Business',
-                    }),
-                  150,
+            <Text style={styles.accountName}>
+              {auth?.user?.first_name} {auth?.user?.last_name}
+            </Text>
+
+            <View style={styles.itemContainer}>
+              {CardItems.map((item, index) => {
+                return (
+                  <HomeCard
+                    key={index}
+                    icon={item.icon}
+                    label={item.label}
+                    onPress={() => handleAction(item.label)}
+                  />
                 );
-              }}
-            />
-          </View>
-        </View>
-      </Modal>
+              })}
+            </View>
+
+            <View style={{paddingHorizontal: SIZES.font8}}>
+              <Text style={{...FONTS.h10, marginBottom: SIZES.font1}}>
+                Performance
+              </Text>
+              <Rating label="Client Ranking" />
+              <Rating label="Service Points" />
+              <Rating label="Tribality" />
+              <Rating label="Tribal Presence" />
+            </View>
+          </ScrollView>
+        </AwaitResponse>
+      </AwaitResponse>
     </Container>
   );
 };

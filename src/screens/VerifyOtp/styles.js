@@ -80,4 +80,11 @@ export const VerifyOtpStyle = StyleSheet.create({
     width: '80%',
     marginVertical: SIZES.font1,
   },
+  checkMarkView: {
+    width: SIZES.font1 * 4,
+    height: SIZES.font1 * 4,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: COLORS.blue,
+  },
 });
