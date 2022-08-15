@@ -5,7 +5,7 @@ import icons from '../constants/icons';
 import {COLORS, FONTS, SIZES} from '../constants/theme';
 import {DrawerActions, useNavigation} from '@react-navigation/native';
 
-const Header = ({onPress, isNotHome, screenName, isAccount}) => {
+const Header = ({style, isNotHome, screenName, isAccount}) => {
   const {goBack, dispatch} = useNavigation();
 
   return (
