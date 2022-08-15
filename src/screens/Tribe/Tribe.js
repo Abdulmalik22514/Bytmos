@@ -8,7 +8,6 @@ import icons from '../../constants/icons';
 import {OptionIcon, ShareIcon, StarIcon} from '../../assets/svgs/svg';
 import {
   ACTIONS,
-  BOTTOMSHEET_ACTIONS,
   LikeActions,
   TribeBottomSheet,
   TRIBE_BOTTOMSHEET_ACTIONS,
