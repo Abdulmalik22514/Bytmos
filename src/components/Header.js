@@ -3,10 +3,11 @@ import React from 'react';
 import {BackIcon, BellIcon, MenuIcon, SearchIcon} from '../assets/svgs/svg';
 import icons from '../constants/icons';
 import {COLORS, FONTS, SIZES} from '../constants/theme';
-import {useNavigation} from '@react-navigation/native';
+import {DrawerActions, useNavigation} from '@react-navigation/native';
 
-const Header = ({onPress, isNotHome, screenName, isAccount, style}) => {
-  const {goBack} = useNavigation();
+const Header = ({onPress, isNotHome, screenName, isAccount}) => {
+  const {goBack, dispatch} = useNavigation();
+
   return (
     <View>
       <View style={[styles.container, isAccount && styles.isAccount, style]}>
@@ -20,7 +21,7 @@ const Header = ({onPress, isNotHome, screenName, isAccount, style}) => {
             </>
           ) : (
             <>
-              <Pressable onPress={onPress}>
+              <Pressable onPress={() => dispatch(DrawerActions.toggleDrawer())}>
                 <MenuIcon width={24} height={20} />
               </Pressable>
               <Image

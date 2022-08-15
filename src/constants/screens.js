@@ -15,4 +15,7 @@ export const LEAVE_FEEDBACK = 'LeaveFeedback_Screen';
 export const INVITE_FRIENDS = 'InviteFriends_Screen';
 export const SETTINGS = 'Settings_Screen';
 export const HELP = 'Help_Screen';
+export const LOGOUT = 'Logout_Screen';
+export const TRIBE_SCREEN = 'Tribe_Screen';
+export const NEWPOST_SCREEN = 'NewPost_Screen';
 export const ACCOUNT_TYPE = 'AccountType_Screen';

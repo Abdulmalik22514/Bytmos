@@ -40,7 +40,6 @@ const CustomDrawer = props => {
           <Image
             source={{uri: auth?.user?.profile_photo}}
             style={styles.drawerIcon}
-            resizeMode="contain"
           />
           <View>
             <Text style={FONTS.h10}>
