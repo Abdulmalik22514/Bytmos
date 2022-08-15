@@ -7,7 +7,7 @@ import ImagePicker from 'react-native-image-crop-picker';
 
 const Options = [
   {
-    title: 'Take from Camera',
+    title: 'Take a Photo',
     icon: <Icon name="camera" size={26} />,
     actionType: 'Open Camera',
   },
@@ -19,34 +19,35 @@ const Options = [
 ];
 
 const ImageBottomSheet = React.forwardRef(
-  ({onSelectImage, handleClosePress, type, onCoverPhotoSelect}, ref) => {
+  ({onSelectImage, handleClosePress}, ref) => {
     const snapPoints = ['1%', '27%'];
 
     const handleActionType = actionType => {
       handleClosePress();
       if (actionType === 'Open Camera') {
-        ImagePicker.openCamera({
+        ImagePicker.openPicker({
           width: 300,
           height: 400,
           cropping: true,
-        }).then(image => {
-          type === 'coverPhoto'
-            ? onCoverPhotoSelect?.(image.path)
-            : onSelectImage(image.path);
-          console.log({image});
-        });
+          includeBase64: true,
+        })
+          .then(image => {
+            onSelectImage(`data:${image?.mime};base64,${image?.data}`);
+          })
+          .catch(e => console.warn(e?.message));
       }
+
       if (actionType === 'Open Gallery') {
         ImagePicker.openPicker({
           width: 300,
           height: 400,
           cropping: true,
-        }).then(image => {
-          type === 'coverPhoto'
-            ? onCoverPhotoSelect?.(image.path)
-            : onSelectImage(image.path);
-          console.log(image);
-        });
+          includeBase64: true,
+        })
+          .then(image => {
+            onSelectImage(`data:${image?.mime};base64,${image?.data}`);
+          })
+          .catch(e => console.warn(e?.message));
       }
     };
 

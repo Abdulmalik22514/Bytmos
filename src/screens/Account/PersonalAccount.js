@@ -17,6 +17,8 @@ import {getInputValues, UPPER_KEYS} from '../../utils/getInputValues';
 import CountryPicker from 'react-native-country-picker-modal';
 import CameraComponent from '../../components/CameraComponent';
 import Container from '../../components/Container';
+import {useStorageApi} from '../../services/api/storage/storage.index';
+import {config} from '../../configs/config';
 
 const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
   const {user} = useFlusStores()?.auth;
@@ -27,6 +29,7 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
   const [type, setType] = useState('');
 
   const {UpdatePersonalAccount, FetchPersonalAccount} = useAuthApis();
+  const {UploadImageMedia} = useStorageApi();
 
   const fetchAccountApi = useMutation(FetchPersonalAccount, {
     onSuccess: res => {
@@ -36,13 +39,8 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
     },
   });
 
-  const onOpenModal = type => {
-    setType(type);
-    bottomSheetRef?.current?.snapToIndex(1);
-  };
-
   /* update company account api */
-  const updateCompanyAccountApi = useMutation(UpdatePersonalAccount, {
+  const updatePersonalAccountApi = useMutation(UpdatePersonalAccount, {
     onSuccess: res => {
       if (res?.status) {
         if (from === 'signup_process') {
@@ -62,16 +60,44 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
     },
   });
 
+  const onOpenModal = type => {
+    setType(type);
+    bottomSheetRef?.current?.snapToIndex(1);
+  };
+
+  /* uploade the image and  */
+  const uploadImageApi = useMutation(UploadImageMedia, {
+    onSuccess: res => {
+      if (res?.asset_id) {
+        const formData = {profile_photo: res?.secure_url};
+
+        updatePersonalAccountApi.mutateAsync(formData);
+      }
+    },
+  });
+
+  /* handle user file uploading  */
+  const handleFileUpload = imageUrl => {
+    if (imageUrl) {
+      setImageUri(imageUrl);
+
+      const formData = new FormData();
+      formData.append('file', imageUrl);
+      formData.append('upload_preset', config('services.cloudinary.preset'));
+
+      uploadImageApi.mutateAsync(formData);
+    }
+  };
   /* Handle user account update */
   const handleAccountUpdate = formData => {
     formData.gender = gender;
     formData.marital_status = status;
-    updateCompanyAccountApi.mutateAsync(formData);
+    updatePersonalAccountApi.mutateAsync(formData);
   };
 
   /* The api loading state. */
   const isLoading =
-    updateCompanyAccountApi.isLoading || fetchAccountApi.isLoading;
+    updatePersonalAccountApi.isLoading || fetchAccountApi.isLoading;
 
   const bottomSheetRef = useRef(null);
 
@@ -199,7 +225,7 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
       <ImageBottomSheet
         ref={bottomSheetRef}
         handleClosePress={handleClosePress}
-        onSelectImage={setImageUri}
+        onSelectImage={handleFileUpload}
         type={type}
         onCoverPhotoSelect={data => setFieldValue('coverPhoto', data)}
       />

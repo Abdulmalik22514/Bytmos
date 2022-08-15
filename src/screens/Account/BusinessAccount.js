@@ -11,7 +11,7 @@ import CustomButton from '../../components/CustomButton';
 import {useAuthApis} from '../../services/api/Auth/auth.index';
 import {useMutation} from 'react-query';
 import {useFlusDispatcher, useFlusStores} from 'react-flus';
-import {USER_LOGIN} from '../../flus/constants/auth.const';
+import {UPDATE_USER, USER_LOGIN} from '../../flus/constants/auth.const';
 import {DatePicker} from '../../components/DatePicker';
 import CameraComponent from '../../components/CameraComponent';
 import {
@@ -20,6 +20,8 @@ import {
 } from '../../utils/getInputValues';
 import CountryPicker from 'react-native-country-picker-modal';
 import Container from '../../components/Container';
+import {config} from '../../configs/config';
+import {useStorageApi} from '../../services/api/storage/storage.index';
 
 const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
   const [imgeUri, setImageUri] = useState('');
@@ -29,7 +31,17 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
   const dispatcher = useFlusDispatcher();
   const {user} = useFlusStores()?.auth;
 
-  const {UpdateCompanyAccount} = useAuthApis();
+  const {UpdateCompanyAccount, FetchCompanyAccount} = useAuthApis();
+  const {UploadImageMedia} = useStorageApi();
+
+  /* Fetch user account after updating profile */
+  const fetchAccountApi = useMutation(FetchCompanyAccount, {
+    onSuccess: res => {
+      if (res?.status) {
+        dispatcher({type: UPDATE_USER, payload: {data: {...res?.data}}});
+      }
+    },
+  });
 
   const onOpenModal = type => {
     setType(type);
@@ -52,6 +64,31 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
     },
   });
 
+  /* uploade the image and  */
+  const uploadImageApi = useMutation(UploadImageMedia, {
+    onSuccess: res => {
+      if (res?.asset_id) {
+        const formData = {profile_photo: res?.secure_url};
+
+        updateCompanyAccountApi.mutateAsync(formData);
+      }
+    },
+  });
+
+  /* handle user file uploading  */
+  const handleFileUpload = imageUrl => {
+    if (imageUrl) {
+      setImageUri(imageUrl);
+
+      const formData = new FormData();
+      formData.append('file', imageUrl);
+      formData.append('upload_preset', config('services.cloudinary.preset'));
+
+      uploadImageApi.mutateAsync(formData);
+    }
+  };
+
+  /* Handle user account update */
   const handleAccountUpdate = formData => {
     formData.gender = gender;
     formData.marital_status = status;
@@ -63,13 +100,14 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
 
   const bottomSheetRef = useRef(null);
 
+  /* The initial form data  */
   const initialValues = {
     first_name: user?.registrar_first_name,
     last_name: user?.registrar_last_name,
     company_name: user?.company_name,
     country: user?.country,
     state: user?.state,
-    location: user?.current_location,
+    location: user?.location,
     longitude: '2312311',
     latitude: '1131431',
     registrar_position: user?.registrar_position,
@@ -77,9 +115,6 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
     marital_status: user?.marital_status,
     facebook_link: user?.facebook_link,
     instagram_link: user?.instagram_link,
-    //email and phone number of company no need for registration but included in the design
-    // email: user?.company_email,
-    // phone_number: user?.phone_number,
   };
 
   const handleClosePress = () => bottomSheetRef.current.close();
@@ -199,7 +234,7 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
       <ImageBottomSheet
         ref={bottomSheetRef}
         handleClosePress={handleClosePress}
-        onSelectImage={setImageUri}
+        onSelectImage={handleFileUpload}
         type={type}
         onCoverPhotoSelect={data => setFieldValue('coverPhoto', data)}
       />
