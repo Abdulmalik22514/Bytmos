@@ -16,10 +16,13 @@ import Swiper from 'react-native-swiper';
 import SwiperContent, {SWIPER_IMAGES} from '../../components/SwiperContent';
 import {TribeStyles as styles} from './styles';
 import BottomSheet, {BottomSheetBackdrop} from '@gorhom/bottom-sheet';
+import {useNavigation} from '@react-navigation/native';
+import {TRIBALS_SCREEN} from '../../constants/screens';
 
 const Tribe = () => {
   const [active, setActive] = useState('All');
   const [tribe, setTribe] = useState(false);
+  const {navigate} = useNavigation();
 
   const bottomSheetRef = useRef(null);
 
@@ -72,7 +75,9 @@ const Tribe = () => {
                         style={styles.profilePic}
                       />
                       <View>
-                        <Text style={FONTS.h6}>Sonia Fashion Styles</Text>
+                        <Pressable>
+                          <Text style={FONTS.h6}>Sonia Fashion Styles</Text>
+                        </Pressable>
                         <View>
                           <View
                             style={{
@@ -88,7 +93,12 @@ const Tribe = () => {
                               5.0
                             </Text>
                           </View>
-                          <Text style={styles.tribals}>2,300 Tribals</Text>
+                          <Pressable
+                            onPress={() =>
+                              navigate(TRIBALS_SCREEN, {user: 'Flora Clair'})
+                            }>
+                            <Text style={styles.tribals}>2,300 Tribals</Text>
+                          </Pressable>
                         </View>
                       </View>
                     </View>

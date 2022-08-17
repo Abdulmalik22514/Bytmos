@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginVertical: SIZES.font10,
+    marginVertical: SIZES.font10 - 5,
     paddingHorizontal: SIZES.font10,
   },
   image: {
