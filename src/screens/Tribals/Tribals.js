@@ -1,4 +1,4 @@
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import {FlatList, ScrollView, StyleSheet, Text, View} from 'react-native';
 import React, {useState} from 'react';
 import Container from '../../components/Container';
 import Header from '../../components/Header';
@@ -22,16 +22,18 @@ const Tribals = ({route}) => {
         <Text style={FONTS.h8}>1k Likes</Text>
         <SearchBar />
         <View style={{marginBottom: SIZES.font1}}>
-          {TRIBE_FRIENDS.map((item, index) => {
-            return (
-              <TribalsComponent
-                key={index}
-                icon={item.icon}
-                tribe_name={item.tribe_name}
-                business_name={item.business_name}
-              />
-            );
-          })}
+          <FlatList
+            data={TRIBE_FRIENDS}
+            renderItem={({item}) => {
+              return (
+                <TribalsComponent
+                  icon={item.icon}
+                  tribe_name={item.tribe_name}
+                  business_name={item.business_name}
+                />
+              );
+            }}
+          />
         </View>
       </ScrollView>
     </Container>

@@ -65,6 +65,7 @@ const TribalsComponent = ({
         </View>
       </View>
       <TouchableOpacity
+        activeOpacity={0.8}
         onPress={() => setTribe(!tribe)}
         style={[styles.tribingButton, tribe && styles.tribing]}>
         <Text style={[styles.tribeText, tribe && styles.tribingText]}>
