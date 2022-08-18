@@ -20,6 +20,7 @@ export const COLORS = {
   pictureBackground: '#E5E2E2',
   rating: '#F0EEEE',
   border: '#E7E6E6',
+  yellow: '#FFCC33',
 };
 export const SIZES = {
   // font sizes
