@@ -3,9 +3,11 @@ import React from 'react';
 import {COLORS, FONTS, SIZES} from '../constants/theme';
 import {LockIcon} from '../assets/svgs/svg';
 
-const TribeButton = ({title, isMessage, style}) => {
+const TribeButton = ({title, isMessage, style, onPress}) => {
   return (
-    <Pressable style={[styles.container, isMessage && styles.isMessage, style]}>
+    <Pressable
+      onPress={onPress}
+      style={[styles.container, isMessage && styles.isMessage, style]}>
       <Text
         style={[
           FONTS.h10,

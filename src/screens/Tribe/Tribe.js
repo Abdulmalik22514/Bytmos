@@ -17,7 +17,7 @@ import SwiperContent, {SWIPER_IMAGES} from '../../components/SwiperContent';
 import {TribeStyles as styles} from './styles';
 import BottomSheet, {BottomSheetBackdrop} from '@gorhom/bottom-sheet';
 import {useNavigation} from '@react-navigation/native';
-import {TRIBALS_SCREEN} from '../../constants/screens';
+import {TRIBALS_SCREEN, TRIBER_PROFILE} from '../../constants/screens';
 
 const Tribe = () => {
   const [active, setActive] = useState('All');
@@ -75,7 +75,7 @@ const Tribe = () => {
                         style={styles.profilePic}
                       />
                       <View>
-                        <Pressable>
+                        <Pressable onPress={() => navigate(TRIBER_PROFILE)}>
                           <Text style={FONTS.h6}>Sonia Fashion Styles</Text>
                         </Pressable>
                         <View>
