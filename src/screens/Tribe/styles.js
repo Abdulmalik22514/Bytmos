@@ -49,7 +49,7 @@ export const TribeStyles = StyleSheet.create({
     justifyContent: 'space-between',
     width: SIZES.font1 * 9,
     marginTop: SIZES.font10,
-    marginBottom: SIZES.font1,
+    marginBottom: SIZES.font5,
   },
   dotStyle: {
     width: SIZES.font10 - 2,
@@ -68,5 +68,47 @@ export const TribeStyles = StyleSheet.create({
     height: SIZES.font10 - 8,
     marginTop: SIZES.font10,
     borderRadius: 2,
+  },
+  itemSeparator: {
+    width: '100%',
+    borderWidth: 2,
+    borderColor: COLORS.separator,
+  },
+  postComment: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: SIZES.font1,
+    marginBottom: SIZES.font10,
+    paddingHorizontal: SIZES.font10,
+  },
+  commentBox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderColor: COLORS.grey,
+    borderRadius: 15,
+    borderWidth: 1,
+    paddingHorizontal: SIZES.font10 - 5,
+    paddingVertical: SIZES.font10 - 7,
+    width: '85%',
+  },
+  commenterPix: {
+    width: SIZES.font1 * 1.5,
+    height: SIZES.font1 * 1.5,
+    marginRight: SIZES.font10,
+  },
+  postText: {
+    ...FONTS.h10,
+    color: COLORS.blue,
+  },
+  commentInput: {
+    ...FONTS.body4,
+    width: '65%',
+    paddingHorizontal: SIZES.font10 - 5,
+  },
+  commentsHeading: {
+    ...FONTS.body4,
+    color: COLORS.input,
+    paddingHorizontal: SIZES.font10,
   },
 });
