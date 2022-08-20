@@ -1,6 +1,7 @@
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {
+  COMMENTS_SCREEN,
   NEWPOST_SCREEN,
   TRIBALS_SCREEN,
   TRIBER_PROFILE,
@@ -10,6 +11,7 @@ import Tribe from '../screens/Tribe/Tribe';
 import NewPost from '../screens/NewPost/NewPost';
 import Tribals from '../screens/Tribals/Tribals';
 import TriberProfile from '../screens/TriberProfile/TriberProfile';
+import CommentScreen from '../screens/Comments/CommentScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -23,6 +25,7 @@ export const TribeNavigator = () => {
       <Stack.Screen name={NEWPOST_SCREEN} component={NewPost} />
       <Stack.Screen name={TRIBALS_SCREEN} component={Tribals} />
       <Stack.Screen name={TRIBER_PROFILE} component={TriberProfile} />
+      <Stack.Screen name={COMMENTS_SCREEN} component={CommentScreen} />
     </Stack.Navigator>
   );
 };
