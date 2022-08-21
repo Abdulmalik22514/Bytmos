@@ -17,15 +17,15 @@ import {getInputValues, UPPER_KEYS} from '../../utils/getInputValues';
 import CountryPicker from 'react-native-country-picker-modal';
 import CameraComponent from '../../components/CameraComponent';
 import Container from '../../components/Container';
-import {useStorageApi} from '../../services/api/storage/storage.index';
+import {useStorageApi} from './../../services/api/storage/storage.index';
 import {config} from '../../configs/config';
 
 const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
   const {user} = useFlusStores()?.auth;
   const dispatcher = useFlusDispatcher();
 
-  const [imgeUri, setImageUri] = useState('');
-  const [dateValue, setDateValue] = useState('');
+  const [profileImageUri, setProfileImageUri] = useState('');
+  const [coverPhotoUri, setCoverPhotoUri] = useState('');
   const [type, setType] = useState('');
 
   const {UpdatePersonalAccount, FetchPersonalAccount} = useAuthApis();
@@ -38,6 +38,11 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
       }
     },
   });
+
+  const onOpenModal = type => {
+    setType(type);
+    bottomSheetRef?.current?.snapToIndex(1);
+  };
 
   /* update company account api */
   const updatePersonalAccountApi = useMutation(UpdatePersonalAccount, {
@@ -60,16 +65,21 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
     },
   });
 
-  const onOpenModal = type => {
-    setType(type);
-    bottomSheetRef?.current?.snapToIndex(1);
-  };
-
   /* uploade the image and  */
   const uploadImageApi = useMutation(UploadImageMedia, {
-    onSuccess: res => {
+    onSuccess: (res, params) => {
       if (res?.asset_id) {
-        const formData = {profile_photo: res?.secure_url};
+        let formData = {};
+
+        switch (params?.upload_type) {
+          case 'profile':
+            formData = {profile_photo: res?.secure_url};
+            break;
+          case 'cover':
+            formData = {cover_photo: res?.secure_url};
+            break;
+          default:
+        }
 
         updatePersonalAccountApi.mutateAsync(formData);
       }
@@ -77,21 +87,36 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
   });
 
   /* handle user file uploading  */
-  const handleFileUpload = imageUrl => {
-    if (imageUrl) {
-      setImageUri(imageUrl);
+  const handleFileUpload = (type, imageUrl) => {
+    if (
+      imageUrl !== null &&
+      typeof imageUrl !== 'undefined' &&
+      type !== null &&
+      typeof type !== 'undefined'
+    ) {
+      switch (type) {
+        case 'profile':
+          setProfileImageUri(imageUrl);
+          break;
+        case 'cover':
+          setCoverPhotoUri(imageUrl);
+          break;
+        default:
+          /* do nothing  */
+          break;
+      }
 
-      const formData = new FormData();
-      formData.append('file', imageUrl);
-      formData.append('upload_preset', config('services.cloudinary.preset'));
+      const formData = {};
+      formData.file = imageUrl;
+      formData.upload_type = type;
+      formData.upload_preset = config('services.cloudinary.preset');
 
       uploadImageApi.mutateAsync(formData);
     }
   };
+
   /* Handle user account update */
   const handleAccountUpdate = formData => {
-    formData.gender = gender;
-    formData.marital_status = status;
     updatePersonalAccountApi.mutateAsync(formData);
   };
 
@@ -112,12 +137,15 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
     location: user?.location,
     longitude: '2312311',
     latitude: '1131431',
+    dob: user?.dob,
     gender: user?.gender,
     marital_status: user?.marital_status,
     facebook_link: user?.facebook_link,
     instagram_link: user?.instagram_link,
-    coverPhoto: '',
+    profile_photo: user?.profile_photo,
+    cover_photo: user?.cover_photo,
   };
+
   const handleClosePress = () => bottomSheetRef.current.close();
 
   return (
@@ -134,15 +162,17 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
                 <View style={{paddingHorizontal: SIZES.font8}}>
                   <CameraComponent
                     coverPhotoValue={
-                      values.coverPhoto
-                        ? {uri: values.coverPhoto}
-                        : {uri: user?.profile_photo}
+                      coverPhotoUri
+                        ? {uri: coverPhotoUri}
+                        : {uri: values?.cover_photo}
                     }
-                    setCoverPhoto={() => onOpenModal('coverPhoto')}
+                    setCoverPhoto={() => onOpenModal('cover')}
                     profilePhotoValue={
-                      imgeUri ? {uri: imgeUri} : {uri: user?.profile_photo}
+                      profileImageUri
+                        ? {uri: profileImageUri}
+                        : {uri: values?.profile_photo}
                     }
-                    setProfilePhoto={() => onOpenModal('displayPicture')}
+                    setProfilePhoto={() => onOpenModal('profile')}
                   />
 
                   {getInputValues(UPPER_KEYS).map(({label, key}) => (
@@ -153,6 +183,7 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
                       value={values[key]}
                     />
                   ))}
+
                   <Text style={[FONTS.body4, {marginBottom: SIZES.font10}]}>
                     Country/Region*
                   </Text>
@@ -173,8 +204,8 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
                   ))}
                   <View style={{marginBottom: SIZES.font10}}>
                     <DatePicker
-                      onSelectDate={setDateValue}
-                      dateValue={dateValue}
+                      onSelectDate={dob => setFieldValue('dob', dob)}
+                      dateValue={values?.dob !== null ? values?.dob : ''}
                     />
                   </View>
                   <Picker

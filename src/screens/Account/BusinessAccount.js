@@ -17,15 +17,16 @@ import CameraComponent from '../../components/CameraComponent';
 import {
   BUS_UPPER_KEYS,
   getBusinessInputValues,
+  getInputValues,
 } from '../../utils/getInputValues';
 import CountryPicker from 'react-native-country-picker-modal';
 import Container from '../../components/Container';
-import {config} from '../../configs/config';
 import {useStorageApi} from '../../services/api/storage/storage.index';
+import {config} from '../../configs/config';
 
 const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
-  const [imgeUri, setImageUri] = useState('');
-  const [dateValue, setDateValue] = useState('');
+  const [profileImageUri, setProfileImageUri] = useState('');
+  const [coverPhotoUri, setCoverPhotoUri] = useState('');
   const [type, setType] = useState('');
 
   const dispatcher = useFlusDispatcher();
@@ -34,10 +35,9 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
   const {UpdateCompanyAccount, FetchCompanyAccount} = useAuthApis();
   const {UploadImageMedia} = useStorageApi();
 
-  /* Fetch user account after updating profile */
   const fetchAccountApi = useMutation(FetchCompanyAccount, {
     onSuccess: res => {
-      if (res?.status) {
+      if (res?.status && res?.data) {
         dispatcher({type: UPDATE_USER, payload: {data: {...res?.data}}});
       }
     },
@@ -59,6 +59,10 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
               access_token: null,
             },
           });
+        } else {
+          /* Fetch user account information after update profile to update the user 
+					data object. */
+          fetchAccountApi.mutateAsync();
         }
       }
     },
@@ -66,9 +70,18 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
 
   /* uploade the image and  */
   const uploadImageApi = useMutation(UploadImageMedia, {
-    onSuccess: res => {
+    onSuccess: (res, params) => {
       if (res?.asset_id) {
-        const formData = {profile_photo: res?.secure_url};
+        const formData = {};
+        switch (params?.upload_type) {
+          case 'profile':
+            formData.profile_photo = res?.secure_url;
+            break;
+          case 'cover':
+            formData.cover_photo = res?.secure_url;
+            break;
+          default:
+        }
 
         updateCompanyAccountApi.mutateAsync(formData);
       }
@@ -76,22 +89,35 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
   });
 
   /* handle user file uploading  */
-  const handleFileUpload = imageUrl => {
-    if (imageUrl) {
-      setImageUri(imageUrl);
+  const handleFileUpload = (type, imageUrl) => {
+    if (
+      imageUrl !== null &&
+      typeof imageUrl !== 'undefined' &&
+      type !== null &&
+      typeof type !== 'undefined'
+    ) {
+      switch (type) {
+        case 'profile':
+          setProfileImageUri(imageUrl);
+          break;
+        case 'cover':
+          setCoverPhotoUri(imageUrl);
+          break;
+        default:
+          /* do nothing  */
+          break;
+      }
 
-      const formData = new FormData();
-      formData.append('file', imageUrl);
-      formData.append('upload_preset', config('services.cloudinary.preset'));
+      const formData = {};
+      formData.file = imageUrl;
+      formData.upload_type = type;
+      formData.upload_preset = config('services.cloudinary.preset');
 
       uploadImageApi.mutateAsync(formData);
     }
   };
 
-  /* Handle user account update */
   const handleAccountUpdate = formData => {
-    formData.gender = gender;
-    formData.marital_status = status;
     updateCompanyAccountApi.mutateAsync(formData);
   };
 
@@ -100,14 +126,15 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
 
   const bottomSheetRef = useRef(null);
 
-  /* The initial form data  */
   const initialValues = {
     first_name: user?.registrar_first_name,
     last_name: user?.registrar_last_name,
     company_name: user?.company_name,
     country: user?.country,
     state: user?.state,
-    location: user?.location,
+    profile_photo: user?.profile_photo,
+    cover_photo: user?.cover_photo,
+    location: user?.current_location,
     longitude: '2312311',
     latitude: '1131431',
     registrar_position: user?.registrar_position,
@@ -115,6 +142,7 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
     marital_status: user?.marital_status,
     facebook_link: user?.facebook_link,
     instagram_link: user?.instagram_link,
+    dob: user?.dob,
   };
 
   const handleClosePress = () => bottomSheetRef.current.close();
@@ -133,15 +161,17 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
                 <View style={{paddingHorizontal: SIZES.font8}}>
                   <CameraComponent
                     coverPhotoValue={
-                      values.coverPhoto
-                        ? {uri: values.coverPhoto}
-                        : {uri: user?.profile_photo}
+                      coverPhotoUri
+                        ? {uri: coverPhotoUri}
+                        : {uri: values?.cover_photo}
                     }
-                    setCoverPhoto={() => onOpenModal('coverPhoto')}
+                    setCoverPhoto={() => onOpenModal('cover')}
                     profilePhotoValue={
-                      imgeUri ? {uri: imgeUri} : {uri: user?.profile_photo}
+                      profileImageUri
+                        ? {uri: profileImageUri}
+                        : {uri: values?.profile_photo}
                     }
-                    setProfilePhoto={() => onOpenModal('displayPicture')}
+                    setProfilePhoto={() => onOpenModal('profile')}
                   />
                   {getBusinessInputValues(BUS_UPPER_KEYS).map(
                     ({label, key}) => (
@@ -155,8 +185,8 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
                   )}
                   <View style={{marginBottom: SIZES.font10}}>
                     <DatePicker
-                      onSelectDate={setDateValue}
-                      dateValue={dateValue}
+                      onSelectDate={dob => setFieldValue('dob', dob)}
+                      dateValue={values?.dob !== null ? values?.dob : ''}
                     />
                   </View>
                   <Picker
@@ -175,16 +205,7 @@ const PersonalAccount = ({screenName, from = 'inapp_process'}) => {
                     data={['Single', 'Married', 'Divorced']}
                     onPressItem={data => setFieldValue('marital_status', data)}
                   />
-                  {/* {getInputValues(['company_email', 'phone_number']).map(
-                ({label, key}) => (
-                  <InputField
-                    key={key}
-                    label={label}
-                    onChangeText={handleChange(key)}
-                    value={values[key]}
-                  />
-                ),
-              )} */}
+
                   <Text style={[FONTS.body4, {marginBottom: SIZES.font10}]}>
                     Country/Region*
                   </Text>

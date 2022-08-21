@@ -1,7 +1,7 @@
 import {View, Text, ActivityIndicator, StyleSheet} from 'react-native'
 import React, {useEffect, useState} from 'react'
 
-export default function AwaitResponse({api, onerror, autoRefresh, interval, children}) {
+export default function AwaitResponse({api, onerror, autoRefresh, interval, silent = false, children}) {
 	const [loading, isloading] = useState(true)
 	const [error, hasError] = useState(false)
 
@@ -58,14 +58,20 @@ export default function AwaitResponse({api, onerror, autoRefresh, interval, chil
 
 	return (
 		<>
-			{render === false && error === false && loading === true && (
-				<View style={styles.screenLoader}>
-					<ActivityIndicator size={75} />
-					<Text>Loading</Text>
-				</View>
+			{silent ? (
+				<>{children}</>
+			) : (
+				<>
+					{render === false && error === false && loading === true && (
+						<View style={styles.screenLoader}>
+							<ActivityIndicator size={75} />
+							<Text>Loading</Text>
+						</View>
+					)}
+					{render === false && loading === false && error === true && onerror}
+					{error === false && loading === false && render === true && children}
+				</>
 			)}
-			{render === false && loading === false && error === true && onerror}
-			{error === false && loading === false && render === true && children}
 		</>
 	)
 }
