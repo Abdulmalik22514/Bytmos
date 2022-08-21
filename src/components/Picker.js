@@ -9,7 +9,7 @@ const Picker = ({value, onPressItem, data = [], placeHolder}) => {
   return (
     <>
       <View style={styles.container}>
-        <Text style={FONTS.body3}>{value || placeHolder}</Text>
+        <Text style={FONTS.body2}>{value || placeHolder}</Text>
         <Pressable onPress={() => setOpen(!open)}>
           <DropDown />
         </Pressable>

@@ -21,6 +21,7 @@ export const COLORS = {
   rating: '#F0EEEE',
   border: '#E7E6E6',
   yellow: '#FFCC33',
+  date: '#484848',
 };
 export const SIZES = {
   // font sizes
@@ -112,7 +113,7 @@ export const FONTS = {
   body2: {
     fontFamily: 'Roboto-Regular',
     fontSize: SIZES.font5,
-    lineHeight: 23,
+    // lineHeight: 23,
     color: COLORS.black,
   },
   body3: {
