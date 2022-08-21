@@ -31,6 +31,8 @@ const HeartImage = require('../assets/images/heart.png');
 const ChatImage = require('../assets/images/chat.png');
 const SendImage = require('../assets/images/send.png');
 const NewServiceImage = require('../assets/images/newService.png');
+const AutoMakers = require('../assets/images/autoMakers.png');
+const Cynclair = require('../assets/images/cynclair.png');
 
 export default {
   NewServiceImage,
@@ -66,4 +68,6 @@ export default {
   HeartImage,
   ChatImage,
   SendImage,
+  AutoMakers,
+  Cynclair,
 };

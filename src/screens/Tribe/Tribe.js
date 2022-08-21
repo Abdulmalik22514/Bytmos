@@ -1,11 +1,24 @@
-import {FlatList, Image, Pressable, ScrollView, Text, View} from 'react-native';
+import {
+  FlatList,
+  Image,
+  Pressable,
+  ScrollView,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
 import React, {useCallback, useMemo, useRef, useState} from 'react';
 import Container from '../../components/Container';
 import Header from '../../components/Header';
 import {COLORS, FONTS, SIZES} from '../../constants/theme';
 import TribeCategories, {CATEGORIES} from '../../components/TribeCategories';
 import icons from '../../constants/icons';
-import {OptionIcon, ShareIcon, StarIcon} from '../../assets/svgs/svg';
+import {
+  CameraIcon,
+  OptionIcon,
+  ShareIcon,
+  StarIcon,
+} from '../../assets/svgs/svg';
 import {
   ACTIONS,
   LikeActions,
@@ -16,10 +29,18 @@ import Swiper from 'react-native-swiper';
 import SwiperContent, {SWIPER_IMAGES} from '../../components/SwiperContent';
 import {TribeStyles as styles} from './styles';
 import BottomSheet, {BottomSheetBackdrop} from '@gorhom/bottom-sheet';
+import {useNavigation} from '@react-navigation/native';
+import {
+  COMMENTS_SCREEN,
+  TRIBALS_SCREEN,
+  TRIBER_PROFILE,
+} from '../../constants/screens';
+import Comments from '../../components/Comments';
 
 const Tribe = () => {
   const [active, setActive] = useState('All');
   const [tribe, setTribe] = useState(false);
+  const {navigate} = useNavigation();
 
   const bottomSheetRef = useRef(null);
 
@@ -62,6 +83,7 @@ const Tribe = () => {
           <View style={styles.separator} />
           <FlatList
             data={[...Array(5)]}
+            ItemSeparatorComponent={() => <View style={styles.itemSeparator} />}
             renderItem={() => {
               return (
                 <View>
@@ -72,7 +94,9 @@ const Tribe = () => {
                         style={styles.profilePic}
                       />
                       <View>
-                        <Text style={FONTS.h6}>Sonia Fashion Styles</Text>
+                        <Pressable onPress={() => navigate(TRIBER_PROFILE)}>
+                          <Text style={FONTS.h6}>Sonia Fashion Styles</Text>
+                        </Pressable>
                         <View>
                           <View
                             style={{
@@ -88,7 +112,12 @@ const Tribe = () => {
                               5.0
                             </Text>
                           </View>
-                          <Text style={styles.tribals}>2,300 Tribals</Text>
+                          <Pressable
+                            onPress={() =>
+                              navigate(TRIBALS_SCREEN, {user: 'Flora Clair'})
+                            }>
+                            <Text style={styles.tribals}>2,300 Tribals</Text>
+                          </Pressable>
                         </View>
                       </View>
                     </View>
@@ -119,9 +148,12 @@ const Tribe = () => {
                     })}
                   </Swiper>
 
-                  <View style={{paddingHorizontal: SIZES.font10 - 5}}>
+                  <View style={{paddingHorizontal: SIZES.font10}}>
                     <View style={styles.shareContainer}>
                       <View style={styles.iconsContainer}>
+                        {/* <ChatIcon />
+                        <HeartIcon />
+                        <InviteIcon /> */}
                         {ACTIONS.map((item, index) => (
                           <LikeActions item={item} key={index} />
                         ))}
@@ -132,10 +164,29 @@ const Tribe = () => {
                     </View>
 
                     <View style={styles.actionsAmount}>
-                      <Text style={{color: COLORS.input}}>120 Comments</Text>
-                      <Text style={{color: COLORS.input}}>2,300 Likes</Text>
-                      <Text style={{color: COLORS.input}}>300 Shares</Text>
+                      <Pressable onPress={() => navigate(COMMENTS_SCREEN)}>
+                        <Text>120 Comments</Text>
+                      </Pressable>
+                      <Text>2,300 Likes</Text>
+                      <Text>300 Shares</Text>
                     </View>
+                  </View>
+                  <Text style={styles.commentsHeading}>Comments</Text>
+
+                  <Comments />
+                  <View style={styles.postComment}>
+                    <View style={styles.commentBox}>
+                      <Image source={icons.Sonia} style={styles.commenterPix} />
+                      <TextInput
+                        placeholder="Add a comment here"
+                        style={styles.commentInput}
+                        multiline
+                      />
+                      <CameraIcon />
+                    </View>
+                    <Pressable>
+                      <Text style={styles.postText}>POST</Text>
+                    </Pressable>
                   </View>
                 </View>
               );
