@@ -66,18 +66,28 @@ const Home = ({navigation}) => {
   const handleAccountChecking = async () => await checkAccountApi.mutateAsync();
   const handleAccountFetching = async () =>
     await fetchAccountApi.mutateAsync(
-      auth?.user?.account?.user_type.toLowerCase(),
+      auth?.user?.account?.user_type?.toLowerCase(),
     );
 
   const handleAction = title => {
     if (title === 'Account') {
       // Here, user needs to navigate to the account type selected during account creation
-      if (auth?.user?.account?.user_type?.toLowerCase() === 'personal') {
-        navigation.navigate(ACCOUNT_SCREEN, {accountType: 'Personal'});
-      }
+      if (typeof auth?.user?.account === 'undefined') {
+        if (auth?.user?.user_type?.toLowerCase() === 'personal') {
+          navigation.navigate(ACCOUNT_SCREEN, {accountType: 'Personal'});
+        }
 
-      if (auth?.user?.account?.user_type?.toLowerCase() === 'company') {
-        navigation.navigate(ACCOUNT_SCREEN, {accountType: 'Business'});
+        if (auth?.user?.user_type?.toLowerCase() === 'company') {
+          navigation.navigate(ACCOUNT_SCREEN, {accountType: 'Business'});
+        }
+      } else {
+        if (auth?.user?.account?.user_type?.toLowerCase() === 'personal') {
+          navigation.navigate(ACCOUNT_SCREEN, {accountType: 'Personal'});
+        }
+
+        if (auth?.user?.account?.user_type?.toLowerCase() === 'company') {
+          navigation.navigate(ACCOUNT_SCREEN, {accountType: 'Business'});
+        }
       }
     }
     if (title === 'Packages') {
@@ -99,15 +109,15 @@ const Home = ({navigation}) => {
 
   return (
     <Container style={styles.container}>
-      <AwaitResponse api={handleAccountChecking}>
-        <AwaitResponse api={handleAccountFetching}>
-          <Header />
+      <AwaitResponse api={handleAccountChecking} silent>
+        <AwaitResponse api={handleAccountFetching} silent>
+          <Header onPress={() => navigation.toggleDrawer()} />
           <ScrollView
             style={{paddingHorizontal: SIZES.font10}}
             showsVerticalScrollIndicator={false}>
             <Image
               source={{uri: auth?.user?.profile_photo}}
-              resizeMode="contain"
+              // resizeMode="contain"
               style={styles.profilepic}
             />
             <Text style={styles.accountName}>
