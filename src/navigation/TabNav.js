@@ -4,11 +4,11 @@ import {Platform} from 'react-native';
 import TabComponent from '../components/TabComponent';
 import icons from '../constants/icons';
 import {COLORS, SIZES} from '../constants/theme';
-import Tribe from '../screens/Tribe/Tribe';
 import Inbox from '../screens/Inbox/Inbox';
 import MyWallet from '../screens/MyWallet/MyWallet';
 import Profile from '../screens/Profile/Profile';
 import Home from '../screens/Home/Home';
+import {TribeNavigator} from './TribeNavigator';
 
 const Tab = createBottomTabNavigator();
 
@@ -38,7 +38,7 @@ const BottomTabs = () => {
       />
       <Tab.Screen
         name="Tribe"
-        component={Tribe}
+        component={TribeNavigator}
         options={{
           tabBarIcon: ({focused}) => (
             <TabComponent
@@ -61,6 +61,10 @@ const BottomTabs = () => {
               icon={icons.Envelope}
             />
           ),
+          tabBarBadge: 5,
+          tabBarBadgeStyle: {
+            backgroundColor: '#C63636',
+          },
         }}
       />
       <Tab.Screen
