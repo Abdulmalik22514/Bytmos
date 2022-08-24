@@ -1,12 +1,4 @@
-import {
-  FlatList,
-  Image,
-  Pressable,
-  ScrollView,
-  Text,
-  TextInput,
-  View,
-} from 'react-native';
+import {FlatList, Image, Pressable, Text, TextInput, View} from 'react-native';
 import React, {useCallback, useMemo, useRef, useState} from 'react';
 import Container from '../../components/Container';
 import Header from '../../components/Header';
@@ -62,137 +54,155 @@ const Tribe = () => {
     <>
       <Container>
         <Header />
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
+        <View>
+          <View
             style={{
               marginVertical: SIZES.font10,
-              paddingHorizontal: SIZES.font10,
             }}>
-            {CATEGORIES.map((item, index) => (
-              <TribeCategories
-                key={index}
-                icon={item.icon}
-                title={item.title}
-                onPress={() => setActive(item.title)}
-                isActive={item.title === active}
-              />
-            ))}
-          </ScrollView>
+            <FlatList
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              data={CATEGORIES}
+              renderItem={({item}) => {
+                return (
+                  <TribeCategories
+                    title={item.title}
+                    icon={item.icon}
+                    onPress={() => setActive(item.title)}
+                    isActive={item.title === active}
+                  />
+                );
+              }}
+            />
+          </View>
+
           <View style={styles.separator} />
-          <FlatList
-            data={[...Array(5)]}
-            ItemSeparatorComponent={() => <View style={styles.itemSeparator} />}
-            renderItem={() => {
-              return (
-                <View>
-                  <View style={styles.userContainer}>
-                    <View style={styles.rightSide}>
-                      <Image
-                        source={icons.NewProfileImage}
-                        style={styles.profilePic}
-                      />
-                      <View>
-                        <Pressable onPress={() => navigate(TRIBER_PROFILE)}>
-                          <Text style={FONTS.h6}>Sonia Fashion Styles</Text>
-                        </Pressable>
+          <View>
+            <FlatList
+              data={[...Array(5)]}
+              showsVerticalScrollIndicator={false}
+              ListFooterComponent={<View />}
+              ListFooterComponentStyle={{marginBottom: SIZES.font1 * 11}}
+              ItemSeparatorComponent={() => (
+                <View style={styles.itemSeparator} />
+              )}
+              renderItem={() => {
+                return (
+                  <View>
+                    <View style={styles.userContainer}>
+                      <Pressable
+                        style={styles.rightSide}
+                        onPress={() => navigate(TRIBER_PROFILE)}>
+                        <Image
+                          source={icons.NewProfileImage}
+                          style={styles.profilePic}
+                        />
                         <View>
-                          <View
-                            style={{
-                              flexDirection: 'row',
-                              alignItems: 'center',
-                              marginVertical: SIZES.font10 - 7,
-                            }}>
-                            <Text style={[FONTS.body3, {marginRight: 7}]}>
-                              Rating
-                            </Text>
-                            <StarIcon />
-                            <Text style={[FONTS.body3, {marginLeft: 3}]}>
-                              5.0
-                            </Text>
+                          <Text style={FONTS.h6}>Sonia Fashion Styles</Text>
+                          <View>
+                            <View
+                              style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                marginVertical: SIZES.font10 - 7,
+                              }}>
+                              <Text style={[FONTS.body3, {marginRight: 7}]}>
+                                Rating
+                              </Text>
+                              <StarIcon />
+                              <Text style={[FONTS.body3, {marginLeft: 3}]}>
+                                5.0
+                              </Text>
+                            </View>
+                            <Pressable
+                              onPress={() =>
+                                navigate(TRIBALS_SCREEN, {user: 'Flora Clair'})
+                              }>
+                              <Text style={styles.tribals}>2,300 Tribals</Text>
+                            </Pressable>
                           </View>
-                          <Pressable
-                            onPress={() =>
-                              navigate(TRIBALS_SCREEN, {user: 'Flora Clair'})
-                            }>
-                            <Text style={styles.tribals}>2,300 Tribals</Text>
-                          </Pressable>
                         </View>
+                      </Pressable>
+                      <View style={styles.leftSide}>
+                        <Pressable onPress={() => setTribe(!tribe)}>
+                          <Text
+                            style={[
+                              styles.tribeButton,
+                              {color: tribe ? 'black' : COLORS.blue},
+                            ]}>
+                            {tribe ? 'Tribing' : '+Tribe'}
+                          </Text>
+                        </Pressable>
+                        <Pressable
+                          onPress={() =>
+                            bottomSheetRef?.current?.snapToIndex(1)
+                          }>
+                          <OptionIcon />
+                        </Pressable>
                       </View>
                     </View>
-                    <View style={styles.leftSide}>
-                      <Pressable onPress={() => setTribe(!tribe)}>
-                        <Text
-                          style={[
-                            styles.tribeButton,
-                            {color: tribe ? 'black' : COLORS.blue},
-                          ]}>
-                          {tribe ? 'Tribing' : '+Tribe'}
-                        </Text>
-                      </Pressable>
-                      <Pressable
-                        onPress={() => bottomSheetRef?.current?.snapToIndex(1)}>
-                        <OptionIcon />
-                      </Pressable>
-                    </View>
-                  </View>
-                  <Swiper
-                    style={styles.wrapper}
-                    height={SIZES.font1 * 14.7}
-                    activeDotStyle={styles.dotStyle}
-                    activeDotColor={COLORS.blue}
-                    dotStyle={styles.dotStyle}>
-                    {SWIPER_IMAGES.map((item, index) => {
-                      return <SwiperContent key={index} item={item} />;
-                    })}
-                  </Swiper>
+                    <Swiper
+                      style={styles.wrapper}
+                      height={SIZES.font1 * 14.7}
+                      activeDotStyle={styles.dotStyle}
+                      activeDotColor={COLORS.blue}
+                      dotStyle={styles.dotStyle}>
+                      {SWIPER_IMAGES.map((item, index) => {
+                        return <SwiperContent key={index} item={item} />;
+                      })}
+                    </Swiper>
 
-                  <View style={{paddingHorizontal: SIZES.font10}}>
-                    <View style={styles.shareContainer}>
-                      <View style={styles.iconsContainer}>
-                        {/* <ChatIcon />
+                    <View style={{paddingHorizontal: SIZES.font10}}>
+                      <View style={styles.shareContainer}>
+                        <View style={styles.iconsContainer}>
+                          {/* <ChatIcon />
                         <HeartIcon />
                         <InviteIcon /> */}
-                        {ACTIONS.map((item, index) => (
-                          <LikeActions item={item} key={index} />
-                        ))}
+                          {ACTIONS.map((item, index) => (
+                            <LikeActions item={item} key={index} />
+                          ))}
+                        </View>
+                        <Pressable>
+                          <ShareIcon />
+                        </Pressable>
+                      </View>
+
+                      <View style={styles.actionsAmount}>
+                        <Pressable onPress={() => navigate(COMMENTS_SCREEN)}>
+                          <Text>120 Comments</Text>
+                        </Pressable>
+                        <Text>2,300 Likes</Text>
+                        <Text>300 Shares</Text>
+                      </View>
+                    </View>
+                    <Text style={styles.commentsHeading}>Comments</Text>
+
+                    <Comments />
+                    <View style={styles.postComment}>
+                      <View style={styles.commentBox}>
+                        <Pressable>
+                          <Image
+                            source={icons.Sonia}
+                            style={styles.commenterPix}
+                          />
+                        </Pressable>
+                        <TextInput
+                          placeholder="Add a comment here"
+                          style={styles.commentInput}
+                          multiline
+                        />
+                        <CameraIcon />
                       </View>
                       <Pressable>
-                        <ShareIcon />
+                        <Text style={styles.postText}>POST</Text>
                       </Pressable>
                     </View>
-
-                    <View style={styles.actionsAmount}>
-                      <Pressable onPress={() => navigate(COMMENTS_SCREEN)}>
-                        <Text>120 Comments</Text>
-                      </Pressable>
-                      <Text>2,300 Likes</Text>
-                      <Text>300 Shares</Text>
-                    </View>
                   </View>
-                  <Text style={styles.commentsHeading}>Comments</Text>
-
-                  <Comments />
-                  <View style={styles.postComment}>
-                    <View style={styles.commentBox}>
-                      <Image source={icons.Sonia} style={styles.commenterPix} />
-                      <TextInput
-                        placeholder="Add a comment here"
-                        style={styles.commentInput}
-                        multiline
-                      />
-                      <CameraIcon />
-                    </View>
-                    <Pressable>
-                      <Text style={styles.postText}>POST</Text>
-                    </Pressable>
-                  </View>
-                </View>
-              );
-            }}
-          />
-        </ScrollView>
+                );
+              }}
+            />
+          </View>
+        </View>
       </Container>
       <BottomSheet
         enablePanDownToClose

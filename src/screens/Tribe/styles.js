@@ -22,6 +22,7 @@ export const TribeStyles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    width: '22%',
   },
   profilePic: {
     width: SIZES.font1 * 2.5,

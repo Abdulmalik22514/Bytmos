@@ -3,12 +3,17 @@ import React from 'react';
 import icons from '../constants/icons';
 import {HeartIcon} from '../assets/svgs/svg';
 import {COLORS, FONTS, SIZES} from '../constants/theme';
+import {useNavigation} from '@react-navigation/native';
+import {TRIBER_PROFILE} from '../constants/screens';
 
 const Comments = () => {
+  const {navigate} = useNavigation();
   return (
     <View style={{paddingHorizontal: SIZES.font10}}>
       <View style={styles.container}>
-        <Image source={icons.Cynclair} style={styles.commenter} />
+        <Pressable onPress={() => navigate(TRIBER_PROFILE)}>
+          <Image source={icons.Cynclair} style={styles.commenter} />
+        </Pressable>
         <View style={{width: '80%'}}>
           <Text style={FONTS.h10}>Clair Cynclair</Text>
           <Text style={styles.comments}>

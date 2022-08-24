@@ -111,7 +111,7 @@ const Home = ({navigation}) => {
     <Container style={styles.container}>
       <AwaitResponse api={handleAccountChecking} silent>
         <AwaitResponse api={handleAccountFetching} silent>
-          <Header onPress={() => navigation.toggleDrawer()} />
+          <Header />
           <ScrollView
             style={{paddingHorizontal: SIZES.font10}}
             showsVerticalScrollIndicator={false}>

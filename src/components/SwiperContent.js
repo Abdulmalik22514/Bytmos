@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'flex-end',
-    borderRadius: 100,
+    borderRadius: (SIZES.font1 * 1.5) / 2,
     marginTop: SIZES.font1 * 9,
     marginRight: SIZES.font8,
   },

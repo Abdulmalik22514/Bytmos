@@ -33,12 +33,18 @@ const Header = ({style, isNotHome, screenName, isAccount}) => {
           )}
         </View>
         <View style={styles.leftView}>
-          <Pressable>
-            <SearchIcon style={styles.searchIcon} width={20} height={25} />
-          </Pressable>
-          <Pressable>
-            <BellIcon width={24} height={28} />
-          </Pressable>
+          {isNotHome ? (
+            <View />
+          ) : (
+            <>
+              <Pressable>
+                <SearchIcon style={styles.searchIcon} width={20} height={25} />
+              </Pressable>
+              <Pressable>
+                <BellIcon width={24} height={28} />
+              </Pressable>
+            </>
+          )}
         </View>
       </View>
       <View style={styles.separator} />
