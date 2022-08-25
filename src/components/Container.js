@@ -15,11 +15,7 @@ export default function Container({
 
   return (
     <>
-      <StatusBar
-        barStyle={barIconColor}
-        backgroundColor={COLORS.blue}
-        translucent={false}
-      />
+      <StatusBar barStyle={barIconColor} translucent={false} />
       <View style={styles.coreLayer}>
         <View style={styles.upperPart} />
         <View style={styles.lowerPart} />

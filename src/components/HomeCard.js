@@ -1,4 +1,4 @@
-import {Pressable, StyleSheet, Text} from 'react-native';
+import {Pressable, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {
   AccountIcon,
@@ -51,11 +51,18 @@ export const CardItems = [
   },
 ];
 
-const HomeCard = ({icon, label, onPress}) => {
+const HomeCard = ({icon, label, onPress, isService}) => {
   return (
     <Pressable style={styles.container} onPress={onPress}>
       {icon}
       <Text style={styles.label}>{label}</Text>
+      <View>
+        {isService ? (
+          <View style={styles.serviceOrders}>
+            <Text style={styles.serviceAmount}>3</Text>
+          </View>
+        ) : null}
+      </View>
     </Pressable>
   );
 };
@@ -82,9 +89,21 @@ const styles = StyleSheet.create({
   },
   label: {
     ...FONTS.body3,
-    marginLeft: SIZES.font8,
-    width: '80%',
-    paddingRight: SIZES.font10,
+    marginLeft: SIZES.font10,
+    width: '60%',
     color: COLORS.card,
+  },
+  serviceOrders: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: SIZES.font2,
+    height: SIZES.font2,
+    borderRadius: SIZES.font2 / 2,
+    backgroundColor: COLORS.blue,
+    marginLeft: -10,
+  },
+  serviceAmount: {
+    ...FONTS.h10,
+    color: COLORS.white,
   },
 });

@@ -27,7 +27,7 @@ export const TribeCategories = ({title, icon, onPress, isActive}) => {
     <TouchableOpacity
       activeOpacity={0.7}
       onPress={onPress}
-      style={{alignItems: 'center', marginRight: SIZES.font5}}>
+      style={{alignItems: 'center', marginHorizontal: SIZES.font10 - 4}}>
       <Image
         source={icon}
         style={[styles.catImage, isActive && styles.activeImgBorder]}
@@ -42,9 +42,12 @@ export default TribeCategories;
 
 const styles = StyleSheet.create({
   catImage: {
-    width: SIZES.font1 * 2.8,
-    height: SIZES.font1 * 2.4,
+    width: SIZES.font1 * 2.7,
+    height: SIZES.font1 * 2.2,
     marginBottom: SIZES.font10 - 4,
+    borderColor: COLORS.blue,
+    borderWidth: 1,
+    borderRadius: 15,
   },
   activeText: {
     fontWeight: '700',
@@ -53,8 +56,8 @@ const styles = StyleSheet.create({
   activeImgBorder: {
     borderColor: COLORS.blue,
     borderWidth: 4,
-    borderRadius: 18,
-    width: SIZES.font1 * 2.8,
-    height: SIZES.font1 * 2.4,
+    borderRadius: 16,
+    width: SIZES.font1 * 2.7,
+    height: SIZES.font1 * 2.2,
   },
 });

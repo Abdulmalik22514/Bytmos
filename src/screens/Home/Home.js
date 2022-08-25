@@ -132,15 +132,20 @@ const Home = ({navigation}) => {
                     icon={item.icon}
                     label={item.label}
                     onPress={() => handleAction(item.label)}
+                    isService={item.label === 'Service Orders'}
                   />
                 );
               })}
             </View>
 
             <View style={{paddingHorizontal: SIZES.font8}}>
-              <Text style={{...FONTS.h10, marginBottom: SIZES.font1}}>
-                Performance
-              </Text>
+              <View style={styles.performanceHeader}>
+                <Text style={FONTS.h10}>Performance</Text>
+                <View style={styles.serviceOrders}>
+                  <Text style={styles.serviceAmount}>3</Text>
+                </View>
+              </View>
+
               <Rating label="Client Ranking" />
               <Rating label="Service Points" />
               <Rating label="Tribality" />

@@ -1,10 +1,10 @@
-import {FlatList, Image, Pressable, ScrollView, Text, View} from 'react-native';
+import {FlatList, Image, ScrollView, Text, View} from 'react-native';
 import React, {useState} from 'react';
 import Container from '../../components/Container';
 import Header from '../../components/Header';
 import {COLORS, FONTS, SIZES} from '../../constants/theme';
 import icons from '../../constants/icons';
-import {DropDown, StarIcon, UpArrow} from '../../assets/svgs/svg';
+import {StarIcon} from '../../assets/svgs/svg';
 import TribeButton from '../../components/TribeButton';
 import {ProfileStyles as styles} from './styles';
 
@@ -18,7 +18,8 @@ const ServiceItems = [
 ];
 
 const Profile = () => {
-  const [open, setOpen] = useState(false);
+  const [title, setTitle] = useState(false);
+  const [tribe, setTribe] = useState(false);
   return (
     <Container>
       <Header isNotHome screenName="Sonia Fashion Styles" />
@@ -48,45 +49,41 @@ const Profile = () => {
             </View>
           </View>
         </View>
-        <View style={styles.tribingMessenger}>
-          <TribeButton isMessage title={'Message'} />
-          <TribeButton title={'Tribing'} />
-          <Pressable style={styles.dropDownBox} onPress={() => setOpen(!open)}>
-            {open ? <UpArrow /> : <DropDown color={COLORS.blue} />}
-          </Pressable>
-        </View>
-        {open && (
-          <View style={styles.dropDownView}>
-            <Text style={FONTS.body3}>Suggested for you</Text>
-            <FlatList
-              data={[...Array(8)]}
-              renderItem={() => {
-                return (
-                  <View style={styles.suggestedItems}>
-                    <Image
-                      source={icons.Sonia}
-                      style={[styles.soniaIamge, {marginRight: null}]}
-                    />
-                    <Text
-                      style={[
-                        FONTS.h9,
-                        {fontSize: 17, marginBottom: SIZES.font1 * 1.5},
-                      ]}>
-                      Sonia Fashion Styles
-                    </Text>
-                    <View style={styles.suggestedRating}>
-                      <StarIcon />
-                      <Text style={FONTS.body4}>5.0 (630 reviews)</Text>
-                    </View>
-                    <TribeButton title={'Tribe'} />
+        <View style={styles.dropDownView}>
+          <Text style={FONTS.body3}>Your Tribals</Text>
+          <FlatList
+            data={[...Array(8)]}
+            keyExtractor={(_, index) => index.toString()}
+            renderItem={({index}) => {
+              return (
+                <View style={styles.suggestedItems}>
+                  <Image
+                    source={icons.Sonia}
+                    style={[styles.soniaIamge, {marginRight: null}]}
+                  />
+                  <Text
+                    style={[
+                      FONTS.h9,
+                      {fontSize: 17, marginBottom: SIZES.font1 * 1.5},
+                    ]}>
+                    Sonia Fashion Styles
+                  </Text>
+                  <View style={styles.suggestedRating}>
+                    <StarIcon />
+                    <Text style={FONTS.body4}>5.0 (630 reviews)</Text>
                   </View>
-                );
-              }}
-              horizontal
-              showsHorizontalScrollIndicator={false}
-            />
-          </View>
-        )}
+                  <TribeButton
+                    title={title ? 'Tribe' : 'Untribe'}
+                    onPress={() => setTitle(!title)}
+                  />
+                </View>
+              );
+            }}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+          />
+        </View>
+
         <View style={styles.itemsContainer}>
           {ServiceItems.map((item, index) => {
             return (

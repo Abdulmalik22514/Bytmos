@@ -155,9 +155,6 @@ const Tribe = () => {
                     <View style={{paddingHorizontal: SIZES.font10}}>
                       <View style={styles.shareContainer}>
                         <View style={styles.iconsContainer}>
-                          {/* <ChatIcon />
-                        <HeartIcon />
-                        <InviteIcon /> */}
                           {ACTIONS.map((item, index) => (
                             <LikeActions item={item} key={index} />
                           ))}

@@ -29,4 +29,23 @@ export const HomeStyles = StyleSheet.create({
     ...FONTS.h6,
     alignSelf: 'center',
   },
+  performanceHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: SIZES.font1,
+  },
+  serviceOrders: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: SIZES.font2,
+    height: SIZES.font2,
+    borderRadius: SIZES.font2 / 2,
+    backgroundColor: COLORS.blue,
+    marginLeft: -10,
+  },
+  serviceAmount: {
+    ...FONTS.h10,
+    color: COLORS.white,
+  },
 });
