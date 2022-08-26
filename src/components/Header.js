@@ -40,8 +40,11 @@ const Header = ({style, isNotHome, screenName, isAccount}) => {
               <Pressable>
                 <SearchIcon style={styles.searchIcon} width={20} height={25} />
               </Pressable>
-              <Pressable>
-                <BellIcon width={24} height={28} />
+              <Pressable style={styles.bellContainer}>
+                <BellIcon width={24} height={28} style={styles.bellIcon} />
+                <View style={styles.notificationCount}>
+                  <Text style={styles.notifyAmount}>5</Text>
+                </View>
               </Pressable>
             </>
           )}
@@ -85,5 +88,24 @@ const styles = StyleSheet.create({
   },
   isAccount: {
     paddingHorizontal: null,
+  },
+  bellContainer: {
+    flexDirection: 'row',
+    width: SIZES.font1,
+  },
+  notificationCount: {
+    width: SIZES.font5,
+    height: SIZES.font5,
+    borderRadius: SIZES.font5 / 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#C63636',
+    position: 'absolute',
+    right: 0,
+    bottom: SIZES.font10,
+  },
+  notifyAmount: {
+    ...FONTS.h9,
+    color: COLORS.white,
   },
 });
