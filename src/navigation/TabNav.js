@@ -24,7 +24,6 @@ const BottomTabs = () => {
           height:
             Platform.OS === 'android' ? SIZES.font5 * 2.8 : SIZES.font5 * 4,
           borderTopColor: COLORS.input,
-          paddingTop: SIZES.font10,
         },
       }}>
       <Tab.Screen
@@ -63,6 +62,8 @@ const BottomTabs = () => {
           ),
           tabBarBadge: 5,
           tabBarBadgeStyle: {
+            color: COLORS.white,
+            fontWeight: '700',
             backgroundColor: '#C63636',
           },
         }}

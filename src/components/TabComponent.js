@@ -34,5 +34,6 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     justifyContent: 'center',
+    marginTop: SIZES.font10,
   },
 });
