@@ -1,24 +1,21 @@
-import {
-  FlatList,
-  Image,
-  Pressable,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from 'react-native';
+import {FlatList, Image, Pressable, Text, View} from 'react-native';
 import React, {useState} from 'react';
 import Container from '../../components/Container';
 import Header from '../../components/Header';
 import {DropDown} from '../../assets/svgs/svg';
-import {COLORS, FONTS, SIZES} from '../../constants/theme';
+import {FONTS, SIZES} from '../../constants/theme';
 import icons from '../../constants/icons';
 import ImagePicker from 'react-native-image-crop-picker';
 import {CATEGORIES} from '../../components/TribeCategories';
+import {NewPostStyles as styles} from './styles';
+import {useNavigation} from '@react-navigation/native';
+import {SHARE_POST_SCREEN} from '../../constants/screens';
 
-const NewPost = () => {
+const NewPost = ({onSelectImage}) => {
   const [open, setOpen] = useState(false);
   const [category, setCategory] = useState('Add Category');
+  const {navigate} = useNavigation();
+
   return (
     <Container>
       <Header isNotHome screenName="Post" />
@@ -54,8 +51,9 @@ const NewPost = () => {
         <View style={styles.separator} />
         <View style={styles.postContent}>
           <Pressable
+            style={styles.serviceButton}
             onPress={() =>
-              ImagePicker.openCamera({
+              ImagePicker.openPicker({
                 width: 300,
                 height: 400,
                 cropping: true,
@@ -63,17 +61,19 @@ const NewPost = () => {
               })
                 .then(image => {
                   console.log('received image', image);
+                  onSelectImage(
+                    navigate(SHARE_POST_SCREEN, {
+                      selectedImage: `data:${image.mime};base64,${image.data}`,
+                    }),
+                  );
                 })
                 .catch(err => console.warn(err))
             }>
             <Image source={icons.NewProfileImage} style={styles.image} />
+            <Text style={styles.serviceDetails}>
+              Whats new about your business or industry ?
+            </Text>
           </Pressable>
-          <TextInput
-            style={styles.serviceDetails}
-            placeholder="What's new about your business or industry?"
-            placeholderTextColor={COLORS.input}
-            multiline={true}
-          />
         </View>
         <View style={styles.separator} />
       </View>
@@ -82,54 +82,3 @@ const NewPost = () => {
 };
 
 export default NewPost;
-
-const styles = StyleSheet.create({
-  postItemPicker: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingVertical: SIZES.font1 * 1.2,
-    paddingHorizontal: SIZES.font6,
-  },
-  separator: {
-    width: '100%',
-    borderWidth: 0.6,
-    borderColor: COLORS.separator,
-  },
-  image: {
-    width: SIZES.font1 * 2,
-    height: SIZES.font1 * 2,
-    marginRight: SIZES.font10,
-  },
-  postContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: SIZES.font1,
-    paddingHorizontal: SIZES.font6,
-  },
-  serviceDetails: {
-    ...FONTS.body4,
-    color: COLORS.input,
-    width: '75%',
-  },
-  itemSeparator: {
-    width: '100%',
-    borderWidth: 0.6,
-    borderColor: COLORS.separator,
-  },
-  categoriesCard: {
-    marginVertical: SIZES.font1,
-    paddingLeft: SIZES.font8,
-  },
-  categoriesContainer: {
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 1,
-      height: 1,
-    },
-    shadowOpacity: 0.15,
-    shadowRadius: 5,
-    elevation: 0.5,
-    backgroundColor: COLORS.white,
-  },
-});
