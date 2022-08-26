@@ -15,7 +15,6 @@ export const TribeStyles = StyleSheet.create({
   },
   rightSide: {
     flexDirection: 'row',
-    alignItems: 'center',
     justifyContent: 'space-between',
   },
   leftSide: {
@@ -67,7 +66,7 @@ export const TribeStyles = StyleSheet.create({
     backgroundColor: COLORS.input,
     width: SIZES.font1 * 2,
     height: SIZES.font10 - 8,
-    marginTop: SIZES.font10,
+    marginTop: SIZES.font10 - 5,
     borderRadius: 2,
   },
   itemSeparator: {
