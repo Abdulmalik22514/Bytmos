@@ -22,3 +22,4 @@ export const TRIBALS_SCREEN = 'Tribals_Screen';
 export const COMMENTS_SCREEN = 'Comments_Screen';
 export const ACCOUNT_TYPE = 'AccountType_Screen';
 export const TRIBER_PROFILE = 'Triber_Profile_Screen';
+export const SHARE_POST_SCREEN = 'SharePost_Screen';
