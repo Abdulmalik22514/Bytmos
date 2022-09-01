@@ -1,10 +1,16 @@
-import {ImageBackground, Pressable, StyleSheet, Text, View} from 'react-native';
+import {
+  ImageBackground,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import React from 'react';
-import {PlusIcon} from '../assets/svgs/svg';
-import {COLORS, FONTS, SIZES} from '../constants/theme';
+import { PlusIcon } from '../assets/svgs/svg';
+import { COLORS, FONTS, SIZES } from '../constants/theme';
 import icons from '../constants/icons';
-import {useNavigation} from '@react-navigation/native';
-import {NEWPOST_SCREEN} from '../constants/screens';
+import { useNavigation } from '@react-navigation/native';
+import { NEWPOST_SCREEN } from '../constants/screens';
 
 export const SWIPER_IMAGES = [
   icons.SoniaFashion,
@@ -13,24 +19,26 @@ export const SWIPER_IMAGES = [
   icons.SoniaFashion,
 ];
 
-export const SwiperContent = ({item}) => {
-  const {navigate} = useNavigation();
+export const SwiperContent = ({ item, isComment }) => {
+  const { navigate } = useNavigation();
   return (
     <View>
       <ImageBackground source={item} style={styles.uploads} resizeMode="cover">
-        <Pressable
-          style={styles.plusContainer}
-          onPress={() => navigate(NEWPOST_SCREEN)}>
-          <PlusIcon />
-        </Pressable>
+        {isComment ? null : (
+          <Pressable
+            style={styles.plusContainer}
+            onPress={() => navigate(NEWPOST_SCREEN)}>
+            <PlusIcon />
+          </Pressable>
+        )}
       </ImageBackground>
-      <View style={{padding: SIZES.font10 - 5}}>
+      <View style={{ padding: SIZES.font10 - 5 }}>
         <Text style={FONTS.body4}>
           Sonia Fashion Styles just launched a new fleet of wedding gowns with
           great styles and ....
-          <Text style={{color: COLORS.input}}> See more</Text>
+          <Text style={{ color: COLORS.input }}> See more</Text>
         </Text>
-        <Text style={[FONTS.body4, {color: COLORS.input}]}>August 30</Text>
+        <Text style={[FONTS.body4, { color: COLORS.input }]}>August 30</Text>
       </View>
     </View>
   );

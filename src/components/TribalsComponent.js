@@ -1,7 +1,7 @@
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React, {useState} from 'react';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useState } from 'react';
 import icons from '../constants/icons';
-import {SIZES, COLORS, FONTS} from '../constants/theme';
+import { SIZES, COLORS, FONTS } from '../constants/theme';
 
 export const TRIBE_FRIENDS = [
   {
@@ -52,6 +52,7 @@ const TribalsComponent = ({
   business_name,
   tribing,
   onPress,
+  isSend,
 }) => {
   const [tribe, setTribe] = useState(false);
 
@@ -59,19 +60,32 @@ const TribalsComponent = ({
     <View style={styles.container}>
       <View style={styles.leftSide}>
         <Image source={icon} style={styles.userImage} />
-        <View style={{width: SIZES.font1 * 5}}>
+        <View style={{ width: SIZES.font1 * 5 }}>
           <Text style={FONTS.h9}>{tribe_name}</Text>
-          <Text style={[FONTS.h9, {color: COLORS.input}]}>{business_name}</Text>
+          <Text style={[FONTS.h9, { color: COLORS.input }]}>
+            {business_name}
+          </Text>
         </View>
       </View>
-      <TouchableOpacity
-        activeOpacity={0.8}
-        onPress={() => setTribe(!tribe)}
-        style={[styles.tribingButton, tribe && styles.tribing]}>
-        <Text style={[styles.tribeText, tribe && styles.tribingText]}>
-          {tribe ? 'Tribing' : 'Tribe'}
-        </Text>
-      </TouchableOpacity>
+      {isSend ? (
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={() => setTribe(!tribe)}
+          style={[styles.tribingButton, tribe && { borderWidth: null }]}>
+          <Text style={[styles.tribeText, tribe && { color: COLORS.black }]}>
+            {tribe ? 'Sent' : 'Send'}
+          </Text>
+        </TouchableOpacity>
+      ) : (
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={() => setTribe(!tribe)}
+          style={[styles.tribingButton, tribe && styles.tribing]}>
+          <Text style={[styles.tribeText, tribe && styles.tribingText]}>
+            {tribe ? 'Tribing' : 'Tribe'}
+          </Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 };

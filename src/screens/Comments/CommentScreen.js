@@ -11,9 +11,9 @@ import {
 import React from 'react';
 import Container from '../../components/Container';
 import Header from '../../components/Header';
-import {COLORS, FONTS, SIZES} from '../../constants/theme';
+import { COLORS, FONTS, SIZES } from '../../constants/theme';
 import Comments from '../../components/Comments';
-import {CameraIcon} from '../../assets/svgs/svg';
+import { CameraIcon } from '../../assets/svgs/svg';
 import icons from '../../constants/icons';
 
 const CommentScreen = () => {
@@ -21,10 +21,10 @@ const CommentScreen = () => {
     <>
       <Container>
         <Header isNotHome screenName="Comments" />
-        <View style={{flex: 1}}>
+        <View style={{ flex: 1 }}>
           <FlatList
-            data={[...Array(2)]}
-            renderItem={Comments}
+            data={[...Array(2).keys()]}
+            renderItem={() => <Comments />}
             showsVerticalScrollIndicator={false}
           />
           <View style={styles.postComment}>
@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: SIZES.font10,
+    marginBottom: SIZES.font5,
     paddingHorizontal: SIZES.font10,
   },
   commentBox: {

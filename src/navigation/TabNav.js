@@ -1,14 +1,14 @@
 import React from 'react';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {Platform} from 'react-native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Platform } from 'react-native';
 import TabComponent from '../components/TabComponent';
 import icons from '../constants/icons';
-import {COLORS, SIZES} from '../constants/theme';
+import { COLORS, SIZES } from '../constants/theme';
 import Inbox from '../screens/Inbox/Inbox';
 import MyWallet from '../screens/MyWallet/MyWallet';
 import Profile from '../screens/Profile/Profile';
 import Home from '../screens/Home/Home';
-import {TribeNavigator} from './TribeNavigator';
+import Tribe from '../screens/Tribe/Tribe';
 
 const Tab = createBottomTabNavigator();
 
@@ -30,16 +30,16 @@ const BottomTabs = () => {
         name="HomeTab"
         component={Home}
         options={{
-          tabBarIcon: ({focused}) => (
+          tabBarIcon: ({ focused }) => (
             <TabComponent label={'Home'} focused={focused} icon={icons.Home} />
           ),
         }}
       />
       <Tab.Screen
         name="Tribe"
-        component={TribeNavigator}
+        component={Tribe}
         options={{
-          tabBarIcon: ({focused}) => (
+          tabBarIcon: ({ focused }) => (
             <TabComponent
               label={'Tribe'}
               focused={focused}
@@ -53,7 +53,7 @@ const BottomTabs = () => {
         name={'Inbox'}
         component={Inbox}
         options={{
-          tabBarIcon: ({focused}) => (
+          tabBarIcon: ({ focused }) => (
             <TabComponent
               label={'Inbox'}
               focused={focused}
@@ -72,7 +72,7 @@ const BottomTabs = () => {
         name={'MyWallet'}
         component={MyWallet}
         options={{
-          tabBarIcon: ({focused}) => (
+          tabBarIcon: ({ focused }) => (
             <TabComponent
               label={'Wallet'}
               focused={focused}
@@ -85,7 +85,7 @@ const BottomTabs = () => {
         name="Profile"
         component={Profile}
         options={{
-          tabBarIcon: ({focused}) => (
+          tabBarIcon: ({ focused }) => (
             <TabComponent
               label={'Profile'}
               focused={focused}

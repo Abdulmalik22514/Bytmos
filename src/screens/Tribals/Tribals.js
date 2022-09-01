@@ -1,30 +1,40 @@
-import {FlatList, ScrollView, StyleSheet, Text, View} from 'react-native';
-import React, {useState} from 'react';
+import { FlatList, ScrollView, StyleSheet, Text, View } from 'react-native';
+import React, { useState } from 'react';
 import Container from '../../components/Container';
 import Header from '../../components/Header';
-import {FONTS, SIZES} from '../../constants/theme';
+import { FONTS, SIZES } from '../../constants/theme';
 import SearchBar from '../../components/SearchBar';
 import TribalsComponent, {
   TRIBE_FRIENDS,
 } from '../../components/TribalsComponent';
 
-const Tribals = ({route}) => {
-  const {user} = route.params;
+const Tribals = ({ route }) => {
+  const { user } = route.params;
   return (
     <Container>
       <Header isNotHome screenName={user} />
-      <ScrollView
-        showsVerticalScrollIndicator={false}
+      <View
         style={{
           paddingHorizontal: SIZES.font10,
-          paddingVertical: SIZES.font5,
         }}>
-        <Text style={FONTS.h8}>1k Likes</Text>
-        <SearchBar />
-        <View style={{marginBottom: SIZES.font1}}>
+        <View style={{ marginBottom: SIZES.font1 }}>
           <FlatList
             data={TRIBE_FRIENDS}
-            renderItem={({item}) => {
+            showsVerticalScrollIndicator={false}
+            ListFooterComponent={
+              <View style={{ marginBottom: SIZES.font1 * 2 }} />
+            }
+            ListHeaderComponent={() => {
+              return (
+                <>
+                  <Text style={[FONTS.h8, { marginTop: SIZES.font5 }]}>
+                    256 tribals
+                  </Text>
+                  <SearchBar />
+                </>
+              );
+            }}
+            renderItem={({ item }) => {
               return (
                 <TribalsComponent
                   icon={item.icon}
@@ -35,7 +45,7 @@ const Tribals = ({route}) => {
             }}
           />
         </View>
-      </ScrollView>
+      </View>
     </Container>
   );
 };

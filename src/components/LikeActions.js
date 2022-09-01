@@ -1,15 +1,28 @@
-import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import icons from '../constants/icons';
-import {FONTS, SIZES} from '../constants/theme';
-import {CopyIcon, DeleteIcon, Eye_Off} from '../assets/svgs/svg';
+import { COLORS, FONTS, SIZES } from '../constants/theme';
+import { CopyIcon, DeleteIcon, Eye_Off } from '../assets/svgs/svg';
 
-export const ACTIONS = [icons.ChatImage, icons.HeartImage, icons.SendImage];
+export const ACTIONS = [
+  { icon: icons.ChatImage, label: 'Chat' },
+  { icon: icons.HeartImage, label: 'Heart' },
+  { icon: icons.SendImage, label: 'Send' },
+];
 
-export const LikeActions = ({item}) => {
+export const COMMENTS_ACTIONS = [
+  { icon: icons.HeartImage, label: 'Heart' },
+  { icon: icons.SendImage, label: 'Send' },
+];
+
+export const LikeActions = ({ item, onPressItem, like }) => {
   return (
-    <Pressable>
-      <Image source={item} style={styles.image} resizeMode="contain" />
+    <Pressable onPress={onPressItem}>
+      <Image
+        source={item}
+        style={[styles.image, { tintColor: like ? COLORS.red : COLORS.input }]}
+        resizeMode="contain"
+      />
     </Pressable>
   );
 };
@@ -29,7 +42,7 @@ export const TRIBE_BOTTOMSHEET_ACTIONS = [
   },
 ];
 
-export const TribeBottomSheet = ({icon, title}) => {
+export const TribeBottomSheet = ({ icon, title }) => {
   return (
     <Pressable style={styles.contentContainer}>
       {icon}
