@@ -1,47 +1,69 @@
-import {FlatList, Image, Pressable, ScrollView, Text, View} from 'react-native';
-import React, {useRef, useState} from 'react';
+import {
+  FlatList,
+  Image,
+  Pressable,
+  ScrollView,
+  Text,
+  View,
+} from 'react-native';
+import React, { useCallback, useRef, useState } from 'react';
 import Container from '../../components/Container';
 import Header from '../../components/Header';
-import {COLORS, FONTS, SIZES} from '../../constants/theme';
+import { COLORS, FONTS, SIZES } from '../../constants/theme';
 import icons from '../../constants/icons';
-import {DropDown, StarIcon, UpArrow} from '../../assets/svgs/svg';
+import { DropDown, StarIcon, UpArrow } from '../../assets/svgs/svg';
 import TribeButton from '../../components/TribeButton';
-import {TribeProfileStyles as styles} from './styles';
+import { TribeProfileStyles as styles } from './styles';
 import Modal from 'react-native-modal';
 import CustomButton from '../../components/CustomButton';
 import TribeBottomSheet from '../../components/TribeBottomSheet';
+import { useNavigation } from '@react-navigation/native';
+import { TRIBALS_SCREEN } from '../../constants/screens';
 
 const ServiceItems = [
-  {icon: icons.FashionItem1},
-  {icon: icons.FashionItem2},
-  {icon: icons.FashionItem3},
-  {icon: icons.FashionItem4},
-  {icon: icons.FashionItem5},
-  {icon: icons.FashionItem6},
+  { icon: icons.FashionItem1 },
+  { icon: icons.FashionItem2 },
+  { icon: icons.FashionItem3 },
+  { icon: icons.FashionItem4 },
+  { icon: icons.FashionItem5 },
+  { icon: icons.FashionItem6 },
 ];
 
 const TriberProfile = () => {
+  const { navigate } = useNavigation();
   const [open, setOpen] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
+  const [tribes, setTribes] = useState([]);
 
   const bottomSheetRef = useRef(null);
 
-  const _renderComponent = () => {
+  const onTribe = useCallback(index => {
+    setTribes(prev => {
+      const isAmong = prev.includes(index);
+      const filtered = prev.filter(item => item !== index);
+      return isAmong ? filtered : [...prev, index];
+    });
+  }, []);
+
+  const RenderComponent = ({ index }) => {
     return (
       <View style={styles.suggestedItems}>
         <Image
           source={icons.Sonia}
-          style={[styles.soniaIamge, {marginRight: null}]}
+          style={[styles.soniaIamge, { marginRight: null }]}
         />
         <Text
-          style={[FONTS.h9, {fontSize: 17, marginBottom: SIZES.font1 * 1.5}]}>
+          style={[FONTS.h9, { fontSize: 17, marginBottom: SIZES.font1 * 1.5 }]}>
           Sonia Fashion Styles
         </Text>
         <View style={styles.suggestedRating}>
           <StarIcon />
           <Text style={FONTS.body4}>5.0 (630 reviews)</Text>
         </View>
-        <TribeButton title={'Tribe'} />
+        <TribeButton
+          title={tribes.includes(index) ? 'Tribe' : 'Untribe'}
+          onPress={() => onTribe(index)}
+        />
       </View>
     );
   };
@@ -50,32 +72,35 @@ const TriberProfile = () => {
     <>
       <Container>
         <Header isNotHome screenName="Sonia Fashion Styles" />
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView
+          style={{ flexGrow: 1 }}
+          showsVerticalScrollIndicator={false}
+          nestedScrollEnabled={true}>
           <View style={styles.profileContainer}>
             <Image source={icons.Sonia} style={styles.soniaIamge} />
             <View>
-              <Text style={[FONTS.h6, {fontSize: 22, marginBottom: 4}]}>
+              <Text style={[FONTS.h6, { fontSize: 22, marginBottom: 4 }]}>
                 Sonia Fashion Styles
               </Text>
               <Text
-                style={[FONTS.body4, {color: COLORS.input, marginBottom: 4}]}>
+                style={[FONTS.body4, { color: COLORS.input, marginBottom: 4 }]}>
                 Plot 2, Ikare Road, Lagos
               </Text>
-              <Text style={[FONTS.body3, {marginBottom: 4}]}>
-                2,500 Tribals
-              </Text>
               <View style={styles.rating}>
-                <Text style={[FONTS.body3, {marginRight: 7}]}>Rating</Text>
+                <Text style={[FONTS.body3, { marginRight: 7 }]}>Rating</Text>
                 <StarIcon />
-                <Text style={[FONTS.body3, {marginLeft: 3}]}>5.0 </Text>
+                <Text style={[FONTS.body3, { marginLeft: 3 }]}>5.0 </Text>
               </View>
               <View style={styles.ratingReview}>
                 <Pressable
                   onPress={() => bottomSheetRef?.current?.snapToIndex(1)}>
                   <Text style={FONTS.h10}>34 reviews</Text>
                 </Pressable>
-                <Pressable>
-                  <Text style={[FONTS.h10, {color: COLORS.blue}]}>
+                <Pressable
+                  onPress={() =>
+                    navigate(TRIBALS_SCREEN, { user: 'Flora Clair' })
+                  }>
+                  <Text style={[FONTS.h10, { color: COLORS.blue }]}>
                     256 Tribals
                   </Text>
                 </Pressable>
@@ -99,9 +124,10 @@ const TriberProfile = () => {
           {open && (
             <View style={styles.dropDownView}>
               <Text style={FONTS.body3}>Suggested for you</Text>
+
               <FlatList
-                data={[...Array(8)]}
-                renderItem={_renderComponent}
+                data={[...Array(8).keys()]}
+                renderItem={RenderComponent}
                 horizontal
                 showsHorizontalScrollIndicator={false}
               />
