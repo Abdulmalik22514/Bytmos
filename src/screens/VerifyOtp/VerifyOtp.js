@@ -25,6 +25,8 @@ const VerifyOtp = () => {
   const {navigate} = useNavigation();
   const [verify, setVerify] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
+  const [resendingOtp, setResendingOtp] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const formRef = useRef();
 
@@ -32,29 +34,31 @@ const VerifyOtp = () => {
     setModalVisible(!isModalVisible);
   };
 
-  const {VerifyOTP, ResendOTP} = useAuthApis();
+  // const {VerifyOTP, ResendOTP} = useAuthApis();
   /* verify otp handler */
-  const verifyOTPApi = useMutation(VerifyOTP, {
-    onSuccess: res => {
-      if (res?.status) {
-        setVerify(true);
-      }
-    },
-  });
+  // const verifyOTPApi = useMutation(VerifyOTP, {
+  //   onSuccess: res => {
+  //     if (res?.status) {
+  //       setVerify(true);
+  //     }
+  //   },
+  // });
 
   /* resend otp */
-  const resendOTPApi = useMutation(ResendOTP);
+  // const resendOTPApi = useMutation(ResendOTP);
 
   const handleResend = () => {
+    setResendingOtp(true);
+    setLoading(true);
     formRef.current.setErrors('otp', '');
 
-    resendOTPApi.mutate();
+    // resendOTPApi.mutate();
   };
 
-  const handleOTPVerification = formData => verifyOTPApi.mutateAsync(formData);
+  // const handleOTPVerification = formData => verifyOTPApi.mutateAsync(formData);
 
-  const isLoading = verifyOTPApi.isLoading;
-  const resendingOtp = resendOTPApi.isLoading;
+  // const isLoading = verifyOTPApi.isLoading;
+  // const resendingOtp = resendOTPApi.isLoading;
 
   return (
     <Container>
@@ -74,7 +78,10 @@ const VerifyOtp = () => {
         <Formik
           initialValues={{otp: ''}}
           validationSchema={otpValiditor}
-          onSubmit={handleOTPVerification}
+          onSubmit={() => {
+            setVerify(true);
+            // navigate(ACCOUNT_TYPE, { flowFrom: 'signup_process' })
+          }}
           innerRef={formRef}>
           {({
             handleChange,
@@ -119,7 +126,11 @@ const VerifyOtp = () => {
                     <Text style={styles.invalidCode}>
                       Verification code invalid
                     </Text>
-                    <Pressable onPress={handleResend}>
+                    <Pressable
+                      onPress={() => {
+                        setResendingOtp(true);
+                        setLoading(true);
+                      }}>
                       {resendingOtp && (
                         <Text style={styles.resendingText}>Resending...</Text>
                       )}
@@ -141,7 +152,14 @@ const VerifyOtp = () => {
                         <Text style={styles.noOtpReceive}>
                           Didn’t receive OTP?
                         </Text>
-                        <Pressable onPress={handleResend}>
+                        <Pressable
+                          onPress={() => {
+                            handleResend();
+                            setTimeout(() => {
+                              setResendingOtp(false);
+                              setLoading(false);
+                            }, 5000);
+                          }}>
                           <Text style={styles.resendText}> Resend</Text>
                         </Pressable>
                       </>
@@ -151,9 +169,9 @@ const VerifyOtp = () => {
                 <CustomButton
                   title="Proceed"
                   style={styles.proceedButton}
-                  disabled={isLoading || resendingOtp}
+                  disabled={loading || resendingOtp}
                   onPress={handleSubmit}
-                  isLoading={isSubmitting || isLoading}
+                  isLoading={isSubmitting || loading}
                 />
               </KeyboardAwareScrollView>
             </>

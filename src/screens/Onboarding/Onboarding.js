@@ -9,6 +9,7 @@ import Slide1 from './Slides/slide1';
 import Slide2 from './Slides/slide2';
 import Slide3 from './Slides/slide3';
 import Container from '../../components/Container';
+import {TERMS_AND_POLICY_SCREEN} from '../../constants/screens';
 
 const slides = [1, 2, 3];
 
@@ -30,7 +31,7 @@ export default function Onboarding({navigation}) {
     onboardUser();
 
     /* after onboarding goto terms */
-    navigation.navigate('TermsPrivacy');
+    navigation.navigate(TERMS_AND_POLICY_SCREEN);
   };
 
   const _renderItem = ({item}) => {
@@ -55,7 +56,7 @@ export default function Onboarding({navigation}) {
         data={slides}
         dotStyle={styles.dotStyle}
         activeDotStyle={[styles.dotStyle, {backgroundColor: COLORS.blue}]}
-        onDone={() => navigation.navigate('TermsPrivacy')}
+        onDone={() => navigation.navigate(TERMS_AND_POLICY_SCREEN)}
         renderDoneButton={_renderDoneButton}
         showNextButton={false}
       />

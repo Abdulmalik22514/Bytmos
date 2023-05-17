@@ -31,10 +31,10 @@ const styles = StyleSheet.create({
   },
   authForm: {
     width: '95%',
-    marginBottom: SIZES.font9,
+    marginBottom: SIZES.font10,
   },
   errorText: {
-    fontSize: 10,
+    fontSize: 13,
     color: COLORS.red,
   },
 });

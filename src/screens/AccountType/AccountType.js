@@ -44,14 +44,18 @@ const AccountType = ({route}) => {
         <CustomButton
           title="Personal Account"
           style={styles.modalButton}
-          onPress={() => handleAccountCreation(0)}
+          onPress={() =>
+            navigate(ACCOUNT_SCREEN, {accountType: 'Personal', from: flowFrom})
+          }
           disabled={isLoading}
         />
         <Text style={{...FONTS.body4, fontSize: 22}}>OR</Text>
         <CustomButton
           title="Business Account"
           style={styles.modalButton}
-          onPress={() => handleAccountCreation(1)}
+          onPress={() =>
+            navigate(ACCOUNT_SCREEN, {accountType: 'Business', from: flowFrom})
+          }
           disabled={isLoading}
         />
       </View>
